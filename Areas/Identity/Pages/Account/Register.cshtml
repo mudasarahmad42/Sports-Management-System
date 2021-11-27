@@ -1,0 +1,343 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<div class="st-height-b120 st-height-lg-b80"></div>
+
+<div class="container p-2 font-weight-bold" style="background-image: url(../../../../main/images/img/registration_page_1.png); background-size:90%; background-position: 50% 0; background-repeat:no-repeat">
+
+    <h1>Create Your Account on our Application</h1>
+    <hr />
+    <p class="text-lg text-primary m-4">Please read these guidlines carefully before submitting data</p>
+    <p class="link-muted">* Follow the pattern displayed on fields for submission of your data</p>
+    <p class="link-muted">* Upload a clear face photo of yourself as a profile picture</p>
+    <p class="link-muted">* Carefully Read and Verify the Information You have entered</p>
+
+    <form id="parsley-form" enctype="multipart/form-data" asp-route-returnUrl="@Model.ReturnUrl" method="post" data-parsley-validate="">
+        <h4>Create a new account.</h4>
+
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="container m-2">
+            <div class="row">
+                <div class="col-sm">
+                    <br /><br />
+                    <div class="form-group">
+                        <label asp-for="Input.FirstName"></label>
+                        <input asp-for="Input.FirstName" class="form-control" data-parsley-required-message="First Name is Required" required="" maxlength="25" data-parsley-pattern="^[a-zA-Z ]+$" data-parsley-pattern-message="Only use english alphabets" data-parsley-trigger="focusin focusout" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.LastName"></label>
+                        <input asp-for="Input.LastName" class="form-control" data-parsley-required-message="Last Name is Required" required="" maxlength="25" data-parsley-pattern="^[a-zA-Z ]+$" data-parsley-pattern-message="Only use english alphabets" data-parsley-trigger="focusin focusout" />
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.FatherName"></label>
+                        <input asp-for="Input.FatherName" class="form-control" required="" data-parsley-required-message="Father Name is Required" maxlength="25" data-parsley-pattern="^[a-zA-Z ]+$" data-parsley-pattern-message="Only use english alphabets" data-parsley-trigger="focusin focusout" />
+                        <span asp-validation-for="Input.FatherName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.DateOfBirth"></label>
+                        <input asp-for="Input.DateOfBirth" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Date of Birth is required." data-parsley-maxdate="@DateTime.Today.AddYears(-16).AddDays(1).ToString("MM/dd/yyyy")" data-parsley-mindate="01/01/1900" data-date-format="MM/DD/YYYY" />
+                        <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.Age"></label>
+                        <input asp-for="Input.Age" class="form-control" required="" data-parsley-range="[16, 150]" data-parsley-trigger="focusin focusout" data-parsley-required-message="Age is required." />
+                        <span asp-validation-for="Input.Age" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <small class="text-muted">*Upload a clear face photo of yourself as a profile picture</small>
+                        <label asp-for="Input.ProfileImage"></label>
+                        <input asp-for="Input.ProfileImage" class=" form-controlform-control-file" accept="image/*" required="" data-parsley-trigger="focusin focusout" data-parsley-filemaxmegabytes="20" data-parsley-fileimagetypes="image/jpeg, image/png, image/jpg, image/gif, image/webp" data-parsley-required-message="Please upload a clear face photo of yourself" />
+                        <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+
+                    <div class="form-group">
+                        <small class="text-muted">*Roll No-Degree-Session<br />e.g 0111-BSCS-17</small>
+                        <br />
+                        <label asp-for="Input.RollNumber"></label>
+                        <input asp-for="Input.RollNumber" class="form-control" required="" maxlength="25" data-parsley-trigger="focusin focusout" data-parsley-required-message="Roll Number is required" />
+                        <span asp-validation-for="Input.RollNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.Section"></label>
+                        <input asp-for="Input.Section" class="input-section form-control" required="" maxlength="4" data-parsley-type="alphanum" data-parsley-trigger="focusin focusout" data-parsley-required-message="Section is required." />
+                        <span asp-validation-for="Input.Section" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.Semester"></label>
+                        <input class="form-control input-semester" asp-for="Input.Semester" required="" minlength="1" maxlength="2" data-parsley-trigger="focusin focusout" data-parsley-required-message="Semester is required." data-parsley-length-message="Please enter your semester" data-parsley-type="number" />
+                        <span asp-validation-for="Input.Semester" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <small class="text-muted">*Starting Year - Ending year<br />e.g 2017-2021</small><br />
+                        <label asp-for="Input.Session"></label>
+                        <input class="input-session form-control" asp-for="Input.Session" minlength="9" data-parsley-trigger="focusin focusout" data-parsley-required-message="Session is required." data-parsley-minlength-message="Please enter your session"  data-parsley-pattern="^([0-9]{4}-[0-9]{4})$" data-parsley-pattern-message="Please only enter your session by following above mentioned pattern"/>
+                        <span asp-validation-for="Input.Session" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.DepartmentName" class="form__label">Department Name</label>
+                        <select asp-for="Input.DepartmentName" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Department is required.">
+                            <option value="" selected disabled hidden>Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Physical Education and Sports Sciences">Physical Education and Sports Sciences</option>
+                            <option value="Persian">Persian</option>
+                            <option value="English">English</option>
+                            <option value="Punjabi">Punjabi</option>
+                            <option value="Urdu">Urdu</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biotechnology">Biotechnology</option>
+                            <option value="Botany">Botany</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Zoology">Zoology</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Statistics">Statistics</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Fine Arts">Fine Arts</option>
+                        </select>
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-sm">
+                    <br /><br />
+
+                    <div class="form-group">
+                        <label asp-for="Input.Gender" class="form__label">Gender</label>
+                        <select asp-for="Input.Gender" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Gender is required.">
+                            <option value="" selected disabled hidden>Select Gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="NOT TO BE SPECIFIED">Not to be Specified</option>
+                        </select>
+                        <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                    </div>
+                    <hr />
+
+                    <small class="font-weight-bold text-primary">This Information will be required to login to the account<br /> <span class="text-muted">Please keep record of your login details</span></small>
+                    @*<div class="form-group">
+                            <label asp-for="Input.UserName"></label>
+                            <input asp-for="Input.UserName" class="form-control" />
+                            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                        </div>*@
+
+
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label><br />
+                        <small class="text-muted">e.g YourUsername@gcu.edu.pk</small>
+                        <input asp-for="Input.Email" class="form-control" required="" data-parsley-type="email" data-parsley-trigger="focusin focusout" data-parsley-required-message="Email is required." />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label> <br />
+                        <input asp-for="Input.Password" class="form-control" id="ParsleyPasswordConfirm" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Password is required." data-parsley-length="[6, 30]" data-parsley-length-message="Your password should contain atleast 6 characters" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Please confirm the password" data-parsley-equalto="#ParsleyPasswordConfirm" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="bs-callout bs-callout-warning" style="display:none">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Invalid Form!</h4>
+                <p>
+                    Please fill the complete form.
+                </p>
+            </div>
+        </div>
+
+        <div class="bs-callout bs-callout-info" style="display:none">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Well done!</h4>
+            </div>
+        </div>
+
+        <h4 class="text-secondary" style="letter-spacing: 2px; line-height: 1.6;">
+            I hereby confirm that the information provided herein is accurate, correct and complete and that the documents submitted along with this
+            application form are genuine.
+        </h4>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input lg-checkbox" type="checkbox" id="gridCheck" required="">
+                <label class="form-check-label bg-text" for="gridCheck">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; YES
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-block btn-success m-3">Register <i class="fa fa-user-plus"></i></button>
+    </form>
+</div>
+
+@section Scripts
+{
+    @*<partial name="_ValidationScriptsPartial" />*@
+    <script type="text/javascript">
+        $(function () {
+            $('#parsley-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hideit', ok);
+                $('.bs-callout-warning').toggleClass('hideit', !ok);
+            })
+        });
+    </script>
+
+    <script>
+        // custom
+        var cleaveCustom = new Cleave('.input-session', {
+            blocks: [4, 2],
+            delimiter: '-20',
+            prefix: '20'
+        });
+
+    </script>
+
+    <script>
+        // section
+        var cleaveCustom = new Cleave('.input-section', {
+            blocks: [4],
+        });
+    </script>
+
+    @*<script>
+            // Semester
+            new Cleave('.input-semester', {
+                prefix: 'SEMESTER',
+                blocks: [8, 2]
+            });
+        </script>*@
+
+    @*Parsley Date Validator*@
+    <script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('mindate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp >= minTs;
+            }, 32)
+            .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s</div>');
+
+        window.ParsleyValidator
+            .addValidator('maxdate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp <= minTs;
+            }, 32)
+            .addMessage('en', 'maxdate', '<div class="date-error">Date should be less than or equal to %s </div>');
+    </script>
+
+    @*Parsley Image Validator*@
+    <script>
+        $(document).ready(function () {
+            window.ParsleyValidator
+                .addValidator('fileextension', function (value, requirement) {
+                    var fileExtension = value.split('.').pop();
+
+                    return fileExtension === requirement;
+                }, 32)
+                .addMessage('en', 'fileextension', 'Please only upload image file');
+    </script>
+
+
+    <script>
+        var app = app || {};
+
+        // Utils
+        (function ($, app) {
+            'use strict';
+
+            app.utils = {};
+
+            app.utils.formDataSuppoerted = (function () {
+                return !!('FormData' in window);
+            }());
+
+        }(jQuery, app));
+
+        // Parsley Image validators
+        (function ($, app) {
+            'use strict';
+
+            window.Parsley
+                .addValidator('filemaxmegabytes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+                        var maxBytes = requirement * 1048576;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        return file.length === 1 && file[0].size <= maxBytes;
+
+                    },
+                    messages: {
+                        en: 'Max file size is 5MB, Your file is too big'
+                    }
+                })
+                .addValidator('fileimagetypes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
+                        return allowedMimeTypes.indexOf(file[0].type) !== -1;
+
+                    },
+                    messages: {
+                        en: 'Please only upload image files.\n Supported formats are jpg,jpeg,png,webp,gif'
+                    }
+                });
+
+        }(jQuery, app));
+    </script>
+}

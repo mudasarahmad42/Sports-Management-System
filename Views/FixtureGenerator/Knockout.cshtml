@@ -1,0 +1,54 @@
+﻿<head>
+    <meta charset="UTF-8">
+    <title>Knockout Tournament GCU SMS</title>
+    <link rel="stylesheet" type="text/css" href="~/knockout/style.css">
+    <!--Main Javascript File-->
+    <script type="text/javascript" src="~/knockout/knockout.js"></script>
+</head>
+
+<body>
+    <div id="options">
+        <h2>Knockout Tournament</h2>
+        <section>
+            <h4>Instructions</h4>
+            <p>
+                Enter the number of Teams as 4, 8, 16 or 32. <br />
+                Enter all of the teams names (One Team per line). <br />
+                Select your options, and then hit the "Generate" button. <br />
+                Use selection boxes to complete the bracket.
+            </p>
+        </section>
+        <hr />
+        <h3>Step 1: Enter the number of teams</h3>
+        <input id="numberOfPlayers">
+        <h3>Step 2: Enter team's names</h3>
+        <textarea id="names"></textarea>
+        <h3>Step 3: Select options</h3>
+        <div id="selection">
+            <form id="orderType">
+                <input type="radio" name="orderType" value="ordered" id="ordered" class="form-check-input">
+                <label class="form-check-label ml-4" for="ordered">
+                    Ordered
+                </label>
+                <br />
+                <input type="radio" name="orderType" value="unordered" id="randomized" class="form-check-input">
+                <label class="form-check-label ml-4" for="randomized">
+                    Randomized
+                </label>
+            </form>
+
+            <form id="matchType">
+                <input type="radio" name="bracketType" value="single" checked hidden><br>
+            </form>
+        </div>
+
+        <a class="btn btn-primary" asp-controller="Dashboard" asp-action="Index">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+        <button class="btn btn-success" onclick="generateBracket()">Generate</button>
+
+    </div>
+    <div id="bracket">
+        <h2>Your bracket will appear here!</h2>
+    </div>
+</body>

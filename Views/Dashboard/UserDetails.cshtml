@@ -1,0 +1,435 @@
+﻿@model GCUSMS.Models.StudentModel
+
+@{ ViewData["Title"] = "Student Details"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+        <h2 class="alert-heading">
+            Record of <span class="text-primary">@Model.FirstName @Model.LastName</span>
+        </h2>
+        <hr />
+
+        <h2 class="text-primary">User Personal Details</h2>
+        <br />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Profile Image
+            </dt>
+            <dd class="col-sm-10">
+                <img src="~/images/Users/@Model.ProfileImagePath" class="rounded float-left" style="max-height:200px" alt="User Image">
+            </dd>
+
+            <dt class="col-sm-2">
+                First Name
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Last Name
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Father Name
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FatherName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Date Account Created
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+            <dt class="col-sm-2">
+                Email / Username
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                Roll No
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RollNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Section
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section)
+            </dd>
+            <dt class="col-sm-2">
+                Semester
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Semester)
+            </dd>
+            <dt class="col-sm-2">
+                Department
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DepartmentName)
+            </dd>
+            <dt class="col-sm-2">
+                Gender
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+            <dt class="col-sm-2">
+                Age
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Age)
+            </dd>
+            <dt class="col-sm-2">
+                Date of Birth
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateOfBirth)
+            </dd>
+        </dl>
+    </div>
+
+    <hr />
+
+    <h2 class="text-primary">Leaves Record</h2>
+    <br />
+
+    <div class="m-3">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Total Leave
+            </dt>
+            <dd class="col-sm-10">
+                <i class="badge badge-info">@ViewBag.TotalRequests</i> Leaves
+            </dd>
+            <dt class="col-sm-2">
+                Total Approved
+            </dt>
+
+            <dd class="col-sm-10">
+                <i class="badge badge-success"> @ViewBag.TotalApprovedRequests Approved Leaves</i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Total Rejected
+            </dt>
+
+            <dd class="col-sm-10">
+                <i class="badge badge-danger">@ViewBag.TotalRejectedRequests Rejected Leaves</i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Total Pending
+            </dt>
+            @if (ViewBag.TotalPendingRequests > 0)
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-warning animate__animated animate__flash animate__repeat-3 animate__slow">@ViewBag.TotalPendingRequests Pending Leaves</i>
+                </dd>
+            }
+            else if (ViewBag.TotalPendingRequests == 0)
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-warning">@ViewBag.TotalPendingRequests Pending Leaves</i>
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                Action
+            </dt>
+            @if (@ViewBag.TotalRequests == 0 || @ViewBag.TotalRequests == null)
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-secondary" href="javascript:void(0)" style="pointer-events: none">
+                        Leave Record <i class="fas fa-ban"></i>
+                    </a>
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-primary" asp-controller="LeaveApplication" asp-action="StudentLeaves" asp-route-id="@Model.Id">
+                        Leave Record <i class="fa fa-arrow-right"></i>
+                    </a>
+                </dd>
+            }
+        </dl>
+    </div>
+
+    <hr />
+
+    <h2 class="text-primary">Tournament Participation Record</h2>
+    <br />
+
+    <div class="m-3">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Total Participations
+            </dt>
+            @if (@ViewBag.TotalParticipations < 2)
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-info">@ViewBag.TotalParticipations</i> Tournament
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-info">@ViewBag.TotalParticipations</i> Tournaments
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                Selected in Teams
+            </dt>
+
+            <dd class="col-sm-10">
+                <i class="badge badge-success"> @ViewBag.Selectedin Time Selected</i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Action
+            </dt>
+            @if (@ViewBag.TotalParticipations == 0 || @ViewBag.TotalParticipations == null)
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-secondary" href="javascript:void(0)" style="pointer-events: none">
+                        Participations Record <i class="fas fa-ban"></i>
+                    </a>
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-primary" asp-controller="Participants" asp-action="StudentParticipations" asp-route-id="@Model.Id">
+                        Participations Record <i class="fa fa-arrow-right"></i>
+                    </a>
+                </dd>
+            }
+
+        </dl>
+    </div>
+
+    <hr />
+
+    <h2 class="text-primary">Team Record</h2>
+    <br />
+
+    <div class="m-3">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Total Teams
+            </dt>
+            @if (@ViewBag.TotalTeams < 2)
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-info">@ViewBag.TotalTeams</i> Team
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-info">@ViewBag.TotalTeams</i> Teams
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                Action
+            </dt>
+            @if (@ViewBag.TotalTeams == 0 || @ViewBag.TotalTeams == null)
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-secondary" href="javascript:void(0)" style="pointer-events: none">
+                        Team Record <i class="fas fa-ban"></i>
+                    </a>
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-primary" asp-controller="Team" asp-action="StudentTeamList" asp-route-id="@Model.Id">
+                        Team Record <i class="fa fa-arrow-right"></i>
+                    </a>
+                </dd>
+            }
+
+        </dl>
+    </div>
+
+    <h2 class="text-primary">Blogs Record</h2>
+    <br />
+
+    <div class="m-3">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Total Blogs
+            </dt>
+            <dd class="col-sm-10">
+                <i class="badge badge-info">@ViewBag.TotalBlogs</i> Blogs
+            </dd>
+
+            <dt class="col-sm-2">
+                Approved Blogs
+            </dt>
+
+            <dd class="col-sm-10">
+                <i class="badge badge-success"> @ViewBag.ApprovedBlogs Approved Blogs</i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Action
+            </dt>
+            @if (@ViewBag.TotalBlogs == 0 || @ViewBag.TotalBlogs == null)
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-secondary" href="javascript:void(0)" style="pointer-events: none">
+                        Blog Record <i class="fas fa-ban"></i>
+                    </a>
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-primary" asp-controller="Blog" asp-action="StudentBlogs" asp-route-id="@Model.Id">
+                        Blog Record <i class="fa fa-arrow-right"></i>
+                    </a>
+                </dd>
+            }
+
+        </dl>
+    </div>
+
+    <hr />
+
+    <h2 class="text-primary">Equipment Record</h2>
+    <br />
+    <div class="m-3">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Total Allocations
+            </dt>
+            <dd class="col-sm-10">
+                <i class="badge badge-info">@ViewBag.TotalAllocations</i> Allocations
+            </dd>
+
+            <dt class="col-sm-2">
+                Total Returned
+            </dt>
+
+            <dd class="col-sm-10">
+                <i class="badge badge-success">@ViewBag.TotalReturnedEquipment Returned Equipment</i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Total Lost
+            </dt>
+
+            <dd class="col-sm-10">
+                <i class="badge badge-danger">@ViewBag.TotalLostEquipment Lost Equipment</i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Total Pending
+            </dt>
+            @if (ViewBag.TotalPendingEquipment > 0)
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-warning animate__animated animate__flash animate__repeat-3 animate__slow">@ViewBag.TotalPendingEquipment Pending Equipment</i>
+                </dd>
+
+            }
+            else if (ViewBag.TotalPendingEquipment == 0)
+            {
+                <dd class="col-sm-10">
+                    <i class="badge badge-warning">@ViewBag.TotalPendingEquipment Pending Equipment</i>
+                </dd>
+
+            }
+            <dt class="col-sm-2">
+                Action
+            </dt>
+            @if (@ViewBag.TotalAllocations == 0 || @ViewBag.TotalAllocations == null)
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-secondary" href="javascript:void(0)" style="pointer-events: none">
+                        Equipment Record <i class="fas fa-ban"></i>
+                    </a>
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <a class="btn btn-xs btn-primary" asp-controller="Equipments" asp-action="StudentAllocations" asp-route-id="@Model.Id">
+                        Equipment Record <i class="fa fa-arrow-right"></i>
+                    </a>
+                </dd>
+            }
+
+        </dl>
+    </div>
+
+    <hr />
+    <p class="text-primary">Important Note</p>
+    <p class="text-dark">
+        <i class="fa fa-info-circle text-warning"></i> If you delete this user it will delete all the details associated with this user <br />
+        such as its leave record, equipment allocation record etc.<br />
+        <i class="fa fa-exclamation-circle text-danger"></i> It will permanently delete this user and this action is not reversible.
+    </p>
+
+    <div class="text-center p-3 m-3">
+        <a class="btn btn-outline-secondary" asp-action="Users">
+            <i class="fa fa-arrow-left"></i> Back to List
+        </a>
+
+        @*Change if the email of admin's change*@
+        @if (Model.Email != "admin@gcu.edu.pk")
+        {
+            <a class="btn btn-outline-success" asp-action="ManageUserClaims" asp-route-userId="@Model.Id">
+                Manage User Claims
+            </a>
+
+            <a class="btn btn-outline-danger" asp-action="DeleteUser" asp-route-id="@Model.Id" onclick="return confirm('User @Model.FirstName @Model.LastName\nRoll No: @Model.RollNumber\n-----------------------\n is being deleted!')">
+                Delete <i class="fa fa-trash"></i>
+            </a>
+
+            @if (Model.LastName != "HODS")
+            {
+                <a class="btn btn-outline-warning" asp-action="EditUserProfile" asp-route-userId="@Model.Id">
+                    Edit User Details
+                </a>
+            }
+        }
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Which User you are trying to find details of? What is the ID of the this User? <br />Is there something Wrong with the database.<br />
+            Please Contact IT Team to resolve this issue.
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="Users">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}

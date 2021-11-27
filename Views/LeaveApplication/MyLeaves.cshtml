@@ -1,0 +1,182 @@
+﻿@model GCUSMS.ViewModels.StudentLeaveApplicationVM
+
+@{ ViewData["Title"] = "My Leaves List"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<div class="m-3">
+
+    @if (Model.RequestingStudent != null)
+    {
+        <h2 class="alert-heading">
+            Leave History of <span class="text-primary">@Model.RequestingStudent.FirstName @Model.RequestingStudent.LastName</span>
+        </h2>
+    }
+    <hr />
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">@Model.TotalRequests</span>
+                    <span class="info-box-number">Total Requests</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-green">
+                <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                <div class="info-box-content p-1">
+                    <span class="info-box-text">@Model.ApprovedRequests</span>
+                    <span class="info-box-number">Approved Requests</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-red">
+                <span class="info-box-icon"><i class="fa fa-times-circle"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">@Model.RejectedRequests</span>
+                    <span class="info-box-number">Rejected Requests</span>
+                </div>
+            </div>
+        </div>
+
+
+        @if (@Model.PendingRequests > 0)
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-yellow">
+                    <span class="info-box-icon bg-yellow"><i class="fa fa-exclamation"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text animate__animated animate__flash animate__repeat-3 animate__slow">@Model.PendingRequests <i class="badge badge-danger">NEW</i></span>
+                        <span class="info-box-number animate__animated animate__flash animate__repeat-3 animate__slow">Pending Requests</span>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (@Model.PendingRequests == 0)
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-yellow">
+                    <span class="info-box-icon bg-yellow"><i class="fa fa-exclamation"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">@Model.PendingRequests</span>
+                        <span class="info-box-number">Pending Requests</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <hr />
+
+    <table id="TableData" class="display nowrap table table-striped table-bordered hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Full Name
+                </th>
+                <th>
+                    Roll Number
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Message
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.LeaveApplications)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestingStudent.FirstName)  @Html.DisplayFor(modelItem => item.RequestingStudent.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestingStudent.RollNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeaveSubject)
+                    </td>
+                    <td class="truncate">
+                        @Html.DisplayFor(modelItem => item.TrimmedMessage)
+                    </td>
+                    <td>
+                        @if (item.Approved == true)
+                        {
+                            <span class="badge badge-success">Approved</span>
+                        }
+                        else if (item.Approved == false)
+                        {
+                            <span class="badge badge-danger">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning">Pending Approval</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-md btn-outline-primary" asp-action="StudentLeaveDetails" asp-route-id="@item.Id">
+                            <i class="fa fa-file"></i>Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[1]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+        });
+    });
+    </script>
+}

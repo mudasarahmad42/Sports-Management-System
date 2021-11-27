@@ -1,0 +1,109 @@
+﻿@model IEnumerable<GCUSMS.ViewModels.TournamentTeamVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "My Tournaments";
+}
+
+<h1 class="text-center mb-4">My Tournaments</h1>
+
+<p class="text-dark">List of all the tournaments you have played in</p>
+
+
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Tournament Name
+            </th>
+            <th>
+                Tournament Venue
+            </th>
+            <th>
+                Tournament Level
+            </th>
+            <th>
+                Team Name
+            </th>
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tournament.TournamentName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Tournament.TournamentVenue)
+            </td>
+          
+            <td>
+                @if (item.Tournament.isIntraDepartmental == false)
+                {
+                    <span>UNIVERSITY</span>    
+                }
+                else
+                {
+                    <span>DEPARTMENTAL</span><span class="text-black-50"> (@Html.DisplayFor(modelItem => item.Tournament.DepartmentName))</span>
+                }
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Team.TeamName)
+            </td>
+
+            <td>
+                <div class="btn-group-vertical btn-group-sm" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions
+                    </button>
+                    <div class="dropdown-menu pull-left" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item btn-sm pr-0 mr-0" asp-controller="Team" asp-action="TeaminTournament" asp-route-id="@item.TeamId" target="_blank">
+                            <i class="fa fa-list-alt"></i>Team Details
+                        </a>
+
+                        <a class="dropdown-item btn-sm pr-0 mr-0" asp-controller="Team" asp-action="MyTeam" asp-route-id="@item.TeamId" target="_blank">
+                            <i class="fa fa-list-alt"></i>Team Players
+                        </a>
+
+                        <a class="dropdown-item btn-sm pr-0 mr-0" asp-controller="Tournaments" asp-action="TournamentDetail" asp-route-id="@item.TournamentId" target="_blank">
+                            <i class="fa fa-list-alt"></i>Tournament Details
+                        </a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[1]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+            });
+        });
+    </script>
+}

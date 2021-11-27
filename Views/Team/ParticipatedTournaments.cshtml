@@ -1,0 +1,161 @@
+﻿@model List<GCUSMS.ViewModels.TournamentTeamVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Tournaments Particiated";
+}
+
+<h1 class="text-center mb-4">List of Tournaments <span class="text-primary">'@ViewBag.TeamName'</span> Participated in</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@ViewBag.TotalMatchesPlayed</span>
+                <span class="info-box-number">Total Matches</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-blue">
+            <span class="info-box-icon"><i class="fas fa-trophy"></i></span>
+            <div class="info-box-content p-1">
+                <span class="info-box-text">@ViewBag.TotalMatchesWon</span>
+                <span class="info-box-number">Matches Won</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="fas fa-equals"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@ViewBag.TotalMatchesDrawed</span>
+                <span class="info-box-number">Matches Drawed</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-red">
+            <span class="info-box-icon"><i class="fas fa-heart-broken"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@ViewBag.TotalMatchesLost</span>
+                <span class="info-box-number">Matches Lost</span>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+<a class="btn btn-outline-secondary" asp-controller="Team" asp-action="EditTeam" asp-route-id="@ViewBag.TeamId">
+    <i class="fa fa-arrow-left"></i> Go Back
+</a>
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Tournament Name
+            </th>
+            <th>
+                Start Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>
+                Intra Departmental
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tournament.TournamentName)
+                </td>
+
+                <td>
+                    @item.Tournament.StartDate.ToString("MM/dd/yyyy")
+                </td>
+
+                <td>
+                    @item.Tournament.EndDate.ToString("MM/dd/yyyy")
+                </td>
+
+                @if (item.Tournament.isIntraDepartmental == true)
+                {
+                    <td>
+                        <span class="badge badge-success">Yes</span>
+                    </td>
+                }
+                else if (item.Tournament.isIntraDepartmental == false)
+                {
+                    <td>
+                        <span class="badge badge-warning">No</span>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <span class="badge badge-danger">Unknown Status</span>
+                    </td>
+                }
+
+                <td>
+                    <a class="btn btn-primary" asp-controller="Tournaments" asp-action="TournamentDetails" asp-route-id="@item.TournamentId">
+                        Go to Tournament <i class="fa fa-arrow-right"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[1]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'pdf', className: 'btn btn-primary' },
+                    { extend: 'print', className: 'btn btn-primary' },
+                    { extend: 'copy', className: 'btn btn-primary' },
+                    { extend: 'csv', className: 'btn btn-primary' },
+                    { extend: 'excel', className: 'btn btn-primary' }
+                ]
+            });
+        });
+    </script>
+}
+

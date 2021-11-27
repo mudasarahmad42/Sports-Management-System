@@ -1,0 +1,75 @@
+﻿@model List<GCUSMS.ViewModels.TeamPlayerVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = @ViewBag.TeamName + "'s Players";
+}
+
+<h1 class="text-center mb-4">@ViewBag.TeamName Players</h1>
+
+<a class="btn btn-outline-secondary mb-1" asp-controller="Team" asp-action="MyTeams">
+    <i class="fa fa-arrow-left"></i> Go Back
+</a>
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Profile Image
+            </th>
+
+            <th>
+                Name
+            </th>
+            <th>
+                Roll number
+            </th>
+
+            <th>
+                Department
+            </th>
+
+            <th>
+                Role
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <img class="img-thumbnail ml-4 mt-3" src="~/images/Users/@item.Player.ProfileImagePath" style="max-height:150px; max-width:150px;" alt="" />
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Player.FirstName) @Html.DisplayFor(modelItem => item.Player.LastName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Player.RollNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Player.DepartmentName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlayerRole)
+                    @if (item.CaptainType == "Captain")
+                    {
+                        <span> (Captain)</span>
+                    }
+                    else if (item.CaptainType == "Vice Captain")
+                    {
+                        <span> (Vice Captain)</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

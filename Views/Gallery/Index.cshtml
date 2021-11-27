@@ -1,0 +1,88 @@
+﻿@model GCUSMS.ViewModels.SearchGalleryVM
+@using PagedList.Core.Mvc
+
+
+@{
+    ViewData["Title"] = "Gallery";
+}
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<section class="section-hero d-flex justify-content-center align-items-center"
+         style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.73)), url(../../main/images/img/gcu3.jpg);
+        background-size: cover;
+        background-position:center;
+        background-repeat: no-repeat">
+    <div class="container">
+        <div class="row ">
+            <div class="col-12">
+                <div style="color: white;" class="d-flex justify-content-center align-items-center">
+                    <h1 class="gallery-heading">Welcome to the gallery</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section-gallery">
+
+    <div class="container mt-5 mb-5">
+
+        <form asp-controller="Gallery" asp-action="Index" class="row d-flex justify-content-center align-items-center">
+            <div class="col-12">
+                <div class="text-center">
+                    <input asp-for="SearchString" type="text" class="form-control form-control-lg" placeholder="Search" />
+
+                    <button class="btn btn-maroon m-4" type="submit" id="submit" name="submit">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="container">
+            <div class="row d-flex justify-content-center align-items-center">
+                <h1 class="gallery-title">Search</h1>
+            </div>
+
+            <div class="row d-flex justify-content-center align-items-center">
+                <p class="mb-3">We huge collection of images to share with world.</p>
+            </div>
+
+            @if (Model.ImagesForPagination.Count() == 0)
+            {
+                <div class="row d-flex justify-content-center align-items-center m-5" style="display:block;">
+                    <i class="fa fa-image text-secondary" style="font-size: 20rem; "></i>
+
+                    <h3 class="text-secondary m-5">Nothing Found!!!</h3>
+                </div>
+
+                
+            }
+
+            <div id="lightgallery" class="row d-flex justify-content-center align-items-center">
+
+                @foreach (var Images in Model.ImagesForPagination)
+                {
+                <a href="~/images/@Images.ImagePath" data-sub-html=".caption" class="col-xs-4 gallery-images">
+                    <img class="gallery-image-item" src="~/images/@Images.ImagePath" alt="@Images.ImageName">
+                    <div class="caption">
+                        <h4>@Images.ImageName</h4><p>@Images.Description</p>
+                    </div>
+                </a>
+                }
+            </div>
+
+            <div class="col-12 d-flex justify-content-center align-items-center">
+                <ul class="pagination st-post-pagination">
+                    <div list="@Model.ImagesForPagination" count="15">
+                        <pager class="pager-container" list="@Model.ImagesForPagination" options="@PagedListRenderOptions.Bootstrap4PageNumbersPlusPrevAndNext" asp-action="Index" asp-controller="Gallery" asp-route-query="@Model.SearchString" />
+                    </div>
+                </ul>
+            </div>
+        </div>
+</section>

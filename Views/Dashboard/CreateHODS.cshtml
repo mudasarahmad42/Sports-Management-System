@@ -1,0 +1,183 @@
+﻿@model GCUSMS.ViewModels.HODSVM
+
+@{ ViewData["Title"] = "Create HODS Account"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<div class="st-height-b120 st-height-lg-b80"></div>
+
+<div class="container p-2">
+
+    <h1>Create Head of Departmental Sports account</h1>
+
+    <form id="parsley-form" enctype="multipart/form-data" asp-controller="Dashboard" asp-action="CreateHODS" method="post" data-parsley-validate="">
+        <div class="container m-2">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label asp-for="ProfileImage"></label> <br />
+                        <input asp-for="ProfileImage" class=" form-controlform-control-file" accept="image/*" required="" data-parsley-trigger="focusin focusout" data-parsley-filemaxmegabytes="20" data-parsley-fileimagetypes="image/jpeg, image/png, image/jpg, image/gif, image/webp" data-parsley-required-message="Please upload an image" />
+                        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="DepartmentName" class="form__label">Department Name</label>
+                        <select asp-for="DepartmentName" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Department is required.">
+                            <option value="" selected disabled hidden>Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Physical Education and Sports Sciences">Physical Education and Sports Sciences</option>
+                            <option value="Persian">Persian</option>
+                            <option value="English">English</option>
+                            <option value="Punjabi">Punjabi</option>
+                            <option value="Urdu">Urdu</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biotechnology">Biotechnology</option>
+                            <option value="Botany">Botany</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Zoology">Zoology</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Statistics">Statistics</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Fine Arts">Fine Arts</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email"></label><br />
+                        <small class="text-muted">e.g YourUsername@gcu.edu.pk</small>
+                        <input asp-for="Email" class="form-control" required="" data-parsley-type="email" data-parsley-trigger="focusin focusout" data-parsley-required-message="Email is required." />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password"></label> <br />
+                        <input asp-for="Password" class="form-control" id="ParsleyPasswordConfirm" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Password is required." data-parsley-length="[6, 30]" data-parsley-length-message="Your password should contain atleast 6 characters" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Please confirm the password" data-parsley-equalto="#ParsleyPasswordConfirm" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="bs-callout bs-callout-warning" style="display:none">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Invalid Form!</h4>
+                <p>
+                    Please fill the complete form.
+                </p>
+            </div>
+        </div>
+
+        <div class="bs-callout bs-callout-info" style="display:none">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Well done!</h4>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-block btn-success">Create <i class="fa fa-upload"></i></button>
+    </form>
+</div>
+
+@section Scripts
+{
+    @*<partial name="_ValidationScriptsPartial" />*@
+    <script type="text/javascript">
+        $(function () {
+            $('#parsley-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hideit', ok);
+                $('.bs-callout-warning').toggleClass('hideit', !ok);
+            })
+        });
+    </script>
+
+
+    @*Parsley Image Validator*@
+    <script>
+        $(document).ready(function () {
+            window.ParsleyValidator
+                .addValidator('fileextension', function (value, requirement) {
+                    var fileExtension = value.split('.').pop();
+
+                    return fileExtension === requirement;
+                }, 32)
+                .addMessage('en', 'fileextension', 'Please only upload image file');
+    </script>
+
+
+    <script>
+        var app = app || {};
+
+        // Utils
+        (function ($, app) {
+            'use strict';
+
+            app.utils = {};
+
+            app.utils.formDataSuppoerted = (function () {
+                return !!('FormData' in window);
+            }());
+
+        }(jQuery, app));
+
+        // Parsley Image validators
+        (function ($, app) {
+            'use strict';
+
+            window.Parsley
+                .addValidator('filemaxmegabytes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+                        var maxBytes = requirement * 1048576;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        return file.length === 1 && file[0].size <= maxBytes;
+
+                    },
+                    messages: {
+                        en: 'Max file size is 5MB, Your file is too big'
+                    }
+                })
+                .addValidator('fileimagetypes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
+                        return allowedMimeTypes.indexOf(file[0].type) !== -1;
+
+                    },
+                    messages: {
+                        en: 'Please only upload image files.\n Supported formats are jpg,jpeg,png,webp,gif'
+                    }
+                });
+
+        }(jQuery, app));
+    </script>
+}

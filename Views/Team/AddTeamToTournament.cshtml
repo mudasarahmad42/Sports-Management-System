@@ -1,0 +1,237 @@
+﻿@model GCUSMS.ViewModels.TournamentTeamVM
+
+@{ ViewData["Title"] = "Add Team"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<h5 class="text-danger">Important Notice</h5>
+<p class="text-primary">
+    <i class="fa fa-exclamation-circle text-danger"></i>&nbsp; Enter Team ID very carefully <br />
+</p>
+
+@if (@ViewBag.TeamsinTournament == @ViewBag.TournamentMaximumTeams)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        You have reached limit of <strong>@ViewBag.TournamentMaximumTeams</strong> teams allowed in this tournament.
+        Change maximum teams allowed for this tournament to add more teams.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (@ViewBag.TeamsinTournament > @ViewBag.TournamentMaximumTeams)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        You have exceeded the limit of <strong>@ViewBag.TournamentMaximumTeams</strong> teams allowed in this tournament.
+        Please do not add more teams or change the maximum limit of teams allowed in this tournament.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form id="demo-form" data-parsley-validate="" enctype="multipart/form-data" asp-action="AddTeamToTournament">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">Enter Team Name</label>
+                        <input id="TeamName" type="text" name="value" class="form-control" placeholder="" />
+                    </div>
+                </div>
+
+                <input asp-for="TeamId" id="RequestedTeamId" class="form-control" readonly hidden/>
+
+                <hr />
+
+                <div class="col-12">
+                    <h3 class="text-primary">Team Details <i class="fas fa-user-alt text-black-50"></i></h3>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Team Name</label>
+                        <input id="RequestedTeamName" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Level</label>
+                        <input id="RequestedTeamLevel" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Sports</label>
+                        <input id="RequestedTeamSports" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Team's Department</label>
+                        <input id="RequestedTeamDepartment" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="col-12">
+                    <h3 class="text-primary">Tournament Details <i class="fas fa-tools text-black-50"></i></h3>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Tournament ID</label>
+                        <input value="@ViewBag.TournamentId" class="form-control" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Tournament Name</label>
+                        <input type="text" name="value" value="@ViewBag.TournamentName" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Venue</label>
+                        <input type="text" name="value" value="@ViewBag.TournamentVenue" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Is Tournament Intra-Departmental?</label>
+                        @if (ViewBag.TournamentType == true)
+                        {
+                            <input type="text" name="value" value="Yes" class="form-control" placeholder="" disabled />
+                        }
+                        else if (ViewBag.TournamentType == false)
+                        {
+                            <input type="text" name="value" value="No" class="form-control" placeholder="" disabled />
+                        }
+                        else
+                        {
+                            <input type="text" name="value" value="@ViewBag.TournamentType" class="form-control" placeholder="" disabled />
+                        }
+
+                    </div>
+                </div>
+
+
+                <hr>
+
+                <div class="col-12">
+                    <div class="form-group text-center m-1">
+                        <a class="btn btn-outline-secondary" asp-controller="Tournaments" asp-action="TournamentDetails" asp-route-id="@ViewBag.TournamentId">
+                            <i class="fa fa-arrow-left"></i> Go Back
+                        </a>
+
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#TeamName").autocomplete({
+                source: '/Team/SearchTeams'
+            });
+        });
+
+        //Id
+        $('#TeamName').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "POST",
+                url: "/Team/FillTeamId?name=" + data,
+                data: data,
+                success: function (data) {
+                    $('#RequestedTeamId').val(data);
+                }
+            })
+        }).change();
+
+
+        //Name
+        $('#TeamName').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillTeamName?name=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#RequestedTeamName').val(data);
+                }
+            })
+        }).change();
+
+        //Level
+        $('#TeamName').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillTeamLevel?name=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#RequestedTeamLevel').val(data);
+                }
+            })
+        }).change();
+
+        //Sports
+        $('#TeamName').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillTeamSports?name=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#RequestedTeamSports').val(data);
+                }
+            })
+        }).change();
+
+        //DepartmentName
+        $('#TeamName').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillTeamDepartment?name=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#RequestedTeamDepartment').val(data);
+                }
+            })
+        }).change();
+
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#demo-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hidden', !ok);
+                $('.bs-callout-warning').toggleClass('hidden', ok);
+            })
+        });
+    </script>
+}

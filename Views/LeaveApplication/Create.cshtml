@@ -1,0 +1,127 @@
+﻿@model GCUSMS.ViewModels.LeaveApplicationVM
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "Submit Application"; }
+
+
+<section>
+    <h1 class="heading-gallery">Enter Details of your Leave Application</h1>
+
+    <div class="row">
+        <div class="col-12">
+            <form id="parsley-form" data-parsley-validate="" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <!--<small class="text-muted">DD/MM/YYYY</small>-->
+                            <label asp-for="StartDate" class="control-label">Start Date *</label>
+                            <input asp-for="StartDate" id="GetStartDate" class="form-control datepicker" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Start date is required."  data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-date-format="MM/DD/YYYY"  />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="EndDate" class="control-label">End Date *</label>
+                            <input asp-for="EndDate" id="GetEndDate" class="form-control datepicker" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="End date is required." data-parsley-maxdays="" data-parsley-enddate="" data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-date-format="MM/DD/YYYY"  />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="LeaveSubject">Leave Type *</label>
+                            <select asp-for="LeaveSubject" class="form-control" required="" data-parsley-trigger="focusin focusout">
+                                <option value="" selected disabled hidden>Select Leave Type</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Vacations">Vacations</option>
+                                <option value="Paternity Leave">Paternity Leave</option>
+                                <option value="Medical Leave">Medical Leave</option>
+                                <option value="Urgent Piece Of Work">Urgent Piece of Work</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Message" class="control-label">Message*</label>
+                            <textarea asp-for="Message" class="form-control" required="" data-parsley-maxlength="2000" data-parsley-trigger="keydown focusin focusout"></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Submit Application" class="btn btn-primary btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <p class="paragraph-gallery my-3 px-3 ">* Providing this data is mandatory</p>
+</section>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#parsley-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hidden', !ok);
+                $('.bs-callout-warning').toggleClass('hidden', ok);
+            })
+        });
+    </script>
+
+    @*Parsley Date Validator*@
+    <script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('mindate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp >= minTs;
+            }, 32)
+            .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s i.e(MM/DD/YYYY)</div>');
+
+        window.ParsleyValidator
+            .addValidator('maxdays', function (value) {
+               
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                 // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference <= 15;
+            }, 32)
+            .addMessage('en', 'maxdays', '<div class="date-error">You can only submit leave for 15 days via this application %s </div>');
+
+        window.ParsleyValidator
+            .addValidator('enddate', function (value) {
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                console.log("Start date: " + GetStartDate);
+                console.log("Min Ts: " + minTs);
+                console.log("TimeStamp: " + timestamp);
+                console.log("Difference: " + Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24)));
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference > -1;
+            }, 32)
+            .addMessage('en', 'enddate', '<div class="date-error">End date should be after the start date </div>');
+    </script>
+}

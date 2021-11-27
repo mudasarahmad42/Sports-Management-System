@@ -1,0 +1,53 @@
+﻿@model GCUSMS.ViewModels.UserClaimsVM
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Manage User Claims";
+}
+
+<div class="container">
+    <div class="m-3 p-3">
+        <form method="post">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Manage User Claims</h2>
+                </div>
+
+                <div class="m-2">
+                    <h1 class="text-warning"> <i class="fa fa-exclamation-triangle text-danger"></i> Important Note</h1>
+                    <hr />
+                    <p class="text-primary">
+                        By making this user head of departmental sports you are granting him following rights <br /><br />
+                        <i class="fa fa-dot-circle text-danger"></i> This User now can see the list of students participating in tournaments <br />
+                        <i class="fa fa-dot-circle text-danger"></i> This User now can edit or download the participant list <br />
+                        <i class="fa fa-dot-circle text-danger"></i> This User now can select or reject players on the team <br />
+                    </p>
+                </div>
+                <hr />
+                <div class="card-body">
+                    <p class="text-danger"><i class="fa fa-exclamation"></i> Tick the Box if you want this user as <span class="font-weight-bolder text-primary">HEAD / CAPTAIN OF @ViewBag.userDepartmentName DEPARTMENT'S SPORTS</span></p>
+                    @for (int i = 0; i < Model.Claims.Count; i++)
+                    {
+                        <div class="form-check m-1">
+                            <input type="hidden" asp-for="@Model.Claims[i].ClaimType" />
+                            <input asp-for="@Model.Claims[i].IsSelected" class="form-check-input lg-checkbox" />
+                            <label class="form-check-label bg-text" asp-for="@Model.Claims[i].IsSelected">
+                                @Model.Claims[i].ClaimType
+                            </label>
+                        </div>
+                    }
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </div>
+
+                <div class="card-footer">
+                    <a asp-action="UserDetails" asp-route-id="@Model.UserId"
+                       class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Go Back</a>
+                    <input type="submit" value="Update" class="btn btn-success" onclick="return confirm('You are going to update user rights!')" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

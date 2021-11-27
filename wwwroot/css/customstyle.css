@@ -1,0 +1,233 @@
+/*Parsley*/
+
+input.parsley-success,
+select.parsley-success,
+textarea.parsley-success {
+    color: #468847;
+    background-color: #DFF0D8;
+    border: 1px solid #D6E9C6;
+}
+
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+    color: #B94A48;
+    background-color: #F2DEDE;
+    border: 1px solid #EED3D7;
+}
+
+.parsley-errors-list {
+    margin: 2px 0 3px;
+    padding: 0;
+    list-style-type: none;
+    font-size: 0.9em;
+    line-height: 0.9em;
+    opacity: 0;
+    color: #B94A48;
+    transition: all .3s ease-in;
+    -o-transition: all .3s ease-in;
+    -moz-transition: all .3s ease-in;
+    -webkit-transition: all .3s ease-in;
+}
+
+.parsley-errors-list.filled {
+    opacity: 1;
+}
+
+
+.dashboard-grad-feedback
+{
+    color: maroon;
+    font-size: 1rem;
+}
+
+
+.dashboard-grad {
+    background-image: linear-gradient(to right, #e52d27 0%, #922121 51%, #e52d27 100%);
+    font-size: 4rem !important;
+}
+
+.dashboard-grad {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    padding: 7px 12px;
+    text-align: center;
+    transition: 1s;
+    background-size: 200% auto;
+    border-radius: 10px;
+    display: block;
+}
+
+.dashboard-grad:hover {
+    background-position: right center;
+    text-decoration: none;
+}
+
+
+.btn-grad {
+    background-image: linear-gradient(to right, #e52d27 0%, #922121 51%, #e52d27 100%);
+}
+
+.btn-grad {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    text-align: center;
+    transition: 1s;
+}
+
+.btn-grad:hover {
+    background-position: right center;
+    text-decoration: none;
+} 
+
+/*Gradient Normal Button*/
+
+.list-group-item.active {
+    background-image: linear-gradient(to right, #e52d27 0%, #922121 51%, #e52d27 100%);
+}
+
+.list-group-item.active {
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    display: block;
+    border-color: transparent !important;
+}
+
+.list-group-item.active:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.button-gradient {
+    background-image: linear-gradient(to right, #e52d27 0%, #922121 51%, #e52d27 100%);
+}
+
+.button-gradient {
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+
+.button-gradient:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+         
+
+/*Admin Blog View*/
+
+adminblog-img
+{
+    min-height: 250px !important;
+    max-height: 250px !important;
+}
+
+/*Download Table Buttons*/
+.dt-buttons
+{
+    margin: 1rem 1rem 1rem 0;
+}
+
+/*Anchor Tag at Dashboard Index Icons (AdminPanel)*/
+#StartIconsAdmin a {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    text-align: center;
+    transition: 1s;
+    background-image: linear-gradient(to right, #e52d27 0%, #922121 51%, #e52d27 100%);
+    text-transform: uppercase;
+    transition: 0.5s;
+    font-weight: 700;
+}
+
+/*Text at Dashboard Index Icons (StudentPanel)*/
+#StartTextUser {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    text-align: center;
+    transition: 1s;
+    background-image: linear-gradient(to right, #e52d27 0%, #922121 51%, #e52d27 100%);
+    text-transform: uppercase;
+    transition: 0.5s;
+    font-weight: 700;
+}
+
+/*Parsley*/
+
+input.parsley-success,
+select.parsley-success,
+textarea.parsley-success {
+    color: #468847;
+    background-color: #DFF0D8;
+    border: 1px solid #D6E9C6;
+}
+
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+    color: #B94A48;
+    background-color: #F2DEDE;
+    border: 1px solid #EED3D7;
+}
+
+.parsley-errors-list {
+    margin: 2px 0 3px;
+    padding: 0;
+    list-style-type: none;
+    font-size: 0.9em;
+    line-height: 0.9em;
+    opacity: 0;
+    color: #B94A48;
+    transition: all .3s ease-in;
+    -o-transition: all .3s ease-in;
+    -moz-transition: all .3s ease-in;
+    -webkit-transition: all .3s ease-in;
+}
+
+    .parsley-errors-list.filled {
+        opacity: 1;
+    }
+
+/*Parsley Custom CSS*/
+.parsley-fileimagetypes {
+    line-height: 1.2;
+}
+
+.parsley-filemaxmegabytes {
+    line-height: 1.2;
+}
+
+.parsley-required {
+    margin: 5px;
+}
+
+.date-error {
+    line-height: 1.2;
+    margin: 2px;
+}
+
+/*Show Department if tournament is departmental*/
+#showDepartment
+{
+    display:none;
+}

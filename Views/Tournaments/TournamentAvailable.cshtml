@@ -1,0 +1,134 @@
+﻿@model GCUSMS.ViewModels.PaginatedList<GCUSMS.Models.TournamentModel>
+@*
+    This page is using different pagination then the rest of the application
+    It has its
+    > Pagination Model and other stuff
+    > Paginated List ViewModel
+*@
+
+@{ ViewData["Title"] = "Tournaments List"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled btn-secondary" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled  btn-secondary" : "";
+}
+
+<h1 class="text-primary text-center"><i class="far fa-futbol"></i> Tournaments Available</h1>
+
+<form asp-action="TournamentAvailable" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-success" /><br />
+            <small class="text-muted"><a asp-action="TournamentAvailable">Back to Full List</a></small>
+        </p>
+    </div>
+</form>
+
+<div>
+    <p>Sort By <i class="fas fa-sort"></i></p>
+    <a asp-action="TournamentAvailable" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn btn-link">Due Date</a> |
+    <a asp-action="TournamentAvailable" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn btn-link">Start Date</a>
+</div>
+
+@if (Model.Where(q => q.isActive == true).ToList().Count() > 0)
+{
+
+    @foreach (var item in Model.Where(q => q.isActive == true))
+    {
+        <div class="container">
+            <div class="jumbotron">
+                <h1>@Html.DisplayFor(modelItem => item.TournamentName)</h1>
+                <p class="lead">
+                    <strong>Venue:</strong>  @Html.DisplayFor(modelItem => item.TournamentVenue) <br />
+                    <strong>Start Date: </strong> @item.StartDate.ToString("dd-MM-yy") <br />
+                    <strong>End Date: </strong> @item.EndDate.ToString("dd-MM-yy")  <br />
+                    <strong>Gender: </strong> @item.GenderAllowed <br />
+                    <strong>Sports: </strong> @item.SportsCategory <br />
+                    <strong>Type: </strong> @item.TournamentType <br />
+
+                    @if (DateTime.Today > item.DueDate)
+                    {
+                        <span class="badge badge-danger"> Registrations are closed now</span> <br />
+                    }
+                    else
+                    {
+                        <span><strong>Last Date to Apply:</strong>    @item.DueDate.ToString("dd-MM-yy")</span> <br />
+                    }
+                    @if (item.isIntraDepartmental == true)
+                    {
+                        <strong>Department Name: </strong> @item.DepartmentName <br />
+                    }
+                </p>
+                @if (DateTime.Today > item.DueDate)
+                {
+                    <a class="btn btn-outline-dark float-right" asp-controller="Participants" asp-action="Participate" asp-route-id="@item.TournamentId" hidden>
+                        Participate &nbsp;<i class="fa fa-arrow-right"></i>
+                    </a>
+                }
+                else
+                {
+                    @if (item.isIntraDepartmental == true)
+                    {
+                        @if (item.DepartmentName != null)
+                        { 
+                            @if (@ViewBag.UserDepartment == item.DepartmentName.ToUpper() && (ViewBag.UserGender == item.GenderAllowed || item.GenderAllowed == "MIXED-GENDER"))
+                            {
+                                <a class="btn btn-outline-info float-right" asp-controller="Participants" asp-action="Participate" asp-route-id="@item.TournamentId">
+                                    Participate &nbsp;<i class="fa fa-arrow-right"></i>
+                                </a>
+                            }
+                        }
+                        @if (item.DepartmentName == null)
+                        {
+                            <a class="btn btn-outline-warning float-right" asp-controller="Participants" asp-action="Participate" asp-route-id="@item.TournamentId" hidden>
+                                Participate &nbsp;<i class="fa fa-arrow-right"></i>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        @if (ViewBag.UserGender == item.GenderAllowed || item.GenderAllowed == "MIXED-GENDER")
+                        {
+                            <a class="btn btn-outline-info float-right" asp-controller="Participants" asp-action="Participate" asp-route-id="@item.TournamentId">
+                                Participate &nbsp;<i class="fa fa-arrow-right"></i>
+                            </a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <hr>
+    }
+
+
+
+    <div class="d-flex justify-content-center m-1">
+        <a asp-action="TournamentAvailable"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-primary  @prevDisabled">
+            <i class="fa fa-arrow-left"></i> Previous
+        </a>
+        &nbsp;
+        <a asp-action="TournamentAvailable"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-primary @nextDisabled">
+            Next <i class="fa fa-arrow-right"></i>
+        </a>
+    </div>
+
+}
+else
+{
+    <div class="d-flex justify-content-center">
+        <h1><strong>Nothing to Display</strong></h1>
+    </div>
+}

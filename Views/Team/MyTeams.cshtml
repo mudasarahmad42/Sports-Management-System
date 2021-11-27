@@ -1,0 +1,117 @@
+﻿@model List<GCUSMS.ViewModels.TeamPlayerVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = @ViewBag.PlayerRollNo + "'s Teams";
+}
+
+<h1 class="text-center mb-4">List of the teams <span class="text-primary">@ViewBag.PlayerName</span> is currently part of</h1>
+
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Team Logo
+            </th>
+
+            <th>
+                Team Name
+            </th>
+
+            <th>
+                Team Level
+            </th>
+
+            <th>
+                Team Department
+            </th>
+
+            <th>
+                Team Sports
+            </th>
+
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <img class="img-thumbnail ml-4 mt-3" src="~/images/TeamsLogo/@item.Team.LogoImagePath" style="max-height:150px; max-width:150px;" alt="" />
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.TeamName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.TeamLevel)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.DepartmentName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.TeamSports)
+                </td>
+
+                <td>
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" asp-controller="Team" asp-action="TeaminTournament" asp-route-id="@item.TeamId">
+                            Details <i class="fas fa-book-open"></i>
+                        </a>
+
+                        <a class="dropdown-item" asp-controller="Team" asp-action="MyTeam" asp-route-id="@item.TeamId">
+                            Team Players <i class="fa fa-users"></i>
+                        </a>
+
+                    </div>
+
+                
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[1]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'pdf', className: 'btn btn-primary' },
+                { extend: 'excel', className: 'btn btn-primary' }
+            ]
+        });
+    });
+    </script>
+}

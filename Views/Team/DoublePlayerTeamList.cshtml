@@ -1,0 +1,89 @@
+﻿@model List<GCUSMS.ViewModels.TeamVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "Double Player Teams"; }
+
+<h1 class="text-center mb-4">Double Player Teams List</h1>
+
+<div class="col-10">
+    <a class="btn btn-primary btn-xs" asp-controller="Team" asp-action="TeamList">
+        <i class="fas fa-football-ball"></i> Team List
+    </a>
+    |
+    <a class="btn btn-success btn-xs" asp-controller="Team" asp-action="SinglePlayerTeamList">
+        <i class="fas fa-users"></i> Single Player Teams
+    </a>
+</div>
+
+<div>
+    <table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Team Logo</th>
+                <th scope="col">Team Name</th>
+                <th scope="col">Level</th>
+                <th scope="col">Sports</th>
+                <th scope="col">Maximum Players</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var team in Model)
+            {
+                <tr>
+                    <td><img class="img-thumbnail ml-3 mt-2" src="~/images/TeamsLogo/@team.LogoImagePath" style="max-height:150px; max-width:150px;" alt="" /></td>
+                    <td>@team.TeamName</td>
+                    <td>
+                        @team.TeamLevel
+                        @if (team.TeamLevel == "DEPARTMENTAL")
+                        {
+                            <span class="text-black-50">(@team.DepartmentName)</span>
+                        }
+                    </td>
+                    <td>@team.TeamSports</td>
+                    <td>@team.MaximumPlayers</td>
+                    <td>
+                        <a asp-controller="Team" asp-action="EditTeam" asp-route-id="@team.TeamId" class="btn btn-secondary">
+                            Details <i class=" fa fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[1]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'pdf', className: 'btn btn-primary' },
+                    { extend: 'print', className: 'btn btn-primary' },
+                    { extend: 'copy', className: 'btn btn-primary' },
+                    { extend: 'csv', className: 'btn btn-primary' },
+                    { extend: 'excel', className: 'btn btn-primary' }
+                ]
+            });
+        });
+    </script>
+}

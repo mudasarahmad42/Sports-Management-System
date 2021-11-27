@@ -1,0 +1,327 @@
+﻿@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Fixtures";
+}
+
+<div class="page-wrapper ">
+    <div class="wrapper wrapper--w790">
+        <div class="card-tournament card-5-tournament">
+            <div class="card-heading-tournament">
+                <h2 class="title-tournament">TOURNAMENT DETAILS</h2>
+            </div>
+            <div class="card-body-tournament">
+                <form method="POST">
+                    <div class="form-row">
+                        <div class="name">TOURNAMENT NAME</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-5 input-tournament" type="text" id="tName" name="tournament name" value="@ViewBag.TournamentName" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="name">NUMBER OF TEAMS</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-5 input-tournament" type="text" name="member" id="member" value="@ViewBag.NumberOfTeams" disabled>
+                                <input class="input--style-5 input-tournament" type="text" id="pName" name="participant" value="TEAM " hidden readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-5">
+                        <button class=" btn btn-primary" href="#container" id="filldetails" onclick="addFields()">GENERATE</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<p id="demo"></p>
+
+<div class="page-wrapper " id="team-tournament">
+    <div class="wrapper wrapper--w790">
+        <div class="card-tournament card-5-tournament">
+            <div class="card-heading-tournament">
+                <h2 class="title-tournament">TEAM NAMES</h2>
+            </div>
+            <div class="card-body-tournament">
+                <form method="POST">
+                    <div id="container"> </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p id="demo"></p>
+
+<div class="page-wrapper "id="fixture-tournament">
+    <div class="wrapper wrapper--w790">
+        <div class="card-tournament card-5-tournament">
+            <div class="card-heading-tournament">
+                <h2 class="title-tournament">FIXTURES</h2>
+            </div>
+            <div class="card-body-tournament">
+                <form method="POST">
+
+                    <div id="test2"></div>
+                    <div id="test4"></div>
+                    <div id="test1"></div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const team = [];
+    //const players = [];
+    //Passing array from controller
+    const players = @Html.Raw(Json.Serialize(ViewData["TeamNames"]));
+    const match = [];
+    const map = [];
+    const final = [];
+    const tournamentPairings = [];
+
+    console.log(players);
+
+    //Hide Sections
+    var TeamSection = document.getElementById("team-tournament");
+    TeamSection.style.display = "none";
+
+    
+    var FixtureSection = document.getElementById("fixture-tournament");
+    FixtureSection.style.display = "none";
+
+    //Function
+    function addFields() {
+        var part = document.getElementById("pName").value;
+        // Number of inputs to create
+        var number = document.getElementById("member").value;
+        // Container <div> where dynamic content will be placed
+        var container = document.getElementById("container");
+        // Clear previous contents of the container
+        var tournamenT = document.getElementById("tName").value;
+
+        var GenerateButton = document.getElementById("filldetails");
+        GenerateButton.disabled = true;
+        GenerateButton.classList.remove("btn-primary");
+        GenerateButton.classList.add("btn-secondary");
+
+        //Show Section
+        var TeamSection = document.getElementById("team-tournament");
+        TeamSection.style.display = "";
+
+        while (container.hasChildNodes()) {
+            container.removeChild(container.lastChild);
+        }
+
+        for (i = 0; i < number; i++) {
+            // Append a node with a random text
+            var no = container.appendChild(
+                document.createTextNode(part + (i + 1))
+            );
+            // Create an <input> element, set its type and name attributes
+            team.push(no);
+
+            var input = document.createElement("input");
+            input.classList.add("form-row");
+            input.classList.add("input-group");
+            input.classList.add("input--style-5");
+            input.classList.add("input-tournament");
+            input.type = "text";
+            input.name = "member" + i;
+            input.id = "No" + i;
+            input.value = players[i];
+            container.appendChild(input);
+
+            // Append a line break
+            container.appendChild(document.createElement("br"));
+
+            // container.appendChild(document.createElement("a"));
+        }
+        var btn = document.createElement("BUTTON");
+        var t = document.createTextNode("SUBMIT");
+
+        btn.classList.add("btn")
+        btn.classList.add("btn-primary")
+
+        btn.appendChild(t);
+        container.appendChild(btn);
+
+        btn.onclick = function (e) {
+            e.preventDefault();
+
+            btn.disabled = true;
+            btn.removeAttribute.classList;
+            btn.classList.add("btn-secondary");
+
+            //Show Section
+            var FixtureSection = document.getElementById("fixture-tournament");
+            FixtureSection.style.display = "";
+
+            const head = `<div>
+                          <div class="row justify-content-center">
+                          <div class="col-md-6 text-center mb-5">
+                            <h2 class="heading-section">${tournamenT}</h2>
+                          </div>
+                          </div>`;
+            document.getElementById("test2").innerHTML = head;
+            makeRoundRobinPairings(players);
+            console.log("tours", tournamentPairings);
+            tournamentPairings.forEach((element) => {
+                console.log(element);
+            });
+
+
+            console.log(tournamentPairings.length);
+            const ro = document.getElementById("test3");
+
+            var count = 0;
+            for (let i = 0; i < tournamentPairings.length; i++) {
+
+                count = count + 1;
+                obj = {
+                    Round: "Round " + count,
+                    teams: tournamentPairings[i],
+                };
+                final.push(obj);
+                console.log("round");
+                for (let j = 0; j < tournamentPairings[i].length; j++) {
+                    console.log(tournamentPairings[i][j]);
+                    map.push(tournamentPairings[i][j]);
+                }
+            }
+            console.log(final);
+
+            document.getElementById("test1").innerHTML = final.map(
+                (f) =>
+                    `
+    <div class="row">
+  <div class="col-md-12">
+    <div class="table-wrap">
+      <table class="table">
+
+     <div>
+    <div class="row justify-content-center">
+    <div class="col-md-6 text-center mb-5">
+      <h2 class="heading-sectionViewBagiewBag id="fixtures">${f.Round}</h2>
+    </div>
+    </div>
+    <thead class="thead-dark">
+    <tr>
+      <th>${part}</th>
+      <th>VS</th>
+      <th>${part}</th>
+      <th>Date</th>
+
+    </tr>
+  </thead>
+        <tbody>
+          <tr class="alert" role="alert">
+
+                   <div> ${f.teams.map(
+                        (d) =>
+                            `
+                  <tr>
+                  <th>${d.team1}</th>
+                  <th>VS</th>
+                  <th>${d.team2}</th>
+                  <td><input type="text" class="form-control" placeholder="Enter Time and Date" value="@ViewBag.TournamentStartDate"></td>
+
+                </tr>
+
+                   `
+                    )}</div>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+      </div>`
+            );
+        };
+        console.log(map);
+    }
+
+    console.log(team);
+
+    function makeRoundRobinPairings() {
+        if (players.length % 2 == 1) {
+            players.push("WILL REST THIS ROUND");
+        }
+
+        const playerCount = players.length;
+        const rounds = playerCount - 1;
+        const half = playerCount / 2;
+
+        const playerIndexes = players.map((_, i) => i).slice(1);
+
+        for (let round = 0; round < rounds; round++) {
+            const roundPairings = [];
+
+            const newPlayerIndexes = [0].concat(playerIndexes);
+
+            const firstHalf = newPlayerIndexes.slice(0, half);
+            const secondHalf = newPlayerIndexes.slice(half, playerCount).reverse();
+
+
+            for (let i = 0; i < firstHalf.length; i++) {
+                roundPairings.push({
+                    team1: players[firstHalf[i]],
+                    team2: players[secondHalf[i]],
+                });
+            }
+
+            // rotating the array
+            playerIndexes.push(playerIndexes.shift());
+            tournamentPairings.push(roundPairings);
+        }
+
+        return tournamentPairings;
+    }
+
+    function updateTableHTML() {
+        var tableBody = document.getElementById("your-table-body-id"),
+            newRow,
+            newCell;
+
+        // Reset the table
+        tableBody.innerHTML = "";
+
+        // Build the new table
+        for (var i = 0; i < tournamentPairings.length; i++) {
+            newRow = document.createElement("tr");
+            tableBody.appendChild(newRow);
+
+            if (tournamentPairings[i] instanceof Array) {
+                for (var j = 0; j < tournamentPairings[i].length; j++) {
+                    newCell = document.createElement("td");
+                    newCell.textContent = update[i][j];
+                    newRow.appendChild(newCell);
+                }
+            } else {
+                newCell = document.createElement("td");
+                newCell.textContent = tournamentPairings[i];
+                newRow.appendChild(newCell);
+            }
+        }
+    }
+
+</script>

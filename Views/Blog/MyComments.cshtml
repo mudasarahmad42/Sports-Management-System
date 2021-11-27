@@ -1,0 +1,115 @@
+﻿@model IEnumerable<GCUSMS.ViewModels.CommentVM>
+
+@{ ViewData["Title"] = "My Comments"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+        <h2 class="alert-heading">
+            My Comment List <span class="text-primary">@ViewBag.FullName</span>
+        </h2>
+        <hr />
+        <div class="row">
+            <div class="col-12">
+                <div class="info-box bg-blue">
+                    <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">@Model.Count()</span>
+                        <span class="info-box-number">Total Comments</span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix visible-sm-block"></div>
+        </div>
+        <hr />
+
+        <div>
+            <table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Content</th>
+                        <th scope="col">Comment Date</th>
+                        <th scope="col">Blog Title</th>
+                        <th scope="col">Blog Author</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var comments in Model)
+                    {
+                        <tr>
+                            <td>@comments.Content</td>
+                            <td>@comments.CommentedOn</td>
+                            <td>
+                                @if (comments.Blog.isApproved == true)
+                                {
+                                <a asp-action="Post" asp-route-id="@comments.Blog.BlogID">
+                                    <span> @comments.Blog.Title <i class="fas fa-chevron-right"></i></span>
+                                </a>
+                                }
+                                else
+                                {
+                                    <span class="text-black-50">Not accessible</span>
+                                }
+                            </td>
+                            <td>
+                                @if (@comments.Blog.Author != null)
+                                {
+                                    @comments.Blog.Author.FirstName <span> </span> @comments.Blog.Author.LastName
+                                }
+
+                            </td>
+                            <td>
+                                <form method="post" asp-action="DeleteCommentFromList" asp-route-id="@comments.Id">
+                                    <button class="btn btn-danger" onclick="return confirm('Your comment is being deleted!')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Record with id does not exist!
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="StudentEquipmentList">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[0]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+            });
+        });
+    </script>
+}

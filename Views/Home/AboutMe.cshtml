@@ -1,0 +1,360 @@
+﻿@{ ViewData["Title"] = "About Me"; }
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>About Me</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="~/Test/list/aboutme/assets/favicon1.webp" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
+          type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="~/Test/aboutme/css/styles.css" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top">GCU SMS</a>
+            <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded"
+                           asp-controller="Home" asp-action="Index" id="main-page-link"><i class="fa fa-rocket" style="transform: scale(-1, 1);"></i> Visit The Application <i class="fa fa-rocket"></i></a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded"
+                           href="#about">About</a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded"
+                           href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container d-flex align-items-center flex-column">
+            <!-- Masthead Avatar Image-->
+            <img class="masthead-avatar mb-1" src="~/Test/aboutme/assets/images/image1.png" alt="Mudasar Ahmad" />
+            <!-- Masthead Heading-->
+            <h1 class="masthead-heading text-uppercase mb-0">Mudasar Ahmad</h1>
+            <!-- Icon Divider-->
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Masthead Subheading-->
+            <p class="masthead-subheading font-weight-light mb-0">RAVIAN - BSCS</p>
+        </div>
+    </header>
+    <!-- About Section-->
+    <section class="page-section portfolio" id="about">
+        <div class="container">
+            <!-- About Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase">About</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom divider-dark">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- About Section Content-->
+            <div class="row">
+                <div class="col-12 ms-auto">
+                    <p class="lead text-dark">
+                        Assalam o Alaikum, How are you...? Let me introduce myself, I am Mudasar Ahmad, I have developed this management
+                        system for sports department of Government College University, Lahore. It will help sports
+                        department of GCU Lahore to manage their tasks efficiently. Some of the functionality of this
+                        system is mentioned below.<br> <br>
+                    </p>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> ADMIN DASHBOARD </h6>
+                                <i class="fa fa-circle"></i>
+                                Admin can view list of all users. <br>
+                                <i class="fa fa-circle"></i>
+                                Admin can view details of all registered users. <br>
+                                <i class="fa fa-circle"></i>
+                                Admin can delete any user <br>
+                                <i class="fa fa-circle"></i>
+                                Admin can make any user a captain <br>
+                                <i class="fa fa-circle"></i>
+                                Captains have rights over some data of their own department only. <br>
+                            </div>
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> TOURNAMENT MANAGEMENT </h6>
+                                <i class="fa fa-circle"></i>
+                                Only admin can create a tournament. <br>
+                                <i class="fa fa-circle"></i>
+                                Only admin can manage the tournaments. <br>
+                                <i class="fa fa-circle"></i>
+                                Only admin can edit tournament details. <br>
+                                <i class="fa fa-circle"></i>
+                                Students will be able to see tournaments made public by
+                                Admin. <br>
+                            </div>
+                            <div class="col-4">
+                                <br>
+                                <i class="fa fa-circle"></i>
+                                Students can participate in the tournament made public by Admin <br>
+                                <i class="fa fa-circle"></i>
+                                You can only submit one form per tournament only.<br>
+                                <i class="fa fa-circle"></i>
+                                Captains are allowed to reject or accept participation requests<br>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Icon Divider-->
+                    <div class="divider-custom divider-dark">
+                        <div class="divider-custom-line m-0 p-0"></div>
+                        <div class="divider-custom-line m-0 p-0"></div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> GALLERY MANAGEMENT </h6>
+                                <i class="fa fa-circle"></i>
+                                Only Admin can upload images.<br>
+                                <i class="fa fa-circle"></i>
+                                Anybody can search images by year or department name <br>
+                                <i class="fa fa-circle"></i>
+                                Slideshow of all images can be started to be put on screens. <br>
+                                <i class="fa fa-circle"></i>
+                                Only admin can delete the images. <br>
+                                <i class="fa fa-circle"></i>
+                                Image can only be uploaded in few image specific formats. <br>
+                            </div>
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> LEAVE MANAGEMENT </h6>
+                                <i class="fa fa-circle"></i>
+                                Registered users can submit leaves via this web application. <br>
+                                <i class="fa fa-circle"></i>
+                                Admin can see list of all leaves and their details in the system <br>
+                                <i class="fa fa-circle"></i>
+                                Every individual can see list of thier leaves in the system and its status. <br>
+                                <i class="fa fa-circle"></i>
+                                Users can not submit another leave if their leave is already pending. <br>
+                            </div>
+                            <div class="col-4">
+                                <br>
+                                <i class="fa fa-circle"></i>
+                                Only 15 days leaves is allowed to be submitted via this web application.<br>
+                                <i class="fa fa-circle"></i>
+                                Correct dates are accepted only.<br>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Icon Divider-->
+                    <div class="divider-custom divider-dark">
+                        <div class="divider-custom-line m-0 p-0"></div>
+                        <div class="divider-custom-line m-0 p-0"></div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> EQUIPMENT MANAGEMENT </h6>
+                                <i class="fa fa-circle"></i>
+                                Only Admin can add equipment record<br>
+                                <i class="fa fa-circle"></i>
+                                Admin can allocate equipment to its registered students and keep record of it
+                                digitally.<br>
+                                <i class="fa fa-circle"></i>
+                                Admin can mark lended equipment returned or not returned
+                                returned equipment will be added back to the inventory and vice versa. <br>
+                                <i class="fa fa-circle"></i>
+                                Admin can view list of students of who have borrowed the equipment and their return
+                                status. <br>
+                                <i class="fa fa-circle"></i>
+                                Students can see the list of equipment they have borrowed from the department. <br>
+                            </div>
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> BLOGGING </h6>
+                                <i class="fa fa-circle"></i>
+                                Registered users can Create Blogs<br>
+                                <i class="fa fa-circle"></i>
+                                Author can Upload Blog Header Image<br>
+                                <i class="fa fa-circle"></i>
+                                Author can Edit Blogs<br>
+                                <i class="fa fa-circle"></i>
+                                Everybody can Search Blogs (Title + Content) <br>
+                                <i class="fa fa-circle"></i>
+                                Registered Users can Comment On Blogs <br>
+                                <i class="fa fa-circle"></i>
+                                Anybody can View Blogs.<br>
+                                <i class="fa fa-circle"></i>
+                                Different Dashboard views for Admin and Students. <br>
+                                <i class="fa fa-circle"></i>
+                                You can only delete blogs you wrote. <br>
+                                <i class="fa fa-circle"></i>
+                                Admin can delete any blog. <br>
+
+                            </div>
+                            <div class="col-4">
+                                <br>
+                                <i class="fa fa-circle"></i>
+                                View your comments separtely in a list <br>
+                                <i class="fa fa-circle"></i>
+                                Delete comments from the list.<br>
+                                <i class="fa fa-circle"></i>
+                                Admin can Edit any Blog. <br>
+                                <i class="fa fa-circle"></i>
+                                Author can edit its own blog only<br>
+                                <i class="fa fa-circle"></i>
+                                View your comments separtely in a list <br>
+                                <i class="fa fa-circle"></i>
+                                Delete comments from the list.<br>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Icon Divider-->
+                    <div class="divider-custom divider-dark">
+                        <div class="divider-custom-line m-0 p-0"></div>
+                        <div class="divider-custom-line m-0 p-0"></div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> TEAMS MANAGEMENT </h6>
+                                <i class="fa fa-circle"></i>
+                                Admin can create teams<br>
+                                <i class="fa fa-circle"></i>
+                                Admin can add players to team<br>
+                                <i class="fa fa-circle"></i>
+                                Admin can remove players from team<br>
+                                <i class="fa fa-circle"></i>
+                                Admin can edit attributes of players of different teams <br>
+                            </div>
+                            <div class="col-4">
+                                <h6><i class="fas fa-check"></i> FIXTURE GENERATOR</h6>
+                                <i class="fa fa-circle"></i>
+                                Admin can generate fixtures of tournaments<br>
+                                <i class="fa fa-circle"></i>
+                                Round Robin Algorithm is supported<br>
+                                <i class="fa fa-circle"></i>
+                                Double Round Robin Algorithm is supported <br>
+                                <i class="fa fa-circle"></i>
+                                Single Elimination Algorithm is supported<br>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Icon Divider-->
+                    <div class="divider-custom divider-dark">
+                        <div class="divider-custom-line m-0 p-0"></div>
+                        <div class="divider-custom-line m-0 p-0"></div>
+                    </div>
+                    <p class="lead text-dark">
+                        This project was done for community service. It is a non profit web
+                        application being managed by university, If you find any error or vulnerability in the system.
+                        Please do not exploit it and report it to us as soon as possible. Help us
+                        keep this application up on the internet. Thank You!! 🙂<br> <br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section-->
+    <section class="page-section" id="contact">
+        <div class="container">
+            <!-- Contact Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <br>
+            <p class="lead text-dark">
+                If you have any question about this application or you want to send some feedback,
+                You can use the feedback form available on the application.<br> <br>
+            </p>
+            <!-- Contact Section Form-->
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xl-7">
+                    <!-- Name input-->
+                    <div class="form-group mb-3">
+                        <input class="form-control" type="text" placeholder="MUDASAR AHMAD" disabled />
+                        <label for="name">Full Name</label>
+                    </div>
+
+                    <!-- Email address input-->
+                    <div class="form-group mb-3">
+                        <input class="form-control" id="email" type="email" placeholder="mudasarahmad105@gmail.com"
+                               disabled />
+                        <label for="email">Email address</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <!-- Footer Location-->
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Location</h4>
+                    <p class="lead mb-0">
+                        Government College University, Lahore
+                        <br />
+                        Katchery Road, Lahore Punjab 54000
+                    </p>
+                </div>
+                <!-- Footer Social Icons-->
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Around the Web</h4>
+                    <a class="btn btn-outline-light btn-social mx-1" href="#!">
+                        <i class="fab fa-fw fa-facebook-f"></i>
+                    </a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="#!">
+                        <i class="fab fa-fw fa-linkedin-in"></i>
+                    </a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
+                </div>
+                <!-- Footer About Text-->
+                <div class="col-lg-4">
+                    <h4 class="text-uppercase mb-4">Message</h4>
+                    <p class="lead mb-0">
+                        Help someone around you and be kind to others!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Copyright Section-->
+    <div class="copyright py-4 text-center text-white">
+        <div class="container"><small>Mudasar Ahmad | Copyright &copy; @DateTime.Today.Year</small></div>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="~/Test/aboutme/js/scripts.js"></script>
+</body>
+
+</html>

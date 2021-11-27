@@ -1,0 +1,180 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<StudentModel> SignInManager
+@inject UserManager<StudentModel> UserManager
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "Application Dashboard"; }
+
+
+<!-- ======= About Section ======= -->
+<section class="about">
+
+    <div class="container text-center">
+        <h2>
+            GCU Sports Management System
+        </h2>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            if (User.IsInRole("Administrator"))
+            {
+    <div class="row stats-row m-4" id="StartIconsAdmin">
+        <div class="stats-col text-center col-lg-2 col-sm-auto">
+            <div class="circle">
+                <a asp-controller="Dashboard" asp-action="Users" class="nav-link">
+                    <span class="fa fa-user dashboard-grad"></span><br />
+                    Student Accounts
+                </a>
+            </div>
+        </div>
+
+        <div class="stats-col text-center col-lg-2 col-sm-auto">
+            <div class="circle">
+                <a asp-controller="LeaveApplication" asp-action="Index" class="nav-link">
+                    <span class="fa fa-file-alt dashboard-grad"></span><br />
+                    Leave Management
+                </a>
+            </div>
+        </div>
+
+        <div class="stats-col text-center col-lg-2 col-sm-auto">
+            <div class="circle">
+                <a asp-controller="Equipments" asp-action="Index" class="nav-link">
+                    <span class="fa fa-futbol-o dashboard-grad"></span><br />
+                    Equipment Management
+                </a>
+            </div>
+        </div>
+
+        <div class="stats-col text-center col-lg-2 col-sm-auto">
+            <div class="circle">
+                <a asp-controller="Tournaments" asp-action="TournamentList" class="nav-link">
+                    <span class="fa fa-trophy dashboard-grad"></span><br />
+                    Tournament Management
+                </a>
+            </div>
+        </div>
+
+
+        <div class="stats-col text-center col-lg-2 col-sm-auto">
+            <div class="circle">
+                <a asp-controller="Blog" asp-action="AdminBlogIndex" class="nav-link">
+                    <span class="fas fa-blog dashboard-grad"></span>
+                    Blogs Management
+                </a>
+            </div>
+        </div>
+
+        <div class="stats-col text-center col-lg-2 col-sm-auto">
+            <div class="circle">
+                <a asp-controller="GalleryList" asp-action="Index" class="nav-link">
+                    <span class="fas fa-image dashboard-grad"></span>
+                    Easy Gallery Access
+                </a>
+            </div>
+        </div>
+    </div>
+            }
+
+            if (User.IsInRole("Student"))
+            {
+                <div class="row stats-row m-4">
+                    <div class="stats-col text-center col-lg-2 col-sm-auto">
+                        <div class="circle" id="StartTextUser">
+                            <span class="fa fa-user dashboard-grad"></span><br />
+                            Student Accounts
+                        </div>
+                    </div>
+
+                    <div class="stats-col text-center col-lg-2 col-sm-auto">
+                        <div class="circle" id="StartTextUser">
+                            <span class="fa fa-file-alt dashboard-grad"></span><br />
+                            Leave Management
+                        </div>
+                    </div>
+
+                    <div class="stats-col text-center col-lg-2 col-sm-auto">
+                        <div class="circle" id="StartTextUser">
+                            <span class="fa fa-futbol-o dashboard-grad"></span><br />
+                            Equipment Management
+                        </div>
+                    </div>
+
+                    <div class="stats-col text-center col-lg-2 col-sm-auto">
+                        <div class="circle" id="StartTextUser">
+                            <span class="fa fa-trophy dashboard-grad"></span><br />
+                            Tournament Management
+                        </div>
+                    </div>
+
+
+                    <div class="stats-col text-center col-lg-2 col-sm-auto">
+                        <div class="circle" id="StartTextUser">
+                            <span class="fas fa-blog dashboard-grad"></span>
+                            Blogs Management
+                        </div>
+                    </div>
+
+                    <div class="stats-col text-center col-lg-2 col-sm-auto">
+                        <div class="circle" id="StartTextUser">
+                            <span class="fas fa-image dashboard-grad"></span>
+                            Easy Gallery Access
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <hr />
+    <br class="mt-3" />
+
+    <div class="row m-4">
+        <div class="text-center col-12 col-sm-auto">
+            <p class="text-justify">
+                Welcome to Government College University Lahore Sports Management System.
+                This application is the beta version.
+                <div class="row">
+                    <div class="col-4">
+                        <div class="list-group" id="myList" role="tablist">
+                            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#tab-pane1" role="tab">Readme</a>
+                            <a class="list-group-item list-group-item-action" data-toggle="list" href="#tab-pane2" role="tab">Beta Version</a>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (User.IsInRole("Administrator"))
+                                {
+                                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#tab-pane3" role="tab">User Feedback</a>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="tab-content" style="text-align:left;">
+                            <div class="tab-pane fade active" id="tab-pane1" role="tabpanel">
+                                This application is built to facilitate day to day tasks of a sports department of an instituition.
+
+                            </div>
+                            <div class="tab-pane fade" id="tab-pane2" role="tabpanel">
+                                This is a new application if you encounter any error or find any bug. Write us at gcusports@gmail.com
+                            </div>
+
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (User.IsInRole("Administrator"))
+                                {
+                                    <div class="tab-pane fade active" id="tab-pane3" role="tabpanel">
+                                        <a asp-controller="Home" asp-action="Feedback" class="nav-link">
+                                            <span class="fa fa-question-circle dashboard-grad"></span> <span class="dashboard-grad-feedback">Feedback</span> 
+                                        </a>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </p>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,148 @@
+﻿@model GCUSMS.ViewModels.SearchBlogVM
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<StudentModel> SignInManager
+@inject UserManager<StudentModel> UserManager
+@using PagedList.Core.Mvc
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "My Private Blogs"; }
+
+<div class="container-fluid">
+    <h1 class="mt-4">Dashboard</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">@Model.Blogs.Count()</span>
+                    <span class="info-box-number">Total Blogs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a asp-controller="Blog" asp-action="MyBlogsStudent" class="btn btn-primary mb-3">
+        View All Blogs  <i class="fa fa-arrow-circle-right"></i>
+    </a>
+
+    <form asp-controller="Blog" asp-action="MyPrivateBlogsStudent" class="col-12 d-flex justify-content-center">
+        <div class="col-lg-12">
+            <div class="text-center">
+                <input asp-for="SearchString" type="text" class="form-control" placeholder="Search posts for..." />
+                <div class="st-height-b10 st-height-lg-b10"></div>
+                <button class="btn btn-primary m-4" type="submit" id="submit" name="submit">
+                    Search
+                </button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Blogs.Count() > 0)
+    {
+
+
+        <div class="row">
+
+
+            @foreach (var blog in Model.Blogs)
+            {
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-0 shadow bg-light">
+                        <img src="~/images/Blogs/@blog.BlogImagePath" class="card-img-top adminblog-img">
+                        <div class="card-body">
+                            <div class="row" style="margin: 0px auto 10px 0px;">
+                                <div>
+                                    <h5 class="card-title mb-0">
+                                        @if (blog.Title.Length > 20)
+                                        {
+                                            @(@blog.Title.Substring(0, 17) + "...")
+                                        }
+                                        else
+                                        {
+                                            @blog.Title
+                                        }
+                                    </h5>
+                                </div>
+                                <div class="ml-auto mr-3">
+                                    @if (blog.isPublished == true && blog.isApproved == true)
+                                    {
+                                        <i class="fas fa-eye" style="color: darkgreen;"></i>
+                                    }
+                                    else if (blog.isPublished == true && blog.isApproved == false)
+                                    {
+                                        <i class="fas fa-eye" style="color: deepskyblue;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-eye-slash" style="color: orangered"></i>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row ml-0" style="bottom: 0;">
+                                <div><i class="fas fa-calendar-alt" style="color: gray"></i></div>
+                                <p class="text-muted ml-3 mb-0">Created <br /> <strong>@blog.CreatedOn.ToString("dd/MM/yyyy")</strong></p>
+                            </div>
+                            <div class="row ml-0">
+                                <div><i class="fas fa-sync" style="color: gray"></i></div>
+                                <p class="text-muted ml-3 mb-0">Last updated on  <br /> <strong>@blog.UpdatedOn.ToString("dd/MM/yyyy")</strong></p>
+                            </div>
+                            <div class="row ml-0" style="bottom: 0;">
+                                <div><i class="fas fa-user" style="color: gray"></i></div>
+                                <p class="text-muted ml-3 mb-0">
+                                    Author <br />
+                                    <strong>
+                                        @if (@blog.Author.FirstName.Length > 7)
+                                        {
+                                            @blog.Author.FirstName.Substring(0, 1);
+                                        }
+                                        else
+                                        {
+                                            @blog.Author.FirstName
+                                        }
+
+                                        @blog.Author.LastName
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                @if (blog.isPublished == true && blog.isApproved == true)
+                                {
+                                    <div class="col">
+                                        <a asp-controller="Blog" asp-action="Post" asp-route-id="@blog.BlogID" class="btn btn-primary" target="_blank">
+                                            <i class="fa fa-arrow-circle-right"></i> View
+                                        </a>
+                                    </div>
+                                }
+                                <div class="col">
+                                    <a asp-controller="Blog" asp-action="Edit" asp-route-id="@blog.BlogID" class="btn btn-secondary float-right">
+                                        <i class=" fa fa-edit"></i> Edit
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="dataTables_paginate paging_simple_numbers col-12 d-flex justify-content-center">
+                <ul class="pagination">
+                    <div list="@Model.Blogs" count="20">
+                        <pager class="pager-container" list="@Model.Blogs" options="@PagedListRenderOptions.Bootstrap4PageNumbersPlusPrevAndNext" asp-action="AdminBlogIndex" asp-controller="Blog" asp-route-query="@Model.SearchString" />
+                    </div>
+                </ul>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <h3 class="text-secondary">No Blogs Available to Display</h3>
+        </div>
+    }
+</div>

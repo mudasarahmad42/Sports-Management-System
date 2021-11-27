@@ -1,0 +1,132 @@
+﻿@model GCUSMS.ViewModels.ParticipantVM
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<StudentModel> SignInManager
+@inject UserManager<StudentModel> UserManager
+
+@{ ViewData["Title"] = "Participate"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h1 class="text-primary text-center"><i class="far fa-futbol"></i> Participation Form</h1>
+<hr>
+<br>
+
+<div class="container">
+    <form enctype="multipart/form-data" asp-action="Participate" id="parsley-form" data-parsley-validate="">
+
+        <h2 class="text-primary">Tournament Details <i class="far fa-futbol"></i></h2>
+        <br>
+
+        <div class="form-group">
+            <label for="name">Name of Tournament</label><br>
+            <input type="text" class="form-control" id="name" placeholder="@ViewBag.TournamentName" name="name" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="venue">Venue: </label><br>
+            <input type="text" class="form-control" id="venue" placeholder="@ViewBag.TournamentVenue" name="venue" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="id">Last Date to Apply: </label><br>
+            <input type="text" class="form-control" id="email" placeholder="@ViewBag.TournamentDueDate" name="id" disabled>
+        </div>
+
+        @if (@ViewBag.IsIntra == true)
+        {
+            <div class="form-group">
+                <label for="id">Department Name</label><br>
+                <input type="text" class="form-control" id="email" placeholder="@ViewBag.DepartmentName" name="id" disabled>
+            </div>
+        }
+
+        <hr>
+        <br>
+
+        <h2 class="text-primary">Personal User Details <i class="far fa-user"></i></h2>
+
+        <p class="text-primary">
+            <i class="fas fa-exclamation-triangle text-warning"></i>
+            <br><i class="fas fa-circle text-primary"></i> Please Enter only a working and valid email address
+            <br><i class="fas fa-circle text-primary"></i> This email address will be used to contact you!
+        </p>
+        @if (DateTime.Today < ViewBag.CheckDate)
+        {
+            //If Tournament is not Intra-Departmental then allow participation
+            @if (@ViewBag.IsIntra == null)
+            {
+                <div class="form-group">
+                    <label asp-for="ValidEmail" class="control-label">Enter Email</label>
+                    <input asp-for="ValidEmail" class="form-control" required="" data-parsley-type="email" data-parsley-trigger="focusin focusout" data-parsley-required-message="Email is required." >
+                    <span asp-validation-for="ValidEmail" class="text-danger"></span>
+                </div>
+            }
+
+            //If Tournament is Intra-Departmental and Student has same department as Tournment Department
+            //Allow Participation
+            @if (@ViewBag.IsIntra == true && @ViewBag.StudentDepartment == @ViewBag.DepartmentName)
+            {
+                <div class="form-group">
+                    <label asp-for="ValidEmail" class="control-label">Enter Email</label>
+                    <input asp-for="ValidEmail" class="form-control"  required="" data-parsley-type="email" data-parsley-trigger="focusin focusout" data-parsley-required-message="Email is required." >
+                    <span asp-validation-for="ValidEmail" class="text-danger"></span>
+                </div>
+            }
+
+            //If Tournament is Intra-Departmental but Department is null
+            @if (@ViewBag.IsIntra == true && @ViewBag.DepartmentName == null)
+            {
+                <div class="form-group">
+                    <p class="text-muted">This is an intra-departmental tournament</p>
+                </div>
+            }
+            <hr>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="ValidEmail" class="control-label">Enter Email</label>
+                <input asp-for="ValidEmail" class="form-control" disabled>
+                <span asp-validation-for="ValidEmail" class="text-danger"></span>
+            </div>
+            <hr>
+        }
+
+        <div class="form-group">
+            <label for="name">Name</label><br>
+            <input type="text" class="form-control" id="name" placeholder="@((await UserManager.GetUserAsync(User)).FirstName) @((await UserManager.GetUserAsync(User)).LastName) " name="name" disabled>
+        </div>
+        <div class="form-group">
+            <label for="rollnumber">Roll number: </label><br>
+            <input type="text" class="form-control" id="rollnumber" placeholder="@((await UserManager.GetUserAsync(User)).RollNumber)" name="rollnumber" disabled>
+        </div>
+        <div class="form-group">
+            <label for="dptName">Department Name: </label><br>
+            <input type="text" class="form-control" id="dptName" placeholder="@((await UserManager.GetUserAsync(User)).DepartmentName)" name="dptName" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="section">Section:</label><br>
+            <input type="text" class="form-control" id="section" placeholder="@((await UserManager.GetUserAsync(User)).Section)" name="section" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="semester">Semester:</label><br>
+            <input type="text" class="form-control" id="semester" placeholder="@((await UserManager.GetUserAsync(User)).Semester)" name="semester" disabled>
+        </div>
+
+        <div class="m-4 d-flex justify-content-center">
+            <a class="btn btn-secondary text-center" asp-controller="Tournaments" asp-action="TournamentAvailable">
+                <i class="fa fa-arrow-left"></i> Go Back
+            </a>
+            &nbsp;
+            @if (DateTime.Today < ViewBag.CheckDate)
+            {
+                <button type="submit" class="btn btn-primary text-center">Submit</button>
+            }
+        </div>
+    </form>
+   
+</div>

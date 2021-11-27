@@ -1,0 +1,119 @@
+﻿@model IEnumerable<GCUSMS.ViewModels.TeamPlayerVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "All Players";
+}
+
+<h1 class="text-center mb-4">Players List</h1>
+
+<p class="text-black-50">List of all the players who have played or are playing for the teams that were/are part of the tournaments</p>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <div class="info-box bg-blue">
+            <span class="info-box-icon"><i class="fa fa-users"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@Model.Select(q => q.Player.RollNumber).Distinct().Count()</span>
+                <span class="info-box-number">Unique Participants</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Roll number
+            </th>
+            <th>
+                Department
+            </th>
+            <th>
+                Team
+            </th>
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player.FirstName) @Html.DisplayFor(modelItem => item.Player.LastName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Player.RollNumber)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Player.DepartmentName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Team.TeamName)
+            </td>
+
+            <td>
+                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Actions
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="btn" asp-controller="Participants" asp-action="StudentParticipations" asp-route-id="@item.Player.Id">
+                        Participations <i class="fa fa-list-alt"></i>
+                    </a>
+                    <br />
+                    <a class="btn" asp-controller="Team" asp-action="StudentTeamList" asp-route-id="@item.Player.Id">
+                        Teams <i class="fa fa-list-ul"></i>
+                    </a>
+                </div>
+
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[1]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'pdf', className: 'btn btn-primary' },
+                { extend: 'print', className: 'btn btn-primary' },
+                { extend: 'copy', className: 'btn btn-primary' },
+                { extend: 'csv', className: 'btn btn-primary' },
+                { extend: 'excel', className: 'btn btn-primary' }
+            ]
+        });
+    });
+    </script>
+}

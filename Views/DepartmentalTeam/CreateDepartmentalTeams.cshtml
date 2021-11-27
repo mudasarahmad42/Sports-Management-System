@@ -1,0 +1,160 @@
+﻿@model GCUSMS.ViewModels.CreateTeamVM
+
+@{ ViewData["Title"] = "Create Departmental Team"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<h1 class="text-primary text-center"><i class="fas fa-pen"></i> Create Team</h1>
+
+<div class="container">
+    <h2 class="text-center">
+        <i class="fas fa-info text-primary"></i> Enter Details of the team you want to create
+    </h2>
+    <br>
+
+    <form asp-action="CreateTeams" class="col-lg-6 offset-lg-3" enctype="multipart/form-data" id="parsley-form" data-parsley-validate="">
+        <div class="form-group">
+            <label asp-for="Image">Upload Logo</label>
+            <div class="custom-file">
+                <label asp-for="Image" class="custom-file-label"></label>
+                <input asp-for="Image" class="custom-file-input" placeholder="Input Image" id="image" style="width: 30rem;" accept="image/*" required="" data-parsley-trigger="focusin focusout" data-parsley-filemaxmegabytes="20" data-parsley-fileimagetypes="image/jpeg, image/png, image/jpg, image/gif, image/webp" data-parsley-required-message="Please upload a logo of the team">
+            </div>
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TeamName" class="control-label">Team Name: </label><br>
+            <input asp-for="TeamName" class="form-control" placeholder="Enter Name" data-parsley-required-message="Name is Required" required="" maxlength="30" data-parsley-trigger="focusin focusout">
+            <span asp-validation-for="TeamName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <!--<small class="text-muted">DD/MM/YYYY</small>-->
+            <label asp-for="TeamSports" class="control-label">Enter Sports</label>
+            <select asp-for="TeamSports" class="form-control" data-parsley-required-message="Please select sports" required="" data-parsley-trigger="focusin focusout">
+                <option value="" selected disabled hidden>Select Sports</option>
+                <option value="Cricket">Cricket</option>
+                <option value="Football">Football</option>
+                <option value="Hockey">Hockey</option>
+                <option value="Badminton">Badminton</option>
+                <option value="Squash">Squash</option>
+                <option value="Gymnastics">Gymnastics</option>
+                <option value="Weight Lifting">Weight Lifting</option>
+                <option value="Tug of War">Tug of War</option>
+            </select>
+            <span asp-validation-for="TeamSports" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DepartmentName" class="control-label"></label>
+                <select asp-for="DepartmentName" class="form-control" data-parsley-required-message="Please select sports" required="" data-parsley-trigger="focusin focusout">
+                    <option value="" selected disabled hidden>Select Department</option>
+                    <option value="@ViewBag.userDepartment">@ViewBag.userDepartment</option>
+                </select>
+                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <!--<small class="text-muted">DD/MM/YYYY</small>-->
+            <label asp-for="MaximumPlayers" class="control-label">Enter expected number of players</label>
+            <input asp-for="MaximumPlayers" class="form-control" data-parsley-type="number" data-parsley-required-message="Please enter maximum number of players allowed in this team" required="" data-parsley-trigger="focusin focusout" />
+            <span asp-validation-for="MaximumPlayers" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mb-3">Create</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+    </script>
+
+    @*Parsley Image Validator*@
+    <script>
+        $(document).ready(function () {
+            window.ParsleyValidator
+                .addValidator('fileextension', function (value, requirement) {
+                    var fileExtension = value.split('.').pop();
+
+                    return fileExtension === requirement;
+                }, 32)
+                .addMessage('en', 'fileextension', 'Please only upload image file');
+    </script>
+
+
+    <script>
+        var app = app || {};
+
+        // Utils
+        (function ($, app) {
+            'use strict';
+
+            app.utils = {};
+
+            app.utils.formDataSuppoerted = (function () {
+                return !!('FormData' in window);
+            }());
+
+        }(jQuery, app));
+
+        // Parsley Image validators
+        (function ($, app) {
+            'use strict';
+
+            window.Parsley
+                .addValidator('filemaxmegabytes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+                        var maxBytes = requirement * 1048576;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        return file.length === 1 && file[0].size <= maxBytes;
+
+                    },
+                    messages: {
+                        en: 'Max file size is 5MB, Your file is too big'
+                    }
+                })
+                .addValidator('fileimagetypes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
+                        return allowedMimeTypes.indexOf(file[0].type) !== -1;
+
+                    },
+                    messages: {
+                        en: 'Please only upload image files.\n Supported formats are jpg,jpeg,png,webp,gif'
+                    }
+                });
+
+            }(jQuery, app));
+    </script>
+}

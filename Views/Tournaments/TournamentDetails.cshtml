@@ -1,0 +1,496 @@
+﻿@model GCUSMS.ViewModels.TournamentVM
+
+@{ ViewData["Title"] = "Tournament Details"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+        <h2 class="alert-heading">
+            <span class="text-primary">@Model.TournamentName</span>
+        </h2>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-2">
+                Tournament Id
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TournamentId)
+            </dd>
+            <dt class="col-sm-2">
+                Start Date
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+
+            <dt class="col-sm-2">
+                End Date
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+
+            <dt class="col-sm-2">
+                Last Date to Apply
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.DueDate.ToString("dddd, dd MMMM yyyy") <br />
+                <small class="text-muted">Date Today: @DateTime.Now.ToString("dddd, dd MMMM yyyy") </small>
+            </dd>
+
+            @if (Model.isActive == true || Model.isActive == false)
+            {
+                <dt class="col-sm-2">
+                    Visibility Status
+                </dt>
+
+                <dd class="col-sm-10">
+                    @if (Model.isActive == true)
+                    {
+                        <span class="badge badge-success">Published</span>
+                        <span class="fa fa-eye text-success text-lg" aria-hidden="true"></span>
+                    }
+                    else if (Model.isActive == false)
+                    {
+                        <span class="badge badge-danger">Archived</span>
+                        <span class="fa fa-eye-slash text-danger text-lg" aria-hidden="true"></span>
+                    }
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                Tournament Status
+            </dt>
+
+            <dd class="col-sm-10">
+                @if (Model.Status == "ONGOING")
+                {
+                    <span class="badge badge-info">@Model.Status</span>
+                }
+                else if (Model.Status == "CONCLUDED")
+                {
+                    <span class="badge badge-success">@Model.Status</span>
+                }
+                else if (Model.Status == "POSTPONED")
+                {
+                    <span class="badge badge-warning">@Model.Status</span>
+                }
+                else if (Model.Status == "CANCELLED")
+                {
+                    <span class="badge badge-danger">@Model.Status</span>
+                }
+                else
+                {
+                    <span class="badge badge-primary">NOT SET</span>
+                }
+            </dd>
+
+            <dt class="col-sm-2">
+                Number of Teams Allowed
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TeamsAllowed)
+            </dd>
+
+            <!--<dt class="col-sm-2">
+                Generate Fixtures
+            </dt>
+
+            <dd class="col-sm-10">
+                <a class="btn btn-info btn-xs" asp-controller="Tournaments" asp-action="RoundRobinTournament" asp-route-id="@Model.TournamentId">
+                    All Play All Once
+                </a>
+                <a class="btn btn-info btn-xs" asp-controller="Tournaments" asp-action="DoubleRoundRobinTournament" asp-route-id="@Model.TournamentId">
+                    All Play All Twice
+                </a>-->
+            @*<a class="btn btn-success btn-sm" asp-controller="Tournaments" asp-action="KnockoutTournament" asp-route-id="@Model.TournamentId">
+                    Knockout
+                </a>*@
+            <!--</dd>-->
+
+            <dt class="col-sm-2">
+                Actions
+            </dt>
+
+            <dd class="col-sm-10">
+                <a class="btn btn-primary btn-sm" asp-controller="Tournaments" asp-action="TournamentParticipants" asp-route-id="@Model.TournamentId">
+                    <i class="fa fa-search"></i> See Participants
+                </a>
+                |
+                @if (DateTime.Today > Model.DueDate.Date)
+                {
+                    <a class="btn btn-dark btn-sm" asp-controller="Team" asp-action="AddTeamToTournament" asp-route-id="@Model.TournamentId">
+                        <i class="fa fa-plus"></i> Add Team
+                    </a>
+
+                }
+                else
+                {
+                    <a class="btn btn-success btn-sm" asp-controller="Team" asp-action="AddTeamToTournament" asp-route-id="@Model.TournamentId">
+                        <i class="fa fa-plus"></i> Add Team
+                    </a>
+                }
+
+                <a class="btn btn-success btn-sm" asp-controller="Team" asp-action="ManageTournamentTeam" asp-route-id="@Model.TournamentId">
+                    <i class="fa fa-gear"></i> Manage Teams
+                </a>
+                |
+                <a class="btn btn-primary btn-sm" asp-controller="Tournaments" asp-action="PointsTable" asp-route-id="@Model.TournamentId">
+                    <i class="fa fa-table"></i> See Points Table
+                </a>
+
+                <a class="btn btn-info btn-sm" asp-controller="Tournaments" asp-action="Fixtures" asp-route-id="@Model.TournamentId">
+                    <i class="fa fa-table"></i> Generate Fixtures
+                </a>
+
+                @*<div class="dropdown show d-inline">
+                        <a class="btn btn-info btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Generate Fixtures
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" asp-controller="Tournaments" asp-action="RoundRobinTournament" asp-route-id="@Model.TournamentId">All Play All Once</a>
+                            <a class="dropdown-item" asp-controller="Tournaments" asp-action="DoubleRoundRobinTournament" asp-route-id="@Model.TournamentId">All Play All Twice</a>
+                        </div>
+                    </div>*@
+            </dd>
+
+        </dl>
+
+        <hr />
+
+        <h1 class="text-info">Edit Tournament Details</h1>
+
+
+        <form asp-controller="Tournaments" asp-action="TournamentDetailsEdit" method="post" id="parsley-form" data-parsley-validate="" class="mt-3">
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+            @*Use hidden input elements to store tournament id
+                which we need when we submit the form and update data in the database*@
+            <input hidden asp-for="TournamentId" />
+
+            <div class="form-group row">
+                <label asp-for="TournamentName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="TournamentName" class="form-control" placeholder="Tournament Name">
+                    <span asp-validation-for="TournamentName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="TournamentVenue" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="TournamentVenue" class="form-control" placeholder="Tournament Venue">
+                    <span asp-validation-for="TournamentVenue" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="TeamsAllowed" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="TeamsAllowed" class="form-control" placeholder="Tournament Venue">
+                    <span asp-validation-for="TeamsAllowed" class="text-danger"></span>
+                </div>
+            </div>
+
+            <small class="text-muted">Date Today: @DateTime.Today.ToString("dd-MM-yyyy")</small><br />
+            <div class="form-group row">
+                <label asp-for="StartDate" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="StartDate" id="GetStartDate" data-date-format="MM/DD/YYYY" class="form-control" placeholder="Start Date">
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="EndDate" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="EndDate" id="GetEndDate" data-parsley-enddate="" data-date-format="MM/DD/YYYY" class="form-control" placeholder="End Date">
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="DueDate" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="DueDate" data-date-format="MM/DD/YYYY" data-parsley-duedate="" class="form-control" placeholder="Due Date">
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label asp-for="SportsCategory" class="col-sm-2 col-form-label">Sports Category</label>
+                <div class="col-sm-10">
+                    <select asp-for="SportsCategory" class="form-control">
+                        <option value="" selected disabled hidden>Select Sports</option>
+                        <option value="Cricket">Cricket</option>
+                        <option value="Football">Football</option>
+                        <option value="Hockey">Hockey</option>
+                        <option value="Badminton">Badminton</option>
+                        <option value="Squash">Squash</option>
+                        <option value="Gymnastics">Gymnastics</option>
+                        <option value="Weight Lifting">Weight Lifting</option>
+                        <option value="Tug of War">Tug of War</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span asp-validation-for="SportsCategory" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label asp-for="GenderAllowed" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="GenderAllowed" class="form-control">
+                        <option value="" selected disabled hidden>Select Gender</option>
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                        <option value="Mixed-gender">Mixed-gender</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="TournamentType" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="TournamentType" class="form-control">
+                        <option value="" selected disabled hidden>Select type</option>
+                        <option value="Single">Single</option>
+                        <option value="Double">Double</option>
+                        <option value="Team">Team</option>
+                    </select>
+                    <span asp-validation-for="TournamentType" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="isActive" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="isActive" class="form-check-input lg-checkbox text-lg-left" />
+                    <span asp-validation-for="isActive" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="isIntraDepartmental" class="col-sm-2 col-form-label">Intra Departmental Tournament</label>
+                <div class="col-sm-10">
+                    <input asp-for="isIntraDepartmental" id="isDepartmental" onchange="valueChanged()" class="form-check-input lg-checkbox text-lg-left" />
+                    <span asp-validation-for="isIntraDepartmental" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div id="showDepartment">
+                <strong class="text-primary"><i class="fa fa-info text-info"></i> This is an Intra-Departmental Tournament, Please select the department name </strong> <br /><br />
+                <div class="form-group row">
+                    <label asp-for="DepartmentName" class="col-sm-2 col-form-label">Department Name</label>
+                    <div class="col-sm-10">
+                        <select asp-for="DepartmentName" id="DepartmentRequired" class="form-control" required>
+                            <option value="" selected disabled hidden>Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Physical Education and Sports Sciences">Physical Education and Sports Sciences</option>
+                            <option value="Persian">Persian</option>
+                            <option value="English">English</option>
+                            <option value="Punjabi">Punjabi</option>
+                            <option value="Urdu">Urdu</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biotechnology">Biotechnology</option>
+                            <option value="Botany">Botany</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Zoology">Zoology</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Statistics">Statistics</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Fine Arts">Fine Arts</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4 class="text-primary">Scoring Criteria</h4>
+            <p>
+                <i class="fa fa-dot-circle text-warning"></i> If you change the scoring rules of the tournament<br />
+                Scorecard for this tournament will be updated accordingly.
+            </p>
+            <div class="form-group row">
+                <label asp-for="PointsForWinning" class="col-sm-2 col-form-label">Points For a Win</label>
+                <div class="col-sm-10">
+                    <input asp-for="PointsForWinning" class="form-control" placeholder="Points For a Win" required>
+                    <span asp-validation-for="PointsForWinning" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="PointsForLosing" class="col-sm-2 col-form-label">Points For a Loss</label>
+                <div class="col-sm-10">
+                    <input asp-for="PointsForLosing" class="form-control" placeholder="Points For a Loss" required>
+                    <span asp-validation-for="PointsForLosing" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="PointsForDraw" class="col-sm-2 col-form-label">Points For a Draw</label>
+                <div class="col-sm-10">
+                    <input asp-for="PointsForDraw" class="form-control" placeholder="Points For a Draw" required>
+                    <span asp-validation-for="PointsForDraw" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr />
+            <div class="form-group row">
+                <label asp-for="Message" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Message" class="form-control" placeholder="Write something about the tournament...">
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Winner" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Winner" class="form-control" placeholder="Who won?">
+                    <span asp-validation-for="Winner" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="RunnerUp" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="RunnerUp" class="form-control" placeholder="Runner Up?">
+                    <span asp-validation-for="RunnerUp" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Status" class="col-sm-2 col-form-label">Status</label>
+                <div class="col-sm-10">
+                    <select asp-for="Status" class="form-control">
+                        <option value="" selected disabled hidden>Select Tournament Status</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Concluded">Concluded</option>
+                        <option value="Postponed">Postponed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="m-4 d-flex justify-content-center">
+                <a class="btn btn-danger" asp-controller="Tournaments" asp-action="DeleteTournament" asp-route-id="@Model.TournamentId" onclick="return confirm('Tournament @Model.TournamentName is being deleted permanently!')">
+                    Delete <i class="fa fa-trash"></i>
+                </a>
+                &nbsp;
+                <a class="btn btn-outline-secondary" asp-action="TournamentList">
+                    <i class="fa fa-arrow-left"></i> Go Back
+                </a>
+                &nbsp;
+                <button type="submit" class="btn btn-success">Update <i class="fa fa-refresh"></i></button>
+            </div>
+
+        </form>
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Which Tournament you are trying to find details of? What is the ID of the this Tournament? <br />Is there something Wrong with the database.<br />
+            Go back and try again if error persists <br />
+            Please Contact IT Team to resolve this issue.
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="TournamentList">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+    </div>
+}
+
+@section Scripts
+{
+
+    @*Parsley Date Validator*@
+    <script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('mindate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp >= minTs;
+            }, 32)
+            .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s i.e (MM/DD/YYYY)</div>');
+
+        window.ParsleyValidator
+            .addValidator('duedate', function (value) {
+                var GetEndDate = document.getElementById("GetEndDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetEndDate);
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference < 1;
+            }, 32)
+            .addMessage('en', 'duedate', '<div class="date-error">Due date for participation forms submission should be before the end of tournament %s </div>');
+
+        window.ParsleyValidator
+            .addValidator('enddate', function (value) {
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference > -1;
+            }, 32)
+            .addMessage('en', 'enddate', '<div class="date-error">End date should be after the start date %s i.e(MM/DD/YYYY) </div>');
+    </script>
+
+
+    <script>
+        //This function check value of checkboxes on change
+        function valueChanged() {
+            //Show when checkbox is clicked
+            if ($('#isDepartmental').is(":checked")) {
+                $("#showDepartment").fadeIn();
+                $("#DepartmentRequired").prop('required', true);
+            }
+            else {
+                $("#DepartmentRequired").removeAttr('required')
+                $("#showDepartment").hide();
+            }
+        };
+
+
+        //Check value of checkboxes coming from database
+        if ($('#isDepartmental').prop('checked')) {
+            $('showDepartment').fadeIn();
+            $("#DepartmentRequired").prop('required', true);
+        } else {
+            $("#DepartmentRequired").removeAttr('required')
+            $('#showDepartment').hide();
+        }
+
+        if ($('#isDepartmental').is(":checked")) {
+            $("#showDepartment").fadeIn();
+            $("#DepartmentRequired").prop('required', true);
+        }
+        else {
+            $("#DepartmentRequired").removeAttr('required')
+            $("#showDepartment").hide();
+        }
+    </script>
+}

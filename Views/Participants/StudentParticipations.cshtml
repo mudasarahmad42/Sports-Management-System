@@ -1,0 +1,129 @@
+﻿@model IEnumerable<GCUSMS.ViewModels.ParticipantVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = @ViewBag.StudentName + "'s Participant List";
+}
+
+<h1 class="text-center mb-4"><span class="text-primary">@ViewBag.StudentName </span> Participation List</h1>
+
+
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Roll number
+            </th>
+            <th>
+                Email Provided
+            </th>
+            <th>
+                Department
+            </th>
+            <th>
+                Tournament Name
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Last Date to Apply
+            </th>
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.RequestingStudent.FirstName.Length > 5)
+                    {
+                        @item.RequestingStudent.FirstName.Substring(0, 1) <text>&nbsp;</text> @Html.DisplayFor(modelItem => item.RequestingStudent.LastName)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.RequestingStudent.FirstName) @Html.DisplayFor(modelItem => item.RequestingStudent.LastName)
+                    }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestingStudent.RollNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValidEmail)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestingStudent.DepartmentName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TournamentApplied.TournamentName)
+                </td>
+
+                @if (item.isSelected == true)
+                {
+                    <td>
+                        <span class="badge badge-success">Selected</span>
+                    </td>
+                }
+                else if (item.isSelected == false)
+                {
+                    <td>
+                        <span class="badge badge-danger">Not Selected</span>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <span class="badge badge-info">Pending</span>
+                    </td>
+                }
+
+
+                <td>
+                    @item.TournamentApplied.DueDate.ToString("dd-MM-yyyy")
+                </td>
+
+                <td>
+                    <a class="btn btn-primary" asp-controller="Participants" asp-action="UserParticipationsDetails" asp-route-id="@item.ParticipantId">
+                        <i class="fa fa-list-alt"></i>Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[1]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+            });
+        });
+    </script>
+}

@@ -1,0 +1,116 @@
+﻿@model List<GCUSMS.Models.GalleryModel>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "Gallery List"; }
+
+
+<h1 class="panel-heading">Advanced Search</h1>
+<form method="get" asp-action="Index">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div class="form-group m-2">
+                    <label for="DptName">Enter Department</label>
+                    <input type="search" class="form-control" placeholder="Enter Department" value="@ViewData["GetImages"]" name="DptName" id="dpt">
+                </div>
+
+                <div class="form-group m-2">
+                    <label for="year">Enter Year</label>
+                    <input type="search" class="form-control" placeholder="Enter Year" value="@ViewData["GetYear"]" name="yearName" id="year">
+                </div>
+
+                <div class="list-form__center">
+                    <input id="btn" class="btn btn-success btn-block my-3 px-3" type="submit" value="Search">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<hr />
+
+
+
+<div>
+    <table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Image Thumbnail</th>
+                <th scope="col">Image Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Date</th>
+                <th scope="col">Department </th>
+                <th scope="col">Tournament</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() == 0)
+            {
+                <tr><td style="width:100%;">Nothing Found</td></tr>
+            }
+
+            @foreach (var image in Model)
+            {
+        <tr>
+            <td><img class="img-thumbnail ml-4 mt-3" src="~/images/@image.ImagePath" style="max-height:150px; max-width:150px;" alt="" /></td>
+            <td>@image.ImageName</td>
+            <td>
+                @if (@image.Description.Length > 10)
+                {
+                    @image.Description.Substring(0, 10); @($"...")
+                }
+                else
+                {
+                    @image.Description
+                }
+            </td>
+            <td>@image.UploadedOn.ToString("MM/dd/yyyy")</td>
+            <td>@image.DepartmentName</td>
+            <td>@image.Tournament</td>
+            <td>
+                <form method="post" asp-action="DeleteImage" asp-route-id="@image.ImageId">
+                    <button class="btn btn-danger" onclick="return confirm('Image Name: @image.ImageName is being deleted!')">Delete <i class="fa fa-trash"></i></button>
+                    @*<a href="#myModal" class="trigger-btn btn btn-danger" data-toggle="modal">Delete
+                </a>*@
+                </form>
+            </td>
+        </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[1]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'pdf', className: 'btn btn-primary' },
+                    { extend: 'print', className: 'btn btn-primary' },
+                    { extend: 'copy', className: 'btn btn-primary' },
+                    { extend: 'csv', className: 'btn btn-primary' },
+                    { extend: 'excel', className: 'btn btn-primary' }
+                ]
+            });
+        });
+    </script>
+}

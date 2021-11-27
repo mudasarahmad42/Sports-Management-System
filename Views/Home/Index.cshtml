@@ -1,0 +1,455 @@
+﻿@model GCUSMS.ViewModels.HomeIndexVM
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<section class="section-hero d-flex justify-content-center align-items-center" style="background-image: url(../../main/images/img/hero-bg3.jpg); background-size: cover; background-repeat: no-repeat;">
+    <div class="container">
+        <div class="row">
+            <div class="col-7" style="margin-top: 14%;">
+                <h1 class="hero-title">
+                    Welcome to <br> GCU Sports <br><span class="svg-title">
+                        Management
+                        System
+                    </span>
+                </h1>
+                <div class="cd-headline slide slider-text">
+                    <span>We manage</span>
+                    <span class="cd-words-wrapper">
+                        <b class="is-visible">Tournaments</b>
+                        <b>Leave Applications</b>
+                        <b>Equipment Inventory and Allocations</b>
+                        <b>Student Record and much more!</b>
+                    </span>
+                </div>
+
+                <div class="m-top-2rem"></div>
+                <a class="btn btn-white" asp-area="Identity" asp-page="/Account/Register">Register!</a>
+            </div>
+
+
+            <div class="col-5 slider-png slider-js">
+                <div class="st-hero-img">
+                    <img src="~/main/images/img/gcu-slider1.png" alt="VC GCU">
+                </div>
+                <div class="st-hero-img">
+                    <img src="~/main/images/img/hockey.png" alt="VC GCU">
+                </div>
+                <div class="st-hero-img">
+                    <img src="~/main/images/img/batsman.png" alt="VC GCU">
+                </div>
+                <div class="st-hero-img">
+                    <img src="~/main/images/img/badminton player.png" alt="VC GCU">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section-gallery">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <h1 class="gallery-title">Gallery</h1>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <p class="mb-3">We huge collection of images to share with world.</p>
+        </div>
+
+        <div class="container">
+            <div id="lightgallery" class="row justify-content-center align-items-center mr-0 ml-0">
+
+                @if (Model.Gallery.Count() == 0)
+                {
+                    <div class="row d-block justify-content-center align-items-center m-5" style="color: #722121;">
+                        <i class="fa fa-image" style="font-size: 20rem; "></i>
+                        <h3 class="m-5">Nothing Found!!!</h3>
+                    </div>
+                }
+
+                @foreach (var Images in Model.Gallery.OrderBy(x => Guid.NewGuid()).Take(9))
+                {
+                    <a href="~/images/@Images.ImagePath" data-sub-html=".caption" class="col-xs-4 gallery-images">
+                        <img class="gallery-image-item" src="~/images/@Images.ImagePath" alt="@Images.ImageName">
+                        <div class="caption">
+                            <h4>@Images.ImageName</h4><p>@Images.Description</p>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row d-flex justify-content-center align-items-center">
+                <a asp-controller="Gallery" asp-action="Index" class="btn btn-maroon m-4">View Gallery</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<section class="section-faq d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-sm-12  d-flex justify-content-center align-items-center">
+                <img src="~/main/images/img/gcu-faq3.png" class="faq-bgimage" alt="Questions?">
+            </div>
+            <div class="col-lg-6  col-sm-12">
+
+                <h3 class="m-1 mt-4 mb-4">Your Frequently Asked Questions</h3>
+
+                <div id="accordion" class="myaccordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="d-flex btn-accordion-focus align-items-center justify-content-between btn btn-link"
+                                        data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                                        aria-controls="collapseOne">
+                                    How can we Register?
+                                    <span class="fa-stack fa-sm">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-chevron-up fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                Click on the register button below, provide your details and that's it. <br>
+                                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accordion">Register</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h2 class="mb-0">
+                                <button class="d-flex btn-accordion-focus align-items-center justify-content-between btn btn-link collapsed"
+                                        data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                        aria-controls="collapseTwo">
+                                    How to get registered?
+                                    <span class="fa-stack fa-2x">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-chevron-down fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                You need to provide your name,a profile picture, your roll number, section and other
+                                similar relevant details. You do not need any prior email address to register to our
+                                application
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h2 class="mb-0">
+                                <button class="d-flex btn-accordion-focus align-items-end justify-content-between btn btn-link collapsed"
+                                        data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                                        aria-controls="collapseFour">
+                                    How can i apply for tournaments?
+                                    <span class="fa-stack fa-2x">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-chevron-down fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                You will be able to see all tournaments that are happening on the campus, you can
+                                particapte in them by clicking the participation button that will take you to the
+                                participation form for that particular tournament.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h2 class="mb-0">
+                                <button class="d-flex btn-accordion-focus align-items-center justify-content-between btn btn-link collapsed"
+                                        data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                        aria-controls="collapseThree">
+                                    How can we apply for leave?
+                                    <span class="fa-stack fa-2x">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-chevron-down fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                After Registering yourself to our application. There is a link to click on your
+                                account's dashboard that will take you to the application form or click the button
+                                below. <br />
+                                <a asp-controller="LeaveApplication" asp-action="Create" class="btn btn-accordion">Write a Leave</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingFive">
+                            <h2 class="mb-0">
+                                <button class="d-flex btn-accordion-focus align-items-center justify-content-between btn btn-link collapsed"
+                                        data-toggle="collapse" data-target="#collapseFive" aria-expanded="false"
+                                        aria-controls="collapseFive">
+                                    How to write blogs?
+                                    <span class="fa-stack fa-2x">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fas fa-chevron-down fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFive" class="collapse" aria-labelledby="headingFive"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                There is a blogs tab in your account's dashboard where you can write or edit your
+                                blogs. or click the button below. <br />
+                                <a asp-controller="Blog" asp-action="Create" class="btn btn-accordion">Write a Blog</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-top-10rem"></div>
+</section>
+
+<section class="section-faculty">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <h1 class="gallery-title">Meet Our Faculty</h1>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <p class="mb-3">We huge collection of images to share with world.</p>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="card m-2 ml-0">
+                <img class="card-img-top" style="height: 25rem; width: 16rem;" src="~/main/images/img/Placeholder.png"
+                     alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="text-center">Mateen Akmal</h5>
+                    <p class="card-text text-center">Sports Instructor</p>
+                </div>
+            </div>
+
+            <div class="card m-2">
+                <img class="card-img-top" style="height: 25rem; width: 16rem;" src="~/main/images/img/Placeholder.png"
+                     alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="text-center">Shahbaz Mushtaq</h5>
+                    <p class="card-text text-center">Tennis Couch</p>
+                </div>
+            </div>
+
+            <div class="card m-2">
+                <img class="card-img-top" style="height: 25rem; width: 16rem;" src="~/main/images/img/Placeholder.png"
+                     alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="text-center">Zaheer Hussain</h5>
+                    <p class="card-text text-center">Gym Instructor</p>
+                </div>
+            </div>
+
+            <div class="card m-2">
+                <img class="card-img-top" style="height: 25rem; width: 16rem;" src="~/main/images/img/Placeholder.png"
+                     alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="text-center">M Dilawar</h5>
+                    <p class="card-text text-center">Athletics Couch</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="m-top-10rem"></div>
+</section>
+
+<section class="section-slider">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <h1 class="gallery-title">Features</h1>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <p class="mb-5">We manage many of our tasks using this application</p>
+        </div>
+
+
+        <div class="slick-cards mt-2">
+            <div>
+                <img src="~/main/images/img/tournament.jpg" class="slick-slider-img" alt="module1">
+            </div>
+
+            <div>
+                <img src="~/main/images/img/student.jpg" class="slick-slider-img" alt="module1">
+            </div>
+
+            <div>
+                <img src="~/main/images/img/leave.jpg" class="slick-slider-img" alt="module1">
+            </div>
+
+            <div>
+                <img src="~/main/images/img/blog.jpg" class="slick-slider-img" alt="module1">
+            </div>
+
+
+            <div>
+                <img src="~/main/images/img/gallerymanagement.jpg" class="slick-slider-img" alt="module1">
+            </div>
+
+            <div>
+                <img src="~/main/images/img/equipments.jpg" class="slick-slider-img" alt="module1">
+            </div>
+
+            <div>
+                <img src="~/main/images/img/TeamManagement.jpg" class="slick-slider-img" alt="module1">
+            </div>
+        </div>
+    </div>
+        <div class="m-top-10rem"></div>
+</section>
+
+<section class="section-blogs">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <h1 class="gallery-title">Blogs</h1>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <p class="mb-3">We huge collection of images to share with world.</p>
+        </div>
+
+        <div class="container">
+            <div class="row d-flex justify-content-center align-items-center">
+                @if (Model.Blog.Count() == 0)
+                {
+                        <div class="row d-block justify-content-center align-items-center m-5" style="color: #722121;">
+                            <i class="fas fa-pen" style="font-size: 20rem; "></i>
+                            <h3 class="m-5">Nothing Found!!!</h3>
+                        </div>
+                }
+
+                @foreach (var Blogs in Model.Blog.OrderBy(x => Guid.NewGuid()).Take(9))
+                {
+                    <div class="card m-2" style="width: 22rem;">
+                        <img src="~/images/Blogs/@Blogs.BlogImagePath" alt="@Blogs.Title" class="card-img-top-blogpage">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                @if (Blogs.Title.Length > 20)
+                                {
+                                    @(Blogs.Title.Substring(0, 18) + "...")
+                                }
+                                else
+                                {
+                                    @(Blogs.Title)
+                                }
+                            </h4>
+                            <p class="text-muted">
+                                @Blogs.CreatedOn.ToString("MMMM dd, yyyy")
+                                |
+                                @if (@Blogs.Author.FirstName.Length > 10)
+                                {
+                                    @(@Blogs.Author.FirstName.Substring(0, 1) + "...")
+                                }
+                                else
+                                {
+                                    @(@Blogs.Author.FirstName)
+                                }
+
+                                @if (@Blogs.Author.LastName != null)
+                                {
+                                    @if (@Blogs.Author.LastName.Length > 10)
+                                    {
+                                        @(@Blogs.Author.LastName.Substring(0, 7) + "...")
+                                    }
+                                    else
+                                    {
+                                        @(@Blogs.Author.LastName)
+                                    }
+                                }
+                            </p>
+                            <p class="card-text">
+                                @if (@Blogs.Excerpt.Length > 34)
+                                {
+                                    @(@Blogs.Excerpt.Substring(0, 34) + "...")
+                                }
+                                else
+                                {
+                                    @(@Blogs.Excerpt)
+                                }
+                            </p>
+
+                            <br />
+                            <a class="btn btn-outline-maroon" asp-action="Post" asp-controller="Blog" asp-route-id="@Blogs.BlogID">Read More</a>
+                        </div>
+                    </div>
+                }
+
+                <div class="container">
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <a asp-controller="Blog" asp-action="Index" class="btn btn-maroon m-4">See more blogs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-contact">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <h1 class="gallery-title">Contact Us</h1>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <p class="mb-3">Feel free to provide your feedback</p>
+        </div>
+        <form id="parsley-form" data-parsley-validate="" asp-action="SubmitFeedback" enctype="multipart/form-data" method="post">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input asp-for="Feedback.Name" class="form-control" placeholder="Name" data-parsley-required-message="Name is Required" required="" maxlength="25" data-parsley-pattern="^[a-zA-Z ]+$" data-parsley-pattern-message="Only use english alphabets" data-parsley-trigger="focusin focusout" >
+
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Email">Email address</label>
+                        <input asp-for="Feedback.Email" class="form-control" placeholder="Enter email" required="" data-parsley-type="email" data-parsley-trigger="focusin focusout" data-parsley-required-message="Email is required." >
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea asp-for="Feedback.FeedbackMessage" class="form-control" rows="3" data-parsley-trigger="keydown focusin focusout" data-parsley-length="[1, 1500]" data-parsley-length-message="Maximum limit of 1500 characters is allowed" data-parsley-required-message="Write you feedback here" required=""></textarea>
+                    </div>
+
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-maroon m-4">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

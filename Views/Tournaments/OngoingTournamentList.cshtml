@@ -1,0 +1,187 @@
+﻿@model IEnumerable<GCUSMS.ViewModels.TournamentVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Ongoing Tournaments";
+}
+
+<h1 class="text-center mb-4">Manage Ongoing Tournaments</h1>
+
+<div class="col-10">
+    <a class="btn btn-secondary btn-sm" asp-controller="Tournaments" asp-action="TournamentList">
+        <i class="fas fa-undo"></i> All Tournaments
+    </a>
+    |
+    <a class="btn btn-success btn-sm" asp-controller="Tournaments" asp-action="ConcludedTournamentList">
+        <i class="fas fa-check-circle"></i> Concluded Tournaments
+    </a>
+    |
+    <a class="btn btn-warning btn-sm" asp-controller="Tournaments" asp-action="PostponedTournamentList">
+        <i class="fas fa-stop-circle"></i> Postponed Tournaments
+    </a>
+    |
+    <a class="btn btn-danger btn-sm" asp-controller="Tournaments" asp-action="CancelledTournamentList">
+        <i class="fas fa-times"></i> Cancelled Tournaments
+    </a>
+</div>
+
+
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Tournament Name
+            </th>
+            <th>
+                Venue
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Start Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Visibility
+            </th>
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TournamentName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.TournamentVenue)
+            </td>
+
+            <td>
+                @if (item.Status == "ONGOING")
+                {
+                    <span class="badge badge-primary">
+                        Ongoing <i class="fas fa-sync"></i>
+                    </span>
+                }
+                else if (item.Status == "CONCLUDED")
+                {
+                    <span class="badge badge-success">
+                        Concluded <i class="fas fa-check-circle"></i>
+                    </span>
+                }
+                else if (item.Status == "POSTPONED")
+                {
+                    <span class="badge badge-warning">
+                        Postponed <i class="fas fa-stop-circle"></i>
+                    </span>
+                }
+                else if (item.Status == "CANCELLED")
+                {
+                    <span class="badge badge-warning">
+                        Cancelled 
+                    </span>
+                }
+                else
+                {
+                    <span class="badge badge-secondary">
+                        Not Set
+                    </span>
+                }
+            </td>
+
+            <td>
+                @item.StartDate.ToString("dd-MM-yy")
+            </td>
+
+            <td>
+                @item.EndDate.ToString("dd-MM-yy")
+            </td>
+
+            @if (DateTime.Today > item.DueDate)
+            {
+                <td>
+                    <span class="badge badge-danger  animate__animated animate__flash animate__repeat-3 animate__slow">Registration Closed</span>
+                </td>
+            }
+            else
+            {
+                <td>
+                    @item.DueDate.ToString("dd-MM-yy")
+                </td>
+            }
+
+
+            <td>
+                @if (item.isActive == true)
+                {
+                    <span class="badge badge-success">
+                        Published <i class="fa fa-eye" aria-hidden="true"></i>
+                    </span>
+                }
+                else if (item.isActive == false)
+                {
+                    <span class="badge badge-danger">
+                        Archived <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                    </span>
+                }
+                else
+                {
+                    <span class="badge badge-danger">Something went wrong!</span>
+                }
+            </td>
+
+            <td>
+                <a class="btn btn-primary" asp-controller="Tournaments" asp-action="TournamentDetails" asp-route-id="@item.TournamentId">
+                    Details <i class="fa fa-list-alt"></i>
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[0]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'pdf', className: 'btn btn-primary' },
+                { extend: 'print', className: 'btn btn-primary' },
+                { extend: 'copy', className: 'btn btn-primary' },
+                { extend: 'csv', className: 'btn btn-primary' },
+                { extend: 'excel', className: 'btn btn-primary' }
+            ]
+        });
+    });
+    </script>
+}

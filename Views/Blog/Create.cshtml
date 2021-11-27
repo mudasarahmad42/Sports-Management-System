@@ -1,0 +1,317 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<StudentModel> SignInManager
+@inject UserManager<StudentModel> UserManager
+
+@model GCUSMS.ViewModels.CreateBlogVM
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "Write a Blog"; }
+
+<div class="container-fluid">
+    @if (@ViewBag.NumberOfImages > 50)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            You have reached limit of storage allocated for you.
+            Please delete any unused image from your blog editor images.
+            <a class="btn btn-secondary text-decoration-none" asp-controller="Blog" asp-action="MyBlogEditorImages">
+                See Images <i class="fa fa-arrow-right"></i>
+            </a>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <hr />
+    }
+
+    @if (@ViewBag.NumberOfUnusedImages > 25)
+    {
+        <div class="alert alert-danger" role="alert">
+            You have exceeded the limit of storage allocated for you.
+            Please delete unused images from your blog editor images.
+            <a class="btn btn-warning text-decoration-none" asp-controller="Blog" asp-action="MyBlogEditorImages">
+                See Images <i class="fa fa-arrow-right"></i>
+            </a>
+        </div>
+        <hr />
+    }
+
+    <h1 class="mt-1">Create</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <form asp-controller="Blog" asp-action="Create" method="post" id="parsley-form" data-parsley-validate="" enctype="multipart/form-data">
+                    <div class="card-header">
+                        <i class="fas fa-pen-fancy mr-1"></i>
+                        Write a Post
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="Image"></label>
+                            <div class="custom-file">
+                                <label asp-for="Image" class="custom-file-label"></label>
+                                <input asp-for="Image" class="custom-file-input" placeholder="Input Image" id="image" style="width: 30rem;" accept="image/*" required="" data-parsley-trigger="focusin focusout" data-parsley-filemaxmegabytes="20" data-parsley-fileimagetypes="image/jpeg, image/png, image/jpg, image/gif, image/webp" data-parsley-required-message="Please upload a blog header image">
+                            </div>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Title"></label>
+                            <input asp-for="Title" class="form-control" required="" data-parsley-trigger="focusin focusout" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Excerpt"></label>
+                            <input asp-for="Excerpt" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-minlength="25" />
+                            <span asp-validation-for="Excerpt" class="text-danger"></span>
+                        </div>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            if (User.IsInRole("Administrator"))
+                            {
+                                <div class="form-group">
+                                    <label asp-for="Category">Select Category</label>
+                                    <select asp-for="Category" class="form-control">
+                                        <option value="" selected disabled hidden>Select Category</option>
+                                        <option value="">No Category</option>
+                                        <option class="font-weight-bolder" value="News">News</option>
+                                    </select>
+                                </div>
+                            }
+                        }
+
+                        <div class="form-group">
+                            <label asp-for="Content"></label>
+                            <textarea asp-for="Content" class="form-control textarea" id="editor" rows="8" required></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <p class="text-muted">Publish now or save for later edits.</p>
+                            <label>Publish now?</label>
+                            <input type="checkbox" data-toggle="toggle" asp-for="isPublished">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                        <p style="color: orangered; margin-bottom: 0;">Please Note:</p>
+                        <p>Your post will need to be approved before it is published to the main page</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+    <script>
+        class MyUploadAdapter {
+            constructor(loader) {
+                // The file loader instance to use during the upload. It sounds scary but do not
+                // worry — the loader will be passed into the adapter later on in this guide.
+                this.loader = loader;
+            }
+
+            // Starts the upload process.
+            upload() {
+                return this.loader.file
+                    .then(file => new Promise((resolve, reject) => {
+                        this._initRequest();
+                        this._initListeners(resolve, reject, file);
+                        this._sendRequest(file);
+                    }));
+            }
+
+            // Aborts the upload process.
+            abort() {
+                if (this.xhr) {
+                    this.xhr.abort();
+                }
+            }
+
+            // Initializes the XMLHttpRequest object using the URL passed to the constructor.
+            _initRequest() {
+                const xhr = this.xhr = new XMLHttpRequest();
+
+                // Note that your request may look different. It is up to you and your editor
+                // integration to choose the right communication channel. This example uses
+                // a POST request with JSON as a data structure but your configuration
+                // could be different.
+                xhr.open('POST', '@Url.Action("UploadCkEditorImage", "Blog")', true);
+                xhr.responseType = 'json';
+            }
+
+            // Initializes XMLHttpRequest listeners.
+            _initListeners(resolve, reject, file) {
+                const xhr = this.xhr;
+                const loader = this.loader;
+                const genericErrorText = `Couldn't upload file: ${file.name}.`;
+
+                xhr.addEventListener('error', () => reject(genericErrorText));
+                xhr.addEventListener('abort', () => reject());
+                xhr.addEventListener('load', () => {
+                    const response = xhr.response;
+
+                    // This example assumes the XHR server's "response" object will come with
+                    // an "error" which has its own "message" that can be passed to reject()
+                    // in the upload promise.
+                    //
+                    // Your integration may handle upload errors in a different way so make sure
+                    // it is done properly. The reject() function must be called when the upload fails.
+                    if (!response || response.error) {
+                        return reject(response && response.error ? response.error.message : genericErrorText);
+                    }
+
+                    // If the upload is successful, resolve the upload promise with an object containing
+                    // at least the "default" URL, pointing to the image on the server.
+                    // This URL will be used to display the image in the content. Learn more in the
+                    // UploadAdapter#upload documentation.
+                    resolve({
+                        default: response.url
+                    });
+                });
+
+                // Upload progress when it is supported. The file loader has the #uploadTotal and #uploaded
+                // properties which are used e.g. to display the upload progress bar in the editor
+                // user interface.
+                if (xhr.upload) {
+                    xhr.upload.addEventListener('progress', evt => {
+                        if (evt.lengthComputable) {
+                            loader.uploadTotal = evt.total;
+                            loader.uploaded = evt.loaded;
+                        }
+                    });
+                }
+            }
+
+            // Prepares the data and sends the request.
+            _sendRequest(file) {
+                // Prepare the form data.
+                const data = new FormData();
+
+                data.append('upload', file);
+
+                // Important note: This is the right place to implement security mechanisms
+                // like authentication and CSRF protection. For instance, you can use
+                // XMLHttpRequest.setRequestHeader() to set the request headers containing
+                // the CSRF token generated earlier by your application.
+
+                // Send the request.
+                this.xhr.send(data);
+            }
+        }
+
+        function MyCustomUploadAdapterPlugin(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                // Configure the URL to the upload script in your back-end here!
+                return new MyUploadAdapter(loader);
+            };
+        }
+
+
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+    </script>
+
+
+    @*Parsley Image Validator*@
+    <script>
+        $(document).ready(function () {
+            window.ParsleyValidator
+                .addValidator('fileextension', function (value, requirement) {
+                    var fileExtension = value.split('.').pop();
+
+                    return fileExtension === requirement;
+                }, 32)
+                .addMessage('en', 'fileextension', 'Please only upload image file');
+    </script>
+
+
+    <script>
+        var app = app || {};
+
+        // Utils
+        (function ($, app) {
+            'use strict';
+
+            app.utils = {};
+
+            app.utils.formDataSuppoerted = (function () {
+                return !!('FormData' in window);
+            }());
+
+        }(jQuery, app));
+
+        // Parsley Image validators
+        (function ($, app) {
+            'use strict';
+
+            window.Parsley
+                .addValidator('filemaxmegabytes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+                        var maxBytes = requirement * 1048576;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        return file.length === 1 && file[0].size <= maxBytes;
+
+                    },
+                    messages: {
+                        en: 'Max file size is 5MB, Your file is too big'
+                    }
+                })
+                .addValidator('fileimagetypes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
+                        return allowedMimeTypes.indexOf(file[0].type) !== -1;
+
+                    },
+                    messages: {
+                        en: 'Please only upload image files.\n Supported formats are jpg,jpeg,png,webp,gif'
+                    }
+                });
+
+            }(jQuery, app));
+    </script>
+}

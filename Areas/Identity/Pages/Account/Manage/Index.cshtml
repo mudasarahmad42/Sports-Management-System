@@ -1,0 +1,239 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="row">
+    <form id="parsley-form" enctype="multipart/form-data" method="post" data-parsley-validate="">
+        <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <span class="text-primary">Profile Picture</span> <br />
+                <img src="~/images/Users/@Model.BeforeImagePath" class="rounded float-left" style="max-height:200px" alt="User Image">
+            </div>
+
+            <div class="form-group">
+                <input asp-for="Username" class="form-control" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control phonenumber" data-parsley-length="[12, 12]" data-parsley-length-message="Enter 12 digit phone number" data-parsley-pattern="^([0-9]{4}\s[0-9]{7})$" data-parsley-pattern-message="Please only enter your phone number without any dashes" data-parsley-trigger="focusin focusout" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.EditProfileImage"></label>
+                <input asp-for="Input.EditProfileImage" class="form-control" accept="image/*" data-parsley-trigger="focusin focusout" data-parsley-filemaxmegabytes="20" data-parsley-fileimagetypes="image/jpeg, image/png, image/jpg, image/gif, image/webp" />
+                <span asp-validation-for="Input.EditProfileImage" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.DepartmentName"></label>
+                <input asp-for="Input.DepartmentName" class="form-control" disabled readonly />
+                <span asp-validation-for="Input.DepartmentName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Age"></label>
+                <input asp-for="Input.Age" class="form-control" data-parsley-type="number" data-parsley-range="[16, 150]" data-parsley-trigger="focusin focusout" />
+                <span asp-validation-for="Input.Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Gender"></label>
+                <select asp-for="Input.Gender" class="form-control" required="">
+                    <option value="" selected disabled hidden>Select Gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="NOT TO BE SPECIFIED">Not to be Specified</option>
+                </select>
+                <span asp-validation-for="Input.Gender" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.Section"></label>
+                <input asp-for="Input.Section" class="form-control input-section" maxlength="4" data-parsley-type="alphanum" data-parsley-trigger="focusin focusout" />
+                <span asp-validation-for="Input.Section" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Semester"></label>
+                <input asp-for="Input.Semester" class="form-control" />
+                <span asp-validation-for="Input.Semester" class="text-danger"></span>
+            </div>
+
+            @*<div class="form-group">
+                <label asp-for="Input.Session"></label>
+                <input asp-for="Input.Session" class="form-control input-session" data-parsley-pattern="^([0-9]{4}-[0-9]{4})$" data-parsley-pattern-message="Please only enter your session like 2006-2010" minlength="9" data-parsley-trigger="focusin focusout" />
+                <span asp-validation-for="Input.Session" class="text-danger"></span>
+            </div>*@
+        </div>
+        <div class="col-md-12">
+            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-secondary" asp-controller="Dashboard" asp-action="Index">Go Back</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        new Cleave('.phonenumber', {
+            numericOnly: true,
+            blocks: [4, 7]
+        });
+    </script>
+
+    <script>
+        // Session
+        var cleaveCustom = new Cleave('.input-session', {
+            blocks: [4, 2],
+            delimiter: '-20',
+            prefix: '20'
+        });
+
+    </script>
+
+    <script>
+        // section
+        var cleaveCustom = new Cleave('.input-section', {
+            blocks: [4],
+        });
+    </script>
+
+    @*<script>
+        // Semester
+        new Cleave('.input-semester', {
+            prefix: 'SEMESTER',
+            blocks: [8, 2]
+        });
+    </script>*@
+
+
+    @*Parsley Image Validator*@
+    <script>
+        $(document).ready(function () {
+            window.ParsleyValidator
+                .addValidator('fileextension', function (value, requirement) {
+                    var fileExtension = value.split('.').pop();
+
+                    return fileExtension === requirement;
+                }, 32)
+                .addMessage('en', 'fileextension', 'Please only upload image file');
+    </script>
+
+
+    <script>
+        var app = app || {};
+
+        // Utils
+        (function ($, app) {
+            'use strict';
+
+            app.utils = {};
+
+            app.utils.formDataSuppoerted = (function () {
+                return !!('FormData' in window);
+            }());
+
+        }(jQuery, app));
+
+        // Parsley Image validators
+        (function ($, app) {
+            'use strict';
+
+            window.Parsley
+                .addValidator('filemaxmegabytes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+                        var maxBytes = requirement * 1048576;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        return file.length === 1 && file[0].size <= maxBytes;
+
+                    },
+                    messages: {
+                        en: 'Max file size is 5MB, Your file is too big'
+                    }
+                })
+                .addValidator('fileimagetypes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
+                        return allowedMimeTypes.indexOf(file[0].type) !== -1;
+
+                    },
+                    messages: {
+                        en: 'Please only upload image files.\n Supported formats are jpg,jpeg,png,webp,gif'
+                    }
+                });
+
+        }(jQuery, app));
+    </script>
+}
+
+
+@*========================================-Below is the Default Code-========================================*@
+
+
+@*@page
+    @model IndexModel
+    @{
+        ViewData["Title"] = "Profile";
+        ViewData["ActivePage"] = ManageNavPages.Index;
+    }
+
+    <h4>@ViewData["Title"]</h4>
+    <partial name="_StatusMessage" model="Model.StatusMessage" />
+    <div class="row">
+        <div class="col-md-6">
+            <form id="profile-form" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" disabled />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.PhoneNumber"></label>
+                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-secondary" asp-controller="Dashboard" asp-action="Index">Go Back</a>
+            </form>
+        </div>
+    </div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }*@

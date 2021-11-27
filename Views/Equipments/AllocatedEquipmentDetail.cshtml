@@ -1,0 +1,290 @@
+﻿@model GCUSMS.ViewModels.EquipmentAllocationVM
+
+@{ ViewData["Title"] = "Equipment Details"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+
+        <dl class="row">
+
+            <div class="col-12 mb-3">
+                <h3 class="text-primary">Student Details <i class="fas fa-user-alt text-black-50"></i></h3>
+            </div>
+
+            <dt class="col-sm-2">
+                Profile Image
+            </dt>
+            @if (Model.RequestingStudent.ProfileImagePath != null)
+            {
+                <dd class="col-sm-10">
+                    <img src="~/images/Users/@Model.RequestingStudent.ProfileImagePath" class="rounded float-left" style="max-height:200px" alt="User Image">
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <p>Profile Image of this user does not exist</p>
+                </dd>
+            }
+            <dt class="col-sm-2">
+                Full Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.FirstName) @Html.DisplayFor(model => model.RequestingStudent.LastName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Roll Number
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.RollNumber)
+            </dd>
+
+            <dt class="col-sm-2">
+                Section
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.Section)
+            </dd>
+
+            <dt class="col-sm-2">
+                Department
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.DepartmentName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Semester
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.Semester)
+            </dd>
+
+            <dt class="col-sm-2">
+                Session
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.Session)
+            </dd>
+
+            <div class="col-12 mb-3 mt-3">
+                <h3 class="text-primary">Equipment Details <i class="fas fa-futbol text-black-50"></i></h3>
+            </div>
+
+            <dt class="col-sm-2">
+                Equipment Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestedEquipment.EquipmentName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Equipment Type / Model
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestedEquipment.EquipmentType)
+            </dd>
+
+            <dt class="col-sm-2">
+                Date Allocated
+            </dt>
+            <dd class="col-sm-10">
+                @Model.DateAllocated.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            <dt class="col-sm-2">
+                Allocation Start Date
+            </dt>
+            <dd class="col-sm-10">
+                @Model.StartDate.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            <dt class="col-sm-2">
+                Allocation End Date
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EndDate.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            <dt class="col-sm-2">
+                Quantity Allocated
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.QuantityAllocated)
+            </dd>
+
+            <dt class="col-sm-2">
+                Allocated By
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AllocatedBy)
+            </dd>
+
+            <div class="col-12 mb-3 mt-3">
+                <h3 class="text-primary">Equipment Return Details <i class="fas fa-exchange-alt text-black-50"></i></h3>
+            </div>
+
+            <dt class="col-sm-2">
+                Return Status
+            </dt>
+
+            <dd class="col-sm-10">
+
+                @if (Model.Returned == true)
+                {
+                    <span class="badge badge-success">Returned</span>
+                }
+                else if (Model.Returned == false)
+                {
+                    <span class="badge badge-danger">Not Returned</span>
+                }
+                else
+                {
+                    <span class="badge badge-warning">Pending</span>
+                }
+            </dd>
+
+            <dt class="col-sm-2">
+                Return Date
+            </dt>
+            <dd class="col-sm-10">
+                @Model.DateReturned.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            @if (Model.Returned != null)
+            {
+                <dt class="col-sm-2">
+                    Returned Quantity
+                </dt>
+
+                <dd class="col-sm-10">
+                    @if (Model.QuantityAccepted <= 0)
+                    {
+                        <p> Zero (@Model.QuantityAccepted)</p>
+                    }
+                    else
+                    {
+                        @Model.QuantityAccepted
+                    }
+                </dd>
+
+                <dt class="col-sm-2">
+                    Comments
+                </dt>
+
+                <dd class="col-sm-10">
+                    @if (Model.Comments != null)
+                    {
+                        @Model.Comments
+                    }
+                    else
+                    {
+                        <p> All @Model.QuantityAllocated @Model.RequestedEquipment.EquipmentName are marked as LOST.</p>
+                    }
+                </dd>
+            }
+        </dl>
+    </div>
+
+
+
+    <div class="m-3 text-center">
+
+        @if (Model.Returned == null)
+        {
+            <div class="col-12 mb-3 mt-3">
+                <h5 class="text-primary">Add Details <i class="fas fa-list text-black-50"></i></h5>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <form id="parsley-form" data-parsley-validate="" enctype="multipart/form-data" asp-action="MarkReturn">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+
+                            <input asp-for="Id" class="form-control" hidden />
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <strong>Quantity accepted as returned item<i class="fa fa-info-circle text-warning"></i></strong>
+                                    <input asp-for="QuantityAccepted" class="form-control" id="GetQuantityAccepted" required="" data-parsley-min="1" data-parsley-trigger="focusin focusout" data-parsley-maxequipment="" />
+                                    <span asp-validation-for="QuantityAccepted" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <strong>*</strong>
+                                    <label asp-for="Comments" class="control-label"></label>
+                                    <textarea asp-for="Comments" class="form-control" required="" data-parsley-maxlength="2000" data-parsley-trigger="focusin focusout"></textarea>
+                                    <span asp-validation-for="Comments" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12">
+                                <input type="submit" value="Mark Returned" class="btn btn-primary" />
+
+                                <a class="btn btn-danger" asp-action="ItemNotReturned" asp-route-id="@Model.Id" onclick="return confirm('Name : @Model.RequestedEquipment.EquipmentName \nType: @Model.RequestedEquipment.EquipmentType \nQuantity Allocated: @Model.QuantityAllocated \nAllocated to: @Model.RequestingStudent.RollNumber\n ----------------------------\n This Equipment is being marked Lost / Not Returned!')">
+                                    <i class="fa fa-remove"></i> Mark all as NOT RETURNED / LOST
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+        <br /><br /><hr />
+        <div class="text-center m-1">
+            <a class="btn btn-outline-secondary" asp-action="Index">
+                <i class="fa fa-arrow-left"></i> Go Back to Index
+            </a>
+
+            <a class="btn btn-outline-secondary" asp-action="Allocations" asp-route-id="@Model.RequestedEquipmentId">
+                <i class="fa fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Which Equipment you are trying to find details of? What is the ID of the Equipment? <br />Is there something Wrong with the database.<br />
+            Please Contact IT Team to resolve this issue.
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="Index">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}
+
+
+@section Scripts
+{
+    @*Parsley Custom Validator*@
+<script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('maxequipment', function (value) {
+                // is valid date?
+                var EquipmentAllocated = @Html.Raw(Json.Serialize(ViewData["EquipmentAllocated"])),
+                minTs = document.getElementById("GetQuantityAccepted").value;
+
+                console.log("Equipment Allocated: " + EquipmentAllocated);
+                console.log("Min Ts: " + minTs);
+
+                return isNaN(EquipmentAllocated) ? false : EquipmentAllocated >= minTs;
+            }, 32)
+            .addMessage('en', 'maxequipment', '<div class="date-error">Returned equipment can not be more than allocated number of equipment</div>');
+</script>
+}

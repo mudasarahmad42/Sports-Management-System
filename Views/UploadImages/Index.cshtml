@@ -1,0 +1,185 @@
+﻿@model GCUSMS.ViewModels.GalleryVM
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{ ViewData["Title"] = "Upload Images"; }
+
+
+<section>
+    <h1 class="heading-gallery">Enter Details of the Image you want to upload</h1>
+
+    <div class="m-5">
+        <form enctype="multipart/form-data" asp-action="UploadImages" data-parsley-validate="" id="parsley-form" class="col-lg-6 offset-lg-3 ">
+            <div class="form-check row justify-content-center">
+
+                <strong>
+                    *<span class="fas fa-upload"></span>
+                </strong>
+                <div class="custom-file">
+                    <label asp-for="Image" class="custom-file-label"></label>
+                    <input asp-for="Image" class="custom-file-input" placeholder="Input Image" id="image" style="width: 30rem;" accept="image/*" required="" data-parsley-trigger="focusin focusout" data-parsley-filemaxmegabytes="20" data-parsley-fileimagetypes="image/jpeg, image/png, image/jpg, image/gif, image/webp" data-parsley-required-message="Please upload a image">
+                </div>
+
+                <strong>
+                    *<span class="fas fa-file-image"></span>
+                </strong>
+                <label asp-for="ImageName" class="form__label mt-1">Name</label>
+                <input asp-for="ImageName" class="form-control" placeholder="Name" id="name" required="" data-parsley-trigger="focusin focusout">
+
+
+                <strong>
+                    *<span class="fas fa-file-text"></span>
+                </strong>
+                <label asp-for="Description" class="form__label mt-1">Description</label>
+                <input asp-for="Description" class="form-control" placeholder="Enter Description" id="name" required="" data-parsley-trigger="focusin focusout">
+
+                <hr />
+                @*
+                    Setting from the controller by using DateTime.Now, If you want user to add date uncomment this
+                    and make changes in controller
+                *@
+
+                @*<strong>
+                        <span class="fas fa-calendar-day"></span>
+                    </strong>
+                    <label asp-for="UploadedOn" class="form__label">Enter Date</label>
+                    <input asp-for="UploadedOn" class="form-control">
+
+                    <hr />*@
+
+                <strong>
+                    *<span class="fas fa-building"></span>
+                </strong>
+                <label asp-for="DepartmentName" class="form__label">Department Name</label>
+                <select asp-for="DepartmentName" class="form-control" required="" data-parsley-trigger="focusin focusout">
+                    <option value="" selected disabled hidden>Select Department</option>
+                    <option value="None">None</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Physical Education and Sports Sciences">Physical Education and Sports Sciences</option>
+                    <option value="Political Science">Political Science</option>
+                    <option value="Persian">Persian</option>
+                    <option value="English">English</option>
+                    <option value="Punjabi">Punjabi</option>
+                    <option value="Urdu">Urdu</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biotechnology">Biotechnology</option>
+                    <option value="Botany">Botany</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Zoology">Zoology</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Statistics">Statistics</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Fine Arts">Fine Arts</option>
+                </select>
+
+                <strong>
+                    *<span class="fas fa-football-ball"></span>
+                </strong>
+                <label asp-for="Tournament" class="form__label">Tournament</label> <br />
+                <small class="text-muted">Enter 'None' if image does not belong to any tournament</small>
+                <input asp-for="Tournament" class="form-control" placeholder="Tournament" id="tournament" required="" data-parsley-trigger="focusin focusout">
+
+                <div class="row">
+                    <div class="col text-center">
+                        <input type="submit" class="btn btn-success btn-block my-3 px-3" value="Submit" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <p class="paragraph-gallery my-3 px-3 ">* Providing this data is mandatory</p>
+</section>
+@section Scripts {
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+    </script>
+
+    @*Parsley Image Validator*@
+    <script>
+        $(document).ready(function () {
+            window.ParsleyValidator
+                .addValidator('fileextension', function (value, requirement) {
+                    var fileExtension = value.split('.').pop();
+
+                    return fileExtension === requirement;
+                }, 32)
+                .addMessage('en', 'fileextension', 'Please only upload image file');
+    </script>
+
+
+    <script>
+        var app = app || {};
+
+        // Utils
+        (function ($, app) {
+            'use strict';
+
+            app.utils = {};
+
+            app.utils.formDataSuppoerted = (function () {
+                return !!('FormData' in window);
+            }());
+
+        }(jQuery, app));
+
+        // Parsley Image validators
+        (function ($, app) {
+            'use strict';
+
+            window.Parsley
+                .addValidator('filemaxmegabytes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+                        var maxBytes = requirement * 1048576;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        return file.length === 1 && file[0].size <= maxBytes;
+
+                    },
+                    messages: {
+                        en: 'Max file size is 5MB, Your file is too big'
+                    }
+                })
+                .addValidator('fileimagetypes', {
+                    requirementType: 'string',
+                    validateString: function (value, requirement, parsleyInstance) {
+
+                        if (!app.utils.formDataSuppoerted) {
+                            return true;
+                        }
+
+                        var file = parsleyInstance.$element[0].files;
+
+                        if (file.length == 0) {
+                            return true;
+                        }
+
+                        var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
+                        return allowedMimeTypes.indexOf(file[0].type) !== -1;
+
+                    },
+                    messages: {
+                        en: 'Please only upload image files.\n Supported formats are jpg,jpeg,png,webp,gif'
+                    }
+                });
+
+        }(jQuery, app));
+    </script>
+}
+

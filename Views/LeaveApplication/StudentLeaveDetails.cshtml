@@ -1,0 +1,222 @@
+﻿@model GCUSMS.ViewModels.LeaveApplicationVM
+
+@{ ViewData["Title"] = "Details"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+        <h2 class="alert-heading">
+            Leave History of <span class="text-primary">@Model.RequestingStudent.FirstName @Model.RequestingStudent.LastName</span>
+        </h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-blue">
+                    <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">@ViewBag.TotalRequests</span>
+                        <span class="info-box-number">Total Requests</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-green">
+                    <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                    <div class="info-box-content p-1">
+                        <span class="info-box-text">@ViewBag.TotalApprovedRequests</span>
+                        <span class="info-box-number">Approved Requests</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix visible-sm-block"></div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-red">
+                    <span class="info-box-icon"><i class="fa fa-times-circle"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">@ViewBag.TotalRejectedRequests</span>
+                        <span class="info-box-number">Rejected Requests</span>
+                    </div>
+                </div>
+            </div>
+
+            @if (@ViewBag.TotalPendingRequests > 0)
+            {
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-exclamation"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text animate__animated animate__flash animate__repeat-3 animate__slow">@ViewBag.TotalPendingRequests <i class="badge badge-danger">NEW</i></span>
+                            <span class="info-box-number animate__animated animate__flash animate__repeat-3 animate__slow">Pending Requests</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (@ViewBag.TotalPendingRequests == 0)
+            {
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-exclamation"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">@ViewBag.TotalPendingRequests</span>
+                            <span class="info-box-number">Pending Requests</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-2">
+                Profile Image
+            </dt>
+            <dd class="col-sm-10">
+                <img src="~/images/Users/@Model.RequestingStudent.ProfileImagePath" class="rounded float-left" style="max-height:200px" alt="User Image">
+            </dd>
+            <dt class="col-sm-2">
+                Leave Subject
+            </dt>
+            <dd class="col-sm-10">
+                @if (Model.LeaveSubject == null)
+                {
+                    <p class="text-muted">No Subject Mentioned</p>
+                }
+
+                @Html.DisplayFor(model => model.LeaveSubject)
+            </dd>
+            <dt class="col-sm-2">
+                Full Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.FirstName)  @Html.DisplayFor(model => model.RequestingStudent.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                Roll No
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.RollNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Section
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.Section)
+            </dd>
+            <dt class="col-sm-2">
+                Semester
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.Semester)
+            </dd>
+            <dt class="col-sm-2">
+                Department
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RequestingStudent.DepartmentName)
+            </dd>
+            <dt class="col-sm-2">
+                Leave Start Date
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                Leave End Date
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+            <dt class="col-sm-2">
+                Date Requested
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateRequested)
+            </dd>
+
+            <dt class="col-sm-2">
+                Date Actioned
+            </dt>
+            <dd class="col-sm-10">
+                @if (Model.DateActioned == DateTime.MinValue)
+                {
+                    @("Not Actioned Upon Yet")
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.DateActioned)
+                }
+
+            </dd>
+
+            <dt class="col-sm-2">
+                Approval Status
+            </dt>
+            @if (Model.Approved == true || Model.Approved == false)
+            {
+                <dd class="col-sm-10">
+                    @if (Model.Approved == true)
+                    {
+                        <span class="badge badge-success">Approved</span>
+                    }
+                    else if (Model.Approved == false)
+                    {
+                        <span class="badge badge-danger">Rejected</span>
+                    }
+
+
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    <span class="badge badge-warning">Pending</span>
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Message)
+            </dt>
+            <dd class="col-sm-12">
+                <pre>@Html.DisplayFor(model => model.Message)</pre>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="p-3">
+        <a class="btn btn-outline-secondary" asp-action="MyLeaves">
+            <i class="fa fa-arrow-left"></i> Back to List
+        </a>
+        @if (Model.Approved == null)
+        {
+            <a class="btn btn-outline-danger" asp-action="DeleteLeave" asp-route-id="@Model.Id" onclick="return confirm('Leave Application is being deleted?')">
+                Delete Application <i class="fa fa-trash"></i>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Record with id does not exist!
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="MyLeaves">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}

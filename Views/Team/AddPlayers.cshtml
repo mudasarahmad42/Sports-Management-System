@@ -1,0 +1,229 @@
+﻿@model GCUSMS.ViewModels.TeamPlayerVM
+
+@{ ViewData["Title"] = "Add Player"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<h5 class="text-danger">Important Notice</h5>
+<p class="text-primary">
+    <i class="fa fa-exclamation-circle text-danger"></i>&nbsp; Enter Player ID very carefully <br />
+</p>
+@if (@ViewBag.PlayersInTeam == @ViewBag.MaximumPlayers)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        You have reached limit of <strong>@ViewBag.MaximumPlayers</strong> players allowed in this team.
+        Change maximum players allowed for this team to add more players.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (@ViewBag.PlayersInTeam > @ViewBag.MaximumPlayers)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        You have exceeded the limit of <strong>@ViewBag.MaximumPlayers</strong> players allowed in this team.
+        Please do not add more players or change the maximum limit of players allowed in teams.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form id="demo-form" data-parsley-validate="" enctype="multipart/form-data" asp-action="AddPlayers">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">Enter Roll Number</label>
+                        <input id="RollNumbers" type="text" name="value" class="form-control" placeholder="" />
+                    </div>
+                </div>
+
+                <input asp-for="PlayerId" id="RequestingStudentId" class="form-control" readonly hidden />
+
+                <hr />
+
+                <div class="col-12">
+                    <h3 class="text-primary">Player Details <i class="fas fa-user-alt text-black-50"></i></h3>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Full Name</label>
+                        <input id="StudentName" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Semester</label>
+                        <input id="StudentSemester" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Session</label>
+                        <input id="StudentSession" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Department</label>
+                        <input id="StudentDepartment" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="col-12">
+                    <h3 class="text-primary">Team Details <i class="fas fa-users text-black-50"></i></h3>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">Team ID</label>
+                        <input value="@ViewBag.TeamId" class="form-control" disabled />
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">Team Name</label>
+                        <input type="text" name="value" value="@ViewBag.TeamName" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">Team Level</label>
+                        <input type="text" name="value" value="@ViewBag.TeamLevel" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Team Sports</label>
+                        <input type="text" name="value" value="@ViewBag.TeamSports" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Maximum Players</label>
+                        <input type="text" name="value" value="@ViewBag.MaximumPlayers" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <hr>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-primary btn-block" />
+            </div>
+        </form>
+
+        <div class="text-center m-1">
+            <a class="btn btn-outline-secondary" asp-action="EditTeam" asp-route-id="@ViewBag.TeamId">
+                <i class="fa fa-arrow-left"></i> Go Back
+            </a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#RollNumbers").autocomplete({
+                source: '/Team/GetPlayerId'
+            });
+        });
+
+        //Id
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "POST",
+                url: "/Team/FillId?rollnum=" + data,
+                data: data,
+                success: function (data) {
+                    $('#RequestingStudentId').val(data);
+                }
+            })
+        }).change();
+
+
+        //Name
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillName?rollnum=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#StudentName').val(data);
+                }
+            })
+        }).change();
+
+        //Semester
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillSemester?rollnum=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#StudentSemester').val(data);
+                }
+            })
+        }).change();
+
+        //Session
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillSession?rollnum=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#StudentSession').val(data);
+                }
+            })
+        }).change();
+
+        //Department
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Team/FillDepartment?rollnum=" + data,
+                success: function (data) {
+                    console.log(data);
+                    $('#StudentDepartment').val(data);
+                }
+            })
+        }).change();
+
+
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#demo-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hidden', !ok);
+                $('.bs-callout-warning').toggleClass('hidden', ok);
+            })
+        });
+    </script>
+}

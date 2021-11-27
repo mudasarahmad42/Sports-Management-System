@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<StudentModel> SignInManager
+@inject UserManager<StudentModel> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GCU Sports Management Application is built to save time and effort by automating day to day tasks
+          of department. It also offers many other exciting features.">
+    @*<meta name="theme-color" content="#722121">*@
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!--##################Added After#########################-->
+    <!--Icon-->
+    <link href='~/Test/img/icon.jpg' rel='shortcut icon' type='image/x-icon' />
+    <!--CSS Links-->
+    <link rel="stylesheet" href="~/Test/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Test/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="~/Test/css/style_test.css">
+    <!--Google Font-->
+    <link href="https://fonts.googleapis.com/css?family=Kanit:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <!--////////////Ends here/////////////////-->
+    <!--CleaveJS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous"></script>
+
+</head>
+<body>
+   
+
+    @RenderBody()
+
+    <!--JS Added-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
+    </script>
+
+    <script src="~/Test/js/vendor/bootstrap.min.js"></script>
+    <script src="~/Test/js/plugins.js"></script>
+    <script src="~/Test/js/main.js"></script>
+    <script src="~/Test/js/script.js"></script>
+    <!--Js end-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!--Form Validation-->
+    <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2.9.1/dist/parsley.min.js" asp-append-version="true"></script>
+    
+    <script>
+        $('#form').parsley();
+    </script>
+
+    @RenderSection("Notify", required: false)
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

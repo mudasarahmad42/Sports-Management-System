@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Knockout tournament";
+}
+
+
+<h1 class="text-center mb-4">Knockout Tournament</h1>
+
+<div id="header" class="col-3 m-3">
+
+</div>
+
+
+<script>
+
+    function shuffleArray(inputArray) {
+        var currentIndex = inputArray.length, temporaryValue, randomIndex;
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            // And swap it with the current element.
+            temporaryValue = inputArray[currentIndex];
+            inputArray[currentIndex] = inputArray[randomIndex];
+            inputArray[randomIndex] = temporaryValue;
+        }
+        return inputArray;
+    }
+    //------------------------------------------------
+    window.alert("Read the instructions carefully! \nEnter the number of teams as powers of 2^𝑥 (4,8,16,32) ");
+    var num_team = window.prompt("Enter the number of teams: ");
+    var num_week = num_team / 2;
+
+    //Calculate Number of Matches
+    var n2 = 1
+
+    //If number of teams is even
+    if (num_team % 2 == 0) {
+
+        var OriginalArray = new Array();
+        for (var x = 0; x < num_team; x++) {
+            OriginalArray[x] = window.prompt("Enter the name of team " + (x + 1) + ": ");
+        }
+
+        var isRandom = window.prompt("Randomized the order of teams (y / n)");
+
+        if (isRandom.toLowerCase() === "y" || isRandom.toLowerCase() === "yes") {
+            shuffleOriginal = shuffleArray(OriginalArray);
+            teams = shuffleOriginal.slice();
+            console.log("teams " + teams);
+            console.log("option " + isRandom);
+        }
+        else
+        {
+            teams = OriginalArray.slice();
+        }
+
+        var team1 = "";
+        var team2 = "";
+
+        var counter = 1;
+        for (y = 0; y < teams.length; y += 2)
+        {
+            const para = document.createElement("h2");
+            para.classList.add("text-primary");
+            const node = document.createTextNode("Match " + counter);
+            para.appendChild(node);
+
+            const element = document.getElementById("header");
+            element.appendChild(para);
+
+            team1 = teams[y];
+            team2 = teams[y+1]
+
+            const paraBody = document.createElement("p");
+            paraBody.classList.add("text-big");
+            const Paranode = document.createTextNode(team1 + ' vs ' + team2);
+            const linebreaker = document.createElement("br");
+
+            paraBody.appendChild(Paranode);
+            paraBody.appendChild(linebreaker);
+
+            const Paraelement = document.getElementById("header");
+            Paraelement.appendChild(paraBody);
+
+            counter++;
+        }
+
+    }
+</script>

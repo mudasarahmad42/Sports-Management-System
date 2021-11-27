@@ -1,0 +1,220 @@
+﻿@model GCUSMS.ViewModels.TournamentVM
+
+@{ ViewData["Title"] = "Create Tournament"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<h1 class="text-primary text-center"><i class="far fa-futbol"></i> Create Tournament</h1>
+
+<div class="container">
+    <h2 class="text-center">
+        <i class="fas fa-info text-primary"></i> Enter Details of the tournament you want to create
+    </h2>
+    <br>
+
+    <form asp-action="CreateTournament" id="parsley-form" data-parsley-validate="" class="col-lg-6 offset-lg-3 ">
+        <div class="form-group">
+            <label asp-for="TournamentName" class="control-label">Tournament Name: </label><br>
+            <input asp-for="TournamentName" class="form-control" placeholder="Enter Name" data-parsley-required-message="Name is Required" required="" maxlength="100" data-parsley-trigger="focusin focusout">
+            <span asp-validation-for="TournamentName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TournamentVenue" class="control-label">Venue: </label><br>
+            <input asp-for="TournamentVenue" class="form-control" placeholder="Enter Venue" data-parsley-required-message="Venue is Required" required="" maxlength="100" data-parsley-trigger="focusin focusout">
+            <span asp-validation-for="TournamentVenue" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <!--<small class="text-muted">DD/MM/YYYY</small>-->
+            <label asp-for="StartDate" class="control-label"></label>
+            <input asp-for="StartDate" class="form-control" id="GetStartDate" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Start date is required." data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-date-format="MM/DD/YYYY" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <!--<small class="text-muted">DD/MM/YYYY</small>-->
+            <label asp-for="EndDate" class="control-label"></label>
+            <input asp-for="EndDate" class="form-control" id="GetEndDate" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="End date is required." data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-parsley-enddate="" data-date-format="MM/DD/YYYY" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <!--<small class="text-muted">DD/MM/YYYY</small>-->
+            <label asp-for="DueDate" class="control-label"></label>
+            <input asp-for="DueDate" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Due date is required." data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-date-format="MM/DD/YYYY" data-parsley-duedate="" />
+            <span asp-validation-for="DueDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SportsCategory" class="control-label">Sports</label><br>
+            <select asp-for="SportsCategory" class="form-control" data-parsley-required-message="Please select sports" required="" data-parsley-trigger="focusin focusout">
+                <option value="" selected disabled hidden>Select Sports</option>
+                <option value="Cricket">Cricket</option>
+                <option value="Football">Football</option>
+                <option value="Hockey">Hockey</option>
+                <option value="Badminton">Badminton</option>
+                <option value="Squash">Squash</option>
+                <option value="Tug of War">Tug of War</option>
+                <option value="Other">Other</option>
+            </select>
+            <span asp-validation-for="SportsCategory" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GenderAllowed" class="control-label">Gender</label><br>
+            <select asp-for="GenderAllowed" class="form-control" data-parsley-required-message="Please select the gender allowed to participate in this tournament" required="" data-parsley-trigger="focusin focusout">
+                <option value="" selected disabled hidden>Select Gender</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Mixed-gender">Mixed-gender</option>
+            </select>
+            <span asp-validation-for="GenderAllowed" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TournamentType" class="control-label">Tournament Type</label><br>
+            <select asp-for="TournamentType" class="form-control" data-parsley-required-message="Select the type of the tournament" required="" data-parsley-trigger="focusin focusout">
+                <option value="" selected disabled hidden>Select type</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Team">Team</option>
+            </select>
+            <span asp-validation-for="TournamentType" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="TeamsAllowed" class="control-label">Teams Allowed:</label><br>
+            <input asp-for="TeamsAllowed" class="form-control" required="" data-parsley-type="number" data-parsley-trigger="focusin focusout" data-parsley-required-message="Enter maximum number of teams allowed to play in this tournament">
+            <span asp-validation-for="TeamsAllowed" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="isActive" class="control-label text-left">Active Tournament</label> <br />
+                    <input asp-for="isActive" class="form-control text-left">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="isIntraDepartmental" class="control-label text-left">Intra Departmental Tournament</label> <br />
+                    <input asp-for="isIntraDepartmental" id="isDepartmental" onchange="valueChanged()" class="form-control" />
+                    <span asp-validation-for="isIntraDepartmental" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="showDepartment">
+            <strong class="text-primary"><i class="fa fa-info text-info"></i> This is an Intra-Departmental Tournament, Please select the department name </strong> <br /><br />
+            <div class="form-group row">
+                <label asp-for="DepartmentName" class="col-sm-2 col-form-label">Department Name</label>
+                <select asp-for="DepartmentName" id="DepartmentRequired" class="form-control" required>
+                    <option value="" selected disabled hidden>Select Department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Physical Education and Sports Sciences">Physical Education and Sports Sciences</option>
+                    <option value="Persian">Persian</option>
+                    <option value="English">English</option>
+                    <option value="Punjabi">Punjabi</option>
+                    <option value="Urdu">Urdu</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biotechnology">Biotechnology</option>
+                    <option value="Botany">Botany</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Zoology">Zoology</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Statistics">Statistics</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Fine Arts">Fine Arts</option>
+                </select>
+                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mb-3">Submit</button>
+    </form>
+</div>
+
+@section Scripts
+{
+
+
+    @*Parsley Date Validator*@
+    <script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('mindate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp >= minTs;
+            }, 32)
+            .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s i.e (MM/DD/YYYY)</div>');
+
+        window.ParsleyValidator
+            .addValidator('duedate', function (value) {
+                var GetEndDate = document.getElementById("GetEndDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetEndDate);
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference < 1;
+            }, 32)
+            .addMessage('en', 'duedate', '<div class="date-error">Due date for participation forms submission should be before the end of tournament %s </div>');
+
+        window.ParsleyValidator
+            .addValidator('enddate', function (value) {
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference > -1;
+            }, 32)
+            .addMessage('en', 'enddate', '<div class="date-error">End date should be after the start date %s i.e(MM/DD/YYYY) </div>');
+    </script>
+
+    <script>
+        //This function check value of checkboxes on change
+        function valueChanged() {
+            //Show when checkbox is clicked
+            if ($('#isDepartmental').is(":checked")) {
+                $("#showDepartment").fadeIn();
+                $("#DepartmentRequired").prop('required', true);
+            }
+            else {
+                $("#DepartmentRequired").removeAttr('required')
+                $("#showDepartment").hide();
+            }
+        };
+
+
+        //Check value of checkboxes coming from database
+        if ($('#isDepartmental').prop('checked')) {
+            $('showDepartment').fadeIn();
+            $("#DepartmentRequired").prop('required', true);
+        } else {
+            $("#DepartmentRequired").removeAttr('required')
+            $('#showDepartment').hide();
+        }
+
+        if ($('#isDepartmental').is(":checked")) {
+            $("#showDepartment").fadeIn();
+            $("#DepartmentRequired").prop('required', true);
+        }
+        else {
+            $("#DepartmentRequired").removeAttr('required')
+            $("#showDepartment").hide();
+        }
+    </script>
+}

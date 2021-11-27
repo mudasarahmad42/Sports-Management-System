@@ -1,0 +1,159 @@
+﻿@model GCUSMS.ViewModels.TournamentVM
+
+@{ ViewData["Title"] = "Tournament Detail"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+        <h2 class="alert-heading">
+            Details of <span class="text-primary">@Model.TournamentName </span>
+        </h2>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-2">
+                Tournament Name
+            </dt>
+            <dd class="col-sm-10">
+                @Model.TournamentName
+            </dd>
+
+            <dt class="col-sm-2">
+                Tournament Venue
+            </dt>
+            <dd class="col-sm-10">
+                @Model.TournamentVenue
+            </dd>
+            <dt class="col-sm-2">
+                Tournament Type
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.TournamentType
+            </dd>
+
+            <dt class="col-sm-2">
+                Start Date
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.StartDate.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            <dt class="col-sm-2">
+                End Date
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.EndDate.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            <dt class="col-sm-2">
+                Due Date
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.DueDate.ToString("dddd, dd MMMM yyyy")
+            </dd>
+
+            <dt class="col-sm-2">
+                Winner
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.Winner <i class="fa fa-trophy" style="color:goldenrod"></i>
+            </dd>
+
+            <dt class="col-sm-2">
+                RunnerUp
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.RunnerUp <i class="fa fa-trophy" style="color:silver"></i>
+            </dd>
+
+            <dt class="col-sm-2">
+                Remarks
+            </dt>
+
+            <dd class="col-sm-10">
+                @if (Model.Message != null)
+                {
+                    @Model.Message
+                }
+                else
+                {
+                    <span class="text-black-50">Not Available</span>
+                }
+
+            </dd>
+
+            <dt class="col-sm-2">
+                Points for winning
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.PointsForWinning
+            </dd>
+
+            <dt class="col-sm-2">
+                Points for losing
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.PointsForLosing
+            </dd>
+
+            <dt class="col-sm-2">
+                Points for draw
+            </dt>
+
+            <dd class="col-sm-10">
+                @Model.PointsForDraw
+            </dd>
+
+            @if (Model.isIntraDepartmental == false)
+            {
+                <dt class="col-sm-2">
+                    Tournament Level
+                </dt>
+
+                <dd class="col-sm-10">
+                    University
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-2">
+                    Tournament Level
+                </dt>
+
+                <dd class="col-sm-10">
+                    Departmental <span class="text-black-50">(@Model.DepartmentName)</span>
+                </dd>
+            }
+        </dl>
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Which tournament you are trying to find details of? What is the ID of the this tournament? <br />Is there something wrong with the database.<br />
+            Go back and try again if error persists <br />
+            Please Contact IT Team to resolve this issue.
+        </p>
+
+        <a class="btn btn-outline-secondary" asp-controller="Dashboard" asp-action="Index">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}

@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace GCUSMS.ViewModels
+{
+    public class TournamentVM
+    {
+        [Key]
+        public int TournamentId { get; set; }
+        [DisplayName("Tournament Name")]
+        [Required]
+        public string TournamentName { get; set; }
+        [DisplayName("Tournament Venue")]
+        [Required]
+        public string TournamentVenue { get; set; }
+        [DisplayName("Start Date")]
+        [Required]
+        public DateTime StartDate { get; set; }
+        [DisplayName("End Date")]
+        [Required]
+        public DateTime EndDate { get; set; }
+        [DisplayName("Due Date")]
+        [Required]
+        public DateTime DueDate { get; set; }
+        public int TeamsAllowed { get; set; }
+        public bool isActive { get; set; }
+        public bool isIntraDepartmental { get; set; } = false;
+        public string DepartmentName { get; set; }
+        public int TotalDaysofTournament { get; set; }
+        public string Message { get; set; }
+        public string Winner { get; set; }
+        public string RunnerUp { get; set; }
+        public string Status { get; set; }
+        public int PointsForWinning { get; set; } = 0;
+        public int PointsForLosing { get; set; } = 0;
+        public int PointsForDraw { get; set; } = 0;
+        public string SportsCategory { get; set; }
+        public string GenderAllowed { get; set; }
+        public string TournamentType { get; set; }
+    }
+}

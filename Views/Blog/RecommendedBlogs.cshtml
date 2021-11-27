@@ -1,0 +1,116 @@
+﻿@model GCUSMS.ViewModels.SearchBlogVM
+@using PagedList.Core.Mvc
+
+@{
+    ViewData["Title"] = @ViewBag.authorName + "'s Blogs";
+}
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<section class="section-hero d-flex justify-content-center align-items-center blog-bgimage"
+         style="background-image:linear-gradient(to bottom, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.73)), url(../../main/images/img/blogphoto.jpg); background-size: cover;
+        background-repeat: no-repeat;">
+    <div class="container">
+        <div class="row ">
+            <div style="color: white;" class="col-12">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h1 class="blog-heading">@ViewBag.authorName<text>'s</text> Blogs</h1>
+                </div>
+                <h6 class="text-center">Read what @ViewBag.authorName has to say!</h6>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section-blogs">
+    <div class="container">
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <h1 class="gallery-title">Blogs</h1>
+        </div>
+
+        <form asp-controller="Blog" asp-action="RecommendedBlogs" class="row d-flex justify-content-center align-items-center">
+            <div class="col-12">
+                <div class="text-center">
+                    <input asp-for="SearchString" type="text" class="form-control form-control-lg" placeholder="Search posts for..." />
+                    <button class="btn btn-maroon m-4" type="submit" id="submit" name="submit">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="row d-flex justify-content-center align-items-center">
+            @if (Model.Blogs.Where(q => q.isApproved == true).Count() == 0)
+            {
+                <div class="container">
+                    <div class="row d-flex justify-content-center align-items-center m-5" style="display:block;">
+                        <i class="fas fa-pen text-secondary" style="font-size: 20rem; "></i>
+                        <h3 class="text-danger">Nothing Found!!!</h3>
+                    </div>
+                </div>
+
+            }
+
+            @foreach (var blog in Model.Blogs.Where(q => q.isApproved == true))
+            {
+
+                <div class="card mb-5 m-1" style="width: 23rem;">
+                    <img src="~/images/Blogs/@blog.BlogImagePath" class="card-img-top-blogpage" alt="@blog.Title">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            @if (blog.Title.Length > 20)
+                            {
+                                @(@blog.Title.Substring(0, 18) + "...")
+                            }
+                            else
+                            {
+                                @blog.Title
+                            }
+                        </h4>
+                        <p class="text-muted">
+                            @blog.CreatedOn.ToString("MMMM dd, yyyy")
+                            |
+                            Posted by:
+                            @if (@blog.Author.FirstName.Length > 7)
+                            {
+                                @blog.Author.FirstName.Substring(0, 1);
+                            }
+                            else
+                            {
+                                @blog.Author.FirstName
+                            }
+
+                            @blog.Author.LastName
+                        </p>
+                        @if (blog.Excerpt.Length > 29)
+                        {
+                            <p class="card-text">
+                                @blog.Excerpt.Substring(0, 29)
+                            </p>
+                        }
+                        else
+                        {
+                            @blog.Excerpt.Substring(0, blog.Excerpt.Length)
+                        }
+                        <a class="btn btn-outline-maroon" asp-controller="Blog" asp-action="Post" asp-route-id="@blog.BlogID">Read More</a>
+                    </div>
+                </div>
+
+            }
+
+            <div class="col-lg-12 d-flex justify-content-center align-items-center">
+                <ul class="pagination st-post-pagination">
+                    <div list="@Model.Blogs" count="20">
+                        <pager class="pager-container" list="@Model.Blogs" options="@PagedListRenderOptions.Bootstrap4PageNumbersPlusPrevAndNext" asp-action="Index" asp-controller="Blog" asp-route-query="@Model.SearchString" />
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>

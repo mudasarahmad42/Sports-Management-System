@@ -1,0 +1,153 @@
+﻿@model List<GCUSMS.ViewModels.EquipmentAllocationVM>
+
+@{ ViewData["Title"] = @ViewBag.StudentName + "'s Allocations"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<h1 class="text-center mb-4">@ViewBag.StudentName <span>'s </span>Equipment Allocations Detail</h1>
+@if (Model != null)
+{
+    <div class="m-2">
+        <a class="btn btn-outline-secondary" asp-action="UserDetails" asp-controller="Dashboard" asp-route-id="@ViewBag.StudentId">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+    </div>
+
+    <table id="TableData" class="display nowrap table table-striped table-bordered hover">
+        <thead>
+            <tr>
+                <th>
+                    Full Name
+                </th>
+                <th>
+                    Roll Number
+                </th>
+                <th>
+                    Equipment Name
+                </th>
+                <th>
+                    Equipment Type
+                </th>
+                <th>
+                    Quantity Allocated
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.RequestingStudent.FirstName   @item.RequestingStudent.LastName
+                    </td>
+
+                    <td>
+                        @item.RequestingStudent.RollNumber
+                    </td>
+
+                    <td>
+                        @item.RequestedEquipment.EquipmentName
+                    </td>
+
+                    <td>
+                        @item.RequestedEquipment.EquipmentType
+                    </td>
+
+                    <td>
+                        @item.QuantityAllocated
+                    </td>
+
+                    <td>
+                        @if (item.Returned == true)
+                        {
+                            <span class="badge badge-success">Returned</span>
+                        }
+                        else if (item.Returned == false)
+                        {
+                            <span class="badge badge-danger">Not Returned / Lost</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning">Pending</span>
+                        }
+                    </td>
+
+                    <td>
+                        @item.StartDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        @item.EndDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        <a class="btn btn-md btn-outline-primary" asp-action="AllocatedEquipmentDetail" asp-route-id="@item.Id">
+                            Details <i class="fa fa-file"></i>
+                        </a>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Record with id does not exist!
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="StudentEquipmentList">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[0]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'pdf', className: 'btn btn-primary' },
+                { extend: 'print', className: 'btn btn-primary' },
+                { extend: 'copy', className: 'btn btn-primary' },
+                { extend: 'csv', className: 'btn btn-primary' },
+                { extend: 'excel', className: 'btn btn-primary' }
+            ]
+        });
+    });
+    </script>
+}

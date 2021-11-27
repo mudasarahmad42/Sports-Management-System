@@ -1,0 +1,117 @@
+﻿@model List<GCUSMS.Models.StudentModel>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "User Database";
+}
+
+<h1 class="text-center mb-4">User Database</h1>
+
+<p class="text-muted mt-3">Click the buttons below to download the data in respective formats</p>
+
+<hr />
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Profile Image
+            </th>
+            <th>
+                Name
+            </th>
+
+            <th>
+                Father Name
+            </th>
+            <th>
+                Roll Number
+            </th>
+            <th>
+                Section
+            </th>
+            <th>
+                Department
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @*If you Do not want Admin to show up in the list*@
+        @*.Where(q => q.Email != "admin@gcu.edu.pk")*@
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img class="img-thumbnail" src="~/images/Users/@item.ProfileImagePath" style="max-height:150px; max-width:150px;" alt="" />
+                </td>
+
+                <td>
+                    @if (item.FirstName.Length > 7)
+                    {
+                        @item.FirstName.Substring(0, 1) <small> </small> @Html.DisplayFor(modelItem => item.LastName)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.FirstName) <small> </small> @Html.DisplayFor(modelItem => item.LastName)
+                    }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatherName)
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Section)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary btn-sm" asp-action="UserDetails" asp-route-id="@item.Id">
+                        More Details <i class="fa fa-arrow-right"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+<script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+       
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[1]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'pdf', className: 'btn btn-primary' },
+                { extend: 'print', className: 'btn btn-primary' },
+                { extend: 'copy', className: 'btn btn-primary' },
+                { extend: 'csv', className: 'btn btn-primary' },
+                { extend: 'excel', className: 'btn btn-primary' }
+            ]
+        });
+    });
+</script>
+}

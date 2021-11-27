@@ -1,0 +1,294 @@
+﻿@model GCUSMS.ViewModels.EquipmentAllocationVM
+
+@{ ViewData["Title"] = "Allocations"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<h5 class="text-danger">Important Notice</h5>
+<p class="text-primary">
+    <i class="fa fa-exclamation-circle text-danger"></i>&nbsp; Enter Student ID very carefully <br />
+</p>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form id="demo-form" data-parsley-validate="" enctype="multipart/form-data" asp-action="Allocate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">Enter Roll Number</label>
+                        <input id="RollNumbers" type="text" name="value" class="form-control" placeholder="" required="" data-parsley-trigger="focusin focusout" />
+                    </div>
+                </div>
+
+                <input asp-for="RequestingStudentId" id="RequestingStudentId" class="form-control" readonly hidden />
+
+                <hr />
+
+                <div class="col-12">
+                    <h3 class="text-primary">Student Details <i class="fas fa-user-alt text-black-50"></i></h3>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Full Name</label>
+                        <input id="StudentName" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Semester</label>
+                        <input id="StudentSemester" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Session</label>
+                        <input id="StudentSession" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">Department</label>
+                        <input id="StudentDepartment" type="text" name="value" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+
+                <hr />
+
+                <div class="col-12">
+                    <h3 class="text-primary">Equipment Details <i class="fas fa-tools text-black-50"></i></h3>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">Equipment ID</label>
+                        <input value="@ViewBag.EquipmentID" class="form-control" disabled />
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">Equipment Name</label>
+                        <input type="text" name="value" value="@ViewBag.EquipmentName" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">Equipment Type</label>
+                        <input type="text" name="value" value="@ViewBag.EquipmentType" class="form-control" placeholder="" disabled />
+                    </div>
+                </div>
+
+                <hr>
+
+
+                <div class="col-12">
+                    <h3 class="text-primary">Enter Allocation Details  <i class="fas fa-info-circle text-black-50"></i></h3>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <strong>*</strong>
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" class="form-control" id="GetStartDate" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Start date is required." data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-date-format="MM/DD/YYYY" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <strong>*</strong>
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" class="form-control" id="GetEndDate" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="End date is required." data-parsley-enddate="" data-parsley-maxequipmentdays="" data-parsley-mindate="@DateTime.Today.ToString("MM/dd/yyyy")" data-date-format="MM/DD/YYYY" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    @if (@ViewBag.AvailableEquipment == 0)
+                    {
+                        <div class="form-group">
+                            <label class="control-label">Number of Equipment Allocation</label>
+                            <input type="text" value="Equipment is not available in inventory" class="form-control" disabled />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <strong>*</strong>
+                            <label asp-for="QuantityAllocated" class="control-label">Enter Quantity being allocated</label><small class="text-muted"> (Available: @ViewBag.AvailableEquipment @ViewBag.EquipmentName)</small>
+                            <input asp-for="QuantityAllocated" class="form-control" data-parsley-min="1" data-parsley-max="@ViewBag.AvailableEquipment" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Please enter the quantity" data-parsley-type="number"/>
+                            <span asp-validation-for="QuantityAllocated" class="text-danger"></span>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <strong>*</strong>
+                        <label asp-for="AllocatedBy" class="control-label">Equipment is being allocated by</label>
+                        <input asp-for="AllocatedBy" class="form-control" data-parsley-required-message="Name is Required" required="" maxlength="25" data-parsley-trigger="focusin focusout" />
+                        <span asp-validation-for="AllocatedBy" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Allocate" class="btn btn-primary btn-block" />
+            </div>
+        </form>
+
+        <div class="text-center m-1">
+            <a class="btn btn-outline-secondary" asp-action="Index" >
+            <i class="fa fa-arrow-left"></i> Go Back
+            </a>
+
+            <a class="btn btn-outline-secondary" href="##" onClick="history.go(-1); return false;" >
+            <i class="fa fa-arrow-left"></i> Previous Page
+            </a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#RollNumbers").autocomplete({
+                source: '/Equipments/Test'
+            });
+        });
+
+        //Id
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "POST",
+                url: "/Equipments/FillId?rollnum=" + data,
+                data: data,
+                success: function (data) {
+                    $('#RequestingStudentId').val(data);
+                }
+            })
+        }).change();
+
+
+        //Name
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Equipments/FillName?rollnum=" + data,
+                success: function (data) {
+                    $('#StudentName').val(data);
+                }
+            })
+        }).change();
+
+        //Semester
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Equipments/FillSemester?rollnum=" + data,
+                success: function (data) {
+                    $('#StudentSemester').val(data);
+                }
+            })
+        }).change();
+
+        //Session
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Equipments/FillSession?rollnum=" + data,
+                success: function (data) {
+                    $('#StudentSession').val(data);
+                }
+            })
+        }).change();
+
+        //Department
+        $('#RollNumbers').on('autocompletechange change', function () {
+            var data = this.value;
+            $.ajax({
+                type: "Get",
+                url: "/Equipments/FillDepartment?rollnum=" + data,
+                success: function (data) {
+                    $('#StudentDepartment').val(data);
+                }
+            })
+        }).change();
+
+
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#demo-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hidden', !ok);
+                $('.bs-callout-warning').toggleClass('hidden', ok);
+            })
+        });
+    </script>
+
+    @*Parsley Date Validator*@
+    <script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('mindate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp >= minTs;
+            }, 32)
+            .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s i.e(MM/DD/YYYY)</div>');
+
+
+        window.ParsleyValidator
+            .addValidator('maxequipmentdays', function (value) {
+
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference <= 90;
+            }, 32)
+            .addMessage('en', 'maxequipmentdays', '<div class="date-error">Equipment can not be allocated for more than 90 days</div>');
+
+
+        window.ParsleyValidator
+            .addValidator('enddate', function (value) {
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                console.log("Start date: " + GetStartDate);
+                console.log("Min Ts: " + minTs);
+                console.log("TimeStamp: " + timestamp);
+                console.log("Difference: " + Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24)));
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference > -1;
+            }, 32)
+            .addMessage('en', 'enddate', '<div class="date-error">End date should be after the start date </div>');
+    </script>
+}

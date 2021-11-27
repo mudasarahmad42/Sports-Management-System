@@ -1,0 +1,119 @@
+﻿@model IEnumerable<GCUSMS.ViewModels.EquipmentVM>
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Sports Equipment";
+}
+
+<h1 class="text-center mb-4">Sports Inventory Management Dashboard</h1>
+
+
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Equipment Name
+            </th>
+            <th>
+                Equipment Type
+            </th>
+
+            <th>
+                Quantity
+            </th>
+            <th>
+                Condition
+            </th>
+            <th>
+                Description
+            </th>
+            <th class="text-center">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentType)
+                </td>
+
+                @if (item.Quantity == 0)
+                {
+                    <td>
+                        <span class="info-box-text animate__animated animate__flash animate__repeat-3 animate__slow">@Html.DisplayFor(modelItem => item.Quantity)<i class="badge badge-danger">Not Available</i></span>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Condition)
+                </td>
+
+                <td class="truncate">
+                    @Html.DisplayFor(modelItem => item.TrimmedMessage)
+                </td>
+
+                <td>
+                    <div class="btn-group btn-group" role="group">
+                        <a class="btn btn-primary m-1" asp-action="Allocate" asp-route-id="@item.Id">
+                            Allocate <i class="fa fa-file"></i>
+                        </a>
+                        &nbsp;
+                        <a class="btn btn-info m-1" asp-controller="Equipments" asp-action="Allocations" asp-route-id="@item.Id">
+                            Allocations <i class="fa fa-list-alt"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        $('#TableData').DataTable({
+
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.modal({
+                        header: function (row) {
+                            var data = row.data();
+                            return data[0]
+                        }
+                    }),
+                    renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                }
+            },
+
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'pdf', className: 'btn btn-primary' },
+                { extend: 'print', className: 'btn btn-primary' },
+                { extend: 'copy', className: 'btn btn-primary' },
+                { extend: 'csv', className: 'btn btn-primary' },
+                { extend: 'excel', className: 'btn btn-primary' }
+            ],
+
+             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
+    });
+    </script>
+}

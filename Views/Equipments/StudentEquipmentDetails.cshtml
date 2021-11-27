@@ -1,0 +1,319 @@
+﻿@model GCUSMS.ViewModels.EquipmentAllocationVM
+
+@{ ViewData["Title"] = "Details"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+<div class="m-3">
+    <h2 class="alert-heading">
+        Equipment Allocation History of <span class="text-primary">@Model.RequestingStudent.FirstName @Model.RequestingStudent.LastName</span>
+    </h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">@ViewBag.TotalAllocations</span>
+                    <span class="info-box-number">Total Equipment Allocations</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-green">
+                <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">@ViewBag.TotalReturnedEquipment</span>
+                    <span class="info-box-number">Total Returned Equipment</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-red">
+                <span class="info-box-icon"><i class="fa fa-times-circle"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">@ViewBag.TotalLostEquipment</span>
+                    <span class="info-box-number">Total Lost Equipment</span>
+                </div>
+            </div>
+        </div>
+
+        @if (@ViewBag.TotalPendingEquipment > 0)
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-yellow">
+                    <span class="info-box-icon bg-yellow"><i class="fa fa-exclamation"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text animate__animated animate__flash animate__repeat-3 animate__slow">@ViewBag.TotalPendingEquipment <i class="badge badge-danger">NEW</i></span>
+                        <span class="info-box-number animate__animated animate__flash animate__repeat-3 animate__slow">Pending Equipment</span>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (@ViewBag.TotalPendingEquipment == 0)
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-yellow">
+                    <span class="info-box-icon bg-yellow"><i class="fa fa-exclamation"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">@ViewBag.TotalPendingEquipment</span>
+                        <span class="info-box-number">Pending Equipment</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <hr />
+
+    <p class="text-primary">Personal Details</p>
+    <br />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Profile Image
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/images/Users/@Model.RequestingStudent.ProfileImagePath" class="rounded float-left" style="max-height:200px" alt="User Image">
+        </dd>
+
+        <dt class="col-sm-2">
+            Full Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.FirstName)  @Html.DisplayFor(model => model.RequestingStudent.LastName)
+        </dd>
+
+        <dt class="col-sm-2">
+            Father Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.FatherName)
+        </dd>
+
+        <dt class="col-sm-2">
+            Roll No
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.RollNumber)
+        </dd>
+
+        <dt class="col-sm-2">
+            Gender
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.Gender)
+        </dd>
+
+        <dt class="col-sm-2">
+            Section
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.Section)
+        </dd>
+
+        <dt class="col-sm-2">
+            Semester
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.Semester)
+        </dd>
+
+        <dt class="col-sm-2">
+            Department
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.DepartmentName)
+        </dd>
+
+        <dt class="col-sm-2">
+            Age
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestingStudent.Age)
+        </dd>
+
+        <dt class="col-sm-2">
+            Date of Birth
+        </dt>
+        <dd class="col-sm-10">
+            @Model.RequestingStudent.DateOfBirth.ToString("dd MMMM yyyy")
+        </dd>
+    </dl>
+    <hr />
+
+    <p class="text-primary">Allocation Details</p>
+    <br />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Quantity Allocated
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.QuantityAllocated) <span class="badge badge-primary">@Html.DisplayFor(model => model.RequestedEquipment.EquipmentName)</span>
+        </dd>
+
+        <dt class="col-sm-2">
+            Allocation From
+        </dt>
+        <dd class="col-sm-10">
+            @Model.StartDate.ToString("dddd, dd MMMM yyyy")
+        </dd>
+
+        <dt class="col-sm-2">
+            Allocation Till
+        </dt>
+        <dd class="col-sm-10">
+            @Model.EndDate.ToString("dddd, dd MMMM yyyy")
+        </dd>
+
+        <dt class="col-sm-2">
+            Allocation On
+        </dt>
+        <dd class="col-sm-10">
+            @Model.DateAllocated.ToString("dddd, dd MMMM yyyy")
+        </dd>
+
+        <dt class="col-sm-2">
+            Allocated By
+        </dt>
+
+        <dd class="col-sm-10">
+            @if (Model.AllocatedBy == null)
+            {
+                <p class="text-muted">No Name mentioned here</p>
+            }
+
+            @Html.DisplayFor(model => model.AllocatedBy)
+        </dd>
+
+        @if (Model.Returned == true || Model.Returned == false)
+        {
+            <dt class="col-sm-2">
+                Date Returned
+            </dt>
+            <dd class="col-sm-10">
+                @Model.DateReturned.ToString("dddd, dd MMMM yyyy")
+            </dd>
+        }
+
+        <dt class="col-sm-2">
+            Return Status
+        </dt>
+
+        <dd class="col-sm-10">
+            @if (Model.Returned == true)
+            {
+                <span class="badge badge-success">Returned</span>
+            }
+            else if (Model.Returned == false)
+            {
+                <span class="badge badge-danger">Lost / Never Returned</span>
+            }
+            else
+            {
+                <span class="badge badge-warning">Pending</span>
+            }
+        </dd>
+
+    </dl>
+    <hr />
+
+    <p class="text-primary">Equipment Return Details</p>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            Quantity Borrowed
+        </dt>
+        <dd class="col-sm-10">
+            @Model.QuantityAllocated
+        </dd>
+
+        <dt class="col-sm-2">
+            Quantity Returned
+        </dt>
+        <dd class="col-sm-10">
+            @Model.QuantityAccepted
+        </dd>
+
+        @if (Model.Returned != null)
+        {
+            <dt class="col-sm-2">
+                Administration Comments
+            </dt>
+            <dd class="col-sm-10">
+
+                @if (Model.Comments == null)
+                {
+                    <p class="text-muted"> All @Model.QuantityAllocated @Model.RequestedEquipment.EquipmentName are marked as LOST.</p>
+                }
+                else
+                {
+                    @Model.Comments
+                }
+
+            </dd>
+        }
+    </dl>
+
+    <hr />
+
+    <p class="text-primary">Equipment Details</p>
+    <br />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            Equipment Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestedEquipment.EquipmentName)
+        </dd>
+
+        <dt class="col-sm-2">
+            Equipment Type
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestedEquipment.EquipmentType)
+        </dd>
+
+        <dt class="col-sm-2">
+            Equipment Condition
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RequestedEquipment.Condition)
+        </dd>
+    </dl>
+</div>
+
+
+
+    <div class="p-3">
+        <a class="btn btn-outline-secondary" asp-action="StudentEquipmentList">
+            <i class="fa fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Record with id does not exist!
+        </p>
+        <a class="btn btn-outline-secondary" asp-action="StudentEquipmentList">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}

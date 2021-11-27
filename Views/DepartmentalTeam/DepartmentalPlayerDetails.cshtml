@@ -1,0 +1,274 @@
+﻿@model GCUSMS.ViewModels.EditTeamPlayerVM
+
+@{ ViewData["Title"] = Model.Team.TeamName + " | Player Details"; }
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@if (Model != null)
+{
+    <div class="m-3">
+        <h2 class="alert-heading">
+            Record of <span class="text-primary">@Model.Player.FirstName @Model.Player.LastName</span> in <span class="text-primary">@Model.Team.TeamName</span>
+        </h2>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-2">
+                Profile Image
+            </dt>
+            <dd class="col-sm-10">
+                <img src="~/images/Users/@Model.Player.ProfileImagePath" class="rounded float-left" style="max-height:200px" alt="User Image">
+            </dd>
+
+            <dt class="col-sm-2">
+                Player Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Player.FirstName) @Html.DisplayFor(model => model.Player.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                Roll Number
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Player.RollNumber)
+            </dd>
+
+            <dt class="col-sm-2">
+                Department
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Player.DepartmentName)
+            </dd>
+
+            <dt class="col-sm-2">
+                Player Weight
+            </dt>
+
+            @if (Model.PlayerWeight == null)
+            {
+                <dd class="col-sm-10">
+                    Not Recorded
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.PlayerWeight)
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                Player Height
+            </dt>
+
+            @if (Model.PlayerHeight == null)
+            {
+                <dd class="col-sm-10">
+                    Not Recorded
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.PlayerHeight)
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                Player Fitness Rating
+            </dt>
+
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PlayerFitnessPoints)
+            </dd>
+        </dl>
+
+        <hr />
+        <h6 class="text-info">Feet into Inches</h6>
+        <p>
+            <label class="col-sm-2 col-form-label">Feet</label>
+            <input id="inputFeet" class="form-control" type="number" oninput="LengthConverter(this.value)" onchange="LengthConverter(this.value)">
+        </p>
+
+        <p>Inches: <span id="outputInches"></span></p>
+        <hr />
+
+        <h1 class="text-info">Edit Player Details</h1>
+
+
+        <form asp-controller="DepartmentalTeam" asp-action="DepartmentalPlayerDetails" method="post" class="mt-3" id="parsley-form" data-parsley-validate="">
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+            @*Use hidden input elements to store team player id
+                which we need when we submit the form and update data in the database*@
+            <input hidden asp-for="TeamPlayerId" />
+
+            <div class="form-group row">
+                <label asp-for="PlayerRole" class="col-sm-2 col-form-label">Player Role</label>
+                <div class="col-sm-10">
+                    <select asp-for="PlayerRole" class="form-control">
+                        <option value="" selected disabled hidden>Select Role</option>
+                        <optgroup label="General Roles">
+                            <option value="Player">Player</option>
+                            <option value="Coach">Coach</option>
+                            <option value="Assistant Coach">Assistant Coach</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Others">Others</option>
+                        </optgroup>
+
+                        <optgroup label="Cricket">
+                            <option value="Wicket Keeper">Wicket Keeper</option>
+                            <option value="Bowler">Bowler</option>
+                            <option value="Batsman">Batsman</option>
+                            <option value="Batsman/Wicket Keeper">Batsman/Wicket Keeper</option>
+                            <option value="Extras">Extras</option>
+                        </optgroup>
+
+                        <optgroup label="Football/Hockey">
+                            <option value="Goal Keeper">Goal Keeper</option>
+                            <option value="Striker">Striker</option>
+                            <option value="Right Full Back">Right Full Back</option>
+                            <option value="Left Full Back">Left Full Back</option>
+                            <option value="Center Full Back">Center Full Back</option>
+                            <option value="Right Half Back">Right Half Back</option>
+                            <option value="Left Half Back">Left Half Back</option>
+                            <option value="Center Half Back">Center Half Back</option>
+                            <option value="Outside Right">Outside Right</option>
+                            <option value="Inside Right">Inside Right</option>
+                            <option value="Center Forward">Center Forward</option>
+                            <option value="Center MidFielder">Center MidFielder</option>
+                            <option value="Left Winger">Left Winger</option>
+                            <option value="Right Winger">Right Winger</option>
+                            <option value="Extras">Extras</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="CaptainType">
+                    Captain of <span class="text-primary">@Model.Team.TeamName</span>?
+                </label>
+
+                <div class="col-sm-10">
+                    <select asp-for="CaptainType" class="form-control">
+                        <option value="" selected disabled hidden>Select Captaincy</option>
+                        <option value="">Not a Captain</option>
+                        <option value="Captain">Captain</option>
+                        <option value="Vice Captain">Vice Captain</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-1" asp-for="IsActive">
+                    Currently Playing in Team?
+                </label>
+
+                <div class="col-sm-10">
+                    <div class="col-3">
+                        <input asp-for="IsActive" class="form-control float-left text-left" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="PlayerHeight" class="col-sm-2 col-form-label">Height (Inches)</label>
+                <div class="col-sm-10">
+                    <input asp-for="PlayerHeight" class="form-control playerheight" placeholder="Player Height">
+                    <span asp-validation-for="PlayerHeight" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="PlayerWeight" class="col-sm-2 col-form-label">Weight (Kilogram)</label>
+                <div class="col-sm-10">
+                    <input asp-for="PlayerWeight" class="form-control playerweight" placeholder="Player Weight">
+                    <span asp-validation-for="PlayerWeight" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="PlayerFitnessPoints" class="col-sm-2 col-form-label">Fitness Points</label>
+                <div class="col-sm-10">
+                    <input asp-for="PlayerFitnessPoints" class="form-control" placeholder="Player Fitness Rating">
+                    <span asp-validation-for="PlayerFitnessPoints" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="m-4 d-flex justify-content-center">
+                <a class="btn btn-danger" asp-action="DepartmentalDeletePlayerFromList" asp-route-id="@Model.TeamPlayerId">
+                    Delete <i class="fa fa-trash"></i>
+                </a>
+                &nbsp;
+
+                <a class="btn btn-outline-secondary" asp-action="DepartmentalPlayersList" asp-route-id="@Model.TeamId">
+                    <i class="fa fa-arrow-left"></i> Go Back
+                </a>
+                &nbsp;
+
+                <button type="submit" class="btn btn-success">Update <i class="fa fa-refresh"></i></button>
+            </div>
+
+        </form>
+    </div>
+}
+else
+{
+    <div class="text-center mt-5">
+
+        <span class="fas fa-exclamation-triangle text-red" style="font-size:17rem;"></span>
+        <h1 class="m-5">Something Went Wrong</h1>
+        <p class="text-muted">
+            Which Player you are trying to find details of? What is the ID of the this Player? <br />Is there something Wrong with the database.<br />
+            Go back and try again if error persists <br />
+            Please Contact IT Team to resolve this issue.
+        </p>
+
+        <a class="btn btn-outline-secondary" asp-action="DepartmentalPlayersList" asp-route-id="@Model.TeamId">
+            <i class="fa fa-arrow-left"></i> Go Back
+        </a>
+
+    </div>
+}
+
+@section Scripts
+{
+    @*<partial name="_ValidationScriptsPartial" />*@
+    <script type="text/javascript">
+        $(function () {
+            $('#parsley-form').parsley().on('field:validated', function () {
+                var ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hideit', ok);
+                $('.bs-callout-warning').toggleClass('hideit', !ok);
+            })
+        });
+    </script>
+
+    <script>
+        // custom
+        new Cleave('.playerheight', {
+            numeral: true,
+            prefix: 'Inches '
+        });
+
+    </script>
+
+    <script>
+        // section
+        new Cleave('.playerweight', {
+            numeral: true,
+            prefix: 'Kilograms '
+        });
+    </script>
+
+    <script>
+        function LengthConverter(valNum) {
+            document.getElementById("outputInches").innerHTML = (valNum * 12);
+        }
+    </script>
+}

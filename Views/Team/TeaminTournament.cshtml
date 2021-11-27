@@ -1,0 +1,236 @@
+﻿@model GCUSMS.ViewModels.TeamTournamentFilterVM
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = @ViewBag.TeamName + "'s Tournaments";
+}
+
+
+<h1 class="text-center mb-4">List of the tournaments <span class="text-primary">@ViewBag.TeamName</span> is part of</h1>
+
+<h3>Result filter</h3>
+<p>Enter dates to get the tournaments this team played during that time.</p>
+<form id="parsley-form" data-parsley-validate="" asp-controller="Team" asp-action="TeaminTournament">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">From</label>
+                <input asp-for="StartDate" id="GetStartDate" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="Start date is required." data-date-format="MM/DD/YYYY" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label">To</label>
+                <input asp-for="EndDate" id="GetEndDate" class="form-control" required="" data-parsley-trigger="focusin focusout" data-parsley-required-message="End date is required." data-parsley-enddate="" data-date-format="MM/DD/YYYY" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Filter" class="btn btn-primary btn-block" />
+    </div>
+</form>
+
+<hr />
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="fa fa-list"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@ViewBag.TotalMatchesPlayed</span>
+                <span class="info-box-number">Total Matches</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-blue">
+            <span class="info-box-icon"><i class="fas fa-trophy"></i></span>
+            <div class="info-box-content p-1">
+                <span class="info-box-text">@ViewBag.TotalMatchesWon</span>
+                <span class="info-box-number">Matches Won</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="fas fa-equals"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@ViewBag.TotalMatchesDrawed</span>
+                <span class="info-box-number">Matches Drawed</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-red">
+            <span class="info-box-icon"><i class="fas fa-heart-broken"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">@ViewBag.TotalMatchesLost</span>
+                <span class="info-box-number">Matches Lost</span>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+
+<a class="btn btn-outline-secondary" asp-controller="Team" asp-action="MyTeams">
+    <i class="fa fa-arrow-left"></i> Go Back
+</a>
+<table id="TableData" class="display nowrap table table-striped table-bordered hover" style="width:100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Tournament Name
+            </th>
+
+            <th>
+                Tournament End Date
+            </th>
+            <th>
+                Matches Played
+            </th>
+
+            <th>
+                Matches Won
+            </th>
+
+            <th>
+                Matches Lost
+            </th>
+
+            <th>
+                Matches Drawed
+            </th>
+
+            <th>
+                Total Points
+            </th>
+
+            <th>
+                Tournament Winner
+            </th>
+
+            <th>
+                Tournament Runner Up
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.TournamentTeamList != null)
+        {
+            @foreach (var item in Model.TournamentTeamList)
+            {
+                <tr>
+                    <td>
+                        @item.Tournament.TournamentName
+                    </td>
+
+                    <td>
+                        @item.Tournament.EndDate.ToString("dd/MM/yyyy")
+                    </td>
+
+                    <td>
+                        @item.MatchesPlayed
+                    </td>
+
+                    <td>
+                        @item.MatchesWon
+                    </td>
+
+                    <td>
+                        @item.MatchesLost
+                    </td>
+
+                    <td>
+                        @item.MatchesDrawed
+                    </td>
+
+                    <td>
+                        <strong>@item.TotalPoints</strong>
+                    </td>
+
+                    <td>
+                        @item.Tournament.Winner <i class="fa fa-trophy" style="color:goldenrod"></i>
+                    </td>
+
+                    <td>
+                        @item.Tournament.RunnerUp <i class="fa fa-trophy" style="color:silver"></i>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#TableData').DataTable({
+
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return data[1]
+                            }
+                        }),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+                    }
+                },
+
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'pdf', className: 'btn btn-primary' },
+                ]
+            });
+        });
+    </script>
+
+    @*Parsley Date Validator*@
+    <script type="text/javascript">
+        window.ParsleyValidator
+            .addValidator('mindate', function (value, requirement) {
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(requirement);
+
+                return isNaN(timestamp) ? false : timestamp >= minTs;
+            }, 32)
+            .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s i.e(MM/DD/YYYY)</div>');
+
+        window.ParsleyValidator
+            .addValidator('enddate', function (value) {
+                var GetStartDate = document.getElementById("GetStartDate").value;
+                // is valid date?
+                var timestamp = Date.parse(value),
+                    minTs = Date.parse(GetStartDate);
+
+                console.log("Start date: " + GetStartDate);
+                console.log("Min Ts: " + minTs);
+                console.log("TimeStamp: " + timestamp);
+                console.log("Difference: " + Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24)));
+
+                var DaysDifference = Math.floor((timestamp - minTs) / (1000 * 60 * 60 * 24));
+
+                return isNaN(timestamp) ? false : DaysDifference > -1;
+            }, 32)
+            .addMessage('en', 'enddate', '<div class="date-error">End date should be after the start date </div>');
+    </script>
+}

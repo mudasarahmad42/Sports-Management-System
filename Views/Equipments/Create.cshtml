@@ -1,0 +1,79 @@
+﻿@model GCUSMS.ViewModels.EquipmentVM
+
+@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Equipments Dashboard";
+}
+
+<h1 class="text-primary text-center">Sports Equipment Inventory Management</h1>
+<section>
+
+    <div class="m-5">
+        <form asp-action="Create" id="parsley-form" data-parsley-validate="" class="col-lg-6 offset-lg-3 ">
+            <div class="form-check row justify-content-center">
+
+                <strong>
+                    <span class="fas fa-gears"></span>*
+                </strong>
+                <label asp-for="EquipmentName" class="form__label mt-1">Name</label>
+                <input asp-for="EquipmentName" class="form-control" placeholder="Name" id="name" data-parsley-required-message="Name is Required" required="" maxlength="100" data-parsley-trigger="focusin focusout">
+
+                <hr />
+
+                <strong>
+                    <span class="fas fa-futbol"></span>*
+                </strong>
+                <label asp-for="EquipmentType" class="form__label">Type of Equipment</label>
+                <input asp-for="EquipmentType" class="form-control" placeholder="Type of Equipment" data-parsley-required-message="Type is Required" required="" maxlength="100" data-parsley-trigger="focusin focusout">
+
+                <strong>
+                    <span class="fas fa-sort-numeric-asc"></span>*
+                </strong>
+                <label asp-for="Quantity" class="form__label">Quantity</label>
+                <input asp-for="Quantity" class="form-control" placeholder="Quantity" data-parsley-required-message="Quantity is Required" required="" maxlength="100" data-parsley-trigger="focusin focusout">
+
+                <hr />
+
+                
+                <label asp-for="Condition" class="form__label">Condition of the Equipment</label>
+                <strong>
+                    <span class="fas fa-laugh-beam text-success"></span>&nbsp;<span class="text-warning fas fa-meh"></span>&nbsp;<span class="text-red fas fa-sad-cry"></span>
+                </strong>
+                <select asp-for="Condition" class="form-control" data-parsley-required-message="Please mention condition of the equipment" required=""  data-parsley-trigger="focusin focusout">
+                    <option value="" selected disabled hidden>Select Condition</option>
+                    <option class="text-success" value="Excellent">New</option>
+
+                    
+                    <option class="text-primary" value="Very Good">Slightly Used</option>
+
+                    
+                    <option class="text-info" value="Good">Used</option>
+
+                    <option class="text-secondary" value="Fair">Fair</option>
+                </select>
+
+                <strong>
+                    <span class="fas fa-football-ball"></span>
+                </strong>
+                <label asp-for="Description" class="form__label">Enter Some Description</label>
+                <textarea asp-for="Description" class="form-control" placeholder="Description"></textarea>
+
+                <div class="row">
+                    <div class="col text-center">
+                        <input type="submit" class="btn btn-success btn-block my-3 px-3" value="Submit" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="text-center">
+        <a class="btn btn-outline-secondary" asp-action="Index">
+            <i class="fa fa-arrow-left"></i> Go to the List
+        </a>
+    </div>
+    <p class="paragraph-gallery my-3 px-3 ">* Providing this data is mandatory</p>
+</section>

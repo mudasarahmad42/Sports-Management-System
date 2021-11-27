@@ -1,0 +1,351 @@
+﻿@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "All Play All Twice";
+}
+
+
+<h1 class="text-center mb-4">All Play All Twice Tournament</h1>
+
+<div id="header" class="col-3 m-3">
+
+</div>
+
+
+<script>
+
+    function shuffleArray(inputArray) {
+        var currentIndex = inputArray.length, temporaryValue, randomIndex;
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            // And swap it with the current element.
+            temporaryValue = inputArray[currentIndex];
+            inputArray[currentIndex] = inputArray[randomIndex];
+            inputArray[randomIndex] = temporaryValue;
+        }
+        return inputArray;
+    }
+    //------------------------------------------------
+
+    var num_team = window.prompt("Enter the number of teams: ");
+    var num_week = (num_team - 1) * 2;
+
+    //If number of teams is even
+    if (num_team % 2 == 0) {
+
+        //Calculate Number of Matches
+        var n2 = (num_team - 1) / 2;
+
+        var OriginalArray = new Array();
+        for (var x = 0; x < num_team; x++) {
+            OriginalArray[x] = window.prompt("Enter the name of team " + (x + 1) + ": ");
+        }
+
+        console.log("ORIGINAL ARRAY");
+        console.log(OriginalArray);
+        console.log("------");
+
+    
+        console.log("ORIGINAL ARRAY SHUFFLED ");
+
+        shuffleOriginal = shuffleArray(OriginalArray);
+        teams = shuffleOriginal.slice();
+        console.log("teams " + teams);
+        
+        
+
+        var team1 = "";
+        var team2 = "";
+
+
+        console.log(num_week);
+        //Nested For Loops to Schedule
+        //Outer Loop
+        for (x = 0; x < num_week; x++)
+        {
+
+            var shuffle = (num_week / 2);
+
+            if (x < shuffle)
+            {
+                const para = document.createElement("h2");
+                para.classList.add("text-primary");
+                const node = document.createTextNode("Round " + (x + 1));
+                para.appendChild(node);
+
+                const element = document.getElementById("header");
+                element.appendChild(para);
+
+                console.log("FIRST FIVE > " + x + " Iteration");
+                console.log(teams);
+                console.log("------");
+             
+
+                for (y = 0; y < n2; y++)
+                {
+                    team1 = teams[Math.ceil(n2 - y - 1)];
+                    team2 = teams[Math.ceil(n2 + y)]
+
+                    const paraBody = document.createElement("p");
+                    paraBody.classList.add("text-big");
+                    const node = document.createTextNode(team1 + ' vs ' + team2);
+                    const linebreaker = document.createElement("br");
+
+                    paraBody.appendChild(node);
+                    paraBody.appendChild(linebreaker);
+
+                    const element = document.getElementById("header");
+                    element.appendChild(paraBody);
+                }
+
+                //Rotate Function
+                document.write("<br>");
+                var temp = teams[1];
+
+                for (i = 1; i < teams.length - 1; i++)
+                {
+                    teams[i] = teams[i + 1];
+                }
+                teams[teams.length - 1] = temp;
+
+                document.createElement("br");
+            }
+            else
+            {
+                const para = document.createElement("h2");
+                para.classList.add("text-primary");
+                const node = document.createTextNode("Round " + (x + 1));
+                para.appendChild(node);
+
+                const element = document.getElementById("header");
+                element.appendChild(para);
+
+                if (x == shuffle)
+                {
+                    console.log("we are at " + x);
+
+                    shuffleTeam = shuffleArray(teams);
+                    //console.log("shuffle " + shuffleTeam);
+                    teamsNew = shuffleTeam.slice();
+                    //console.log("teamsNew " + shuffleTeam);
+                }
+
+                console.log("LAST FIVE > " + x + " Iteration");
+                console.log(teamsNew)
+                console.log("------");
+
+                for (y = 0; y < n2; y++)
+                {
+                    team1 = teamsNew[Math.ceil(n2 - y - 1)];
+                    team2 = teamsNew[Math.ceil(n2 + y)]
+
+                    const paraBody = document.createElement("p");
+                    paraBody.classList.add("text-big");
+                    const node = document.createTextNode(team1 + ' vs ' + team2);
+                    const linebreaker = document.createElement("br");
+
+                    paraBody.appendChild(node);
+                    paraBody.appendChild(linebreaker);
+
+                    const element = document.getElementById("header");
+                    element.appendChild(paraBody);
+                }
+
+                //Rotate Function
+                document.write("<br>");
+                var temp = teamsNew[1];
+
+                for (i = 1; i < teamsNew.length - 1; i++) {
+                    teamsNew[i] = teamsNew[i + 1];
+                }
+                teamsNew[teamsNew.length - 1] = temp;
+
+                document.createElement("br");
+            }
+            
+        }
+    }//If Number of teams are odd
+    else
+    {
+        //Incrementing to Even
+        num_team++;
+
+        var num_week = (num_team - 1) * 2;
+        //Calculate Number of Matches
+        var n2 = (num_team - 1) / 2;
+
+        var OriginalArray = new Array();
+        for (var x = 0; x < (num_team - 1); x++) {
+            OriginalArray[x] = window.prompt("Enter the name of team " + (x + 1) + ": ");
+        }
+
+        OriginalArray[OriginalArray.length] = "WILL REST IN THIS ROUND";
+
+        console.log("ORIGINAL ARRAY");
+        console.log(OriginalArray);
+        console.log("------");
+
+
+        console.log("ORIGINAL ARRAY SHUFFLED ");
+
+        shuffleOriginal = shuffleArray(OriginalArray);
+        teams = shuffleOriginal.slice();
+        console.log("teams " + teams);
+
+        var team1 = "";
+        var team2 = "";
+
+
+        console.log("Number of Week " + num_week)
+
+        //Nested For Loops to Schedule
+        //Outer Loop
+        for (x = 0; x < num_week; x++)
+        {
+            var shuffle = (num_week / 2);
+
+            if (x < shuffle) {
+
+                const para = document.createElement("h2");
+                para.classList.add("text-primary");
+                const node = document.createTextNode("Round " + (x + 1));
+                para.appendChild(node);
+
+                const element = document.getElementById("header");
+                element.appendChild(para);
+
+                console.log("FIRST FIVE ODD > " + x + " Iteration");
+                console.log(teams);
+                console.log("------");
+
+                for (y = 0; y < n2; y++) {
+                    team1 = teams[Math.ceil(n2 - y - 1)];
+                    team2 = teams[Math.ceil(n2 + y)]
+
+                    const paraBody = document.createElement("p");
+                    paraBody.classList.add("text-big");
+
+                    if (team1.includes("WILL REST IN THIS ROUND")) {
+                        const node = document.createTextNode(team2 + ' ' + team1);
+                        const linebreaker = document.createElement("br");
+
+                        paraBody.appendChild(node);
+                        paraBody.appendChild(linebreaker);
+
+                        const element = document.getElementById("header");
+                        element.appendChild(paraBody);
+                    }
+                    else if (team2.includes("WILL REST IN THIS ROUND")) {
+                        const node = document.createTextNode(team1 + ' ' + team2);
+                        const linebreaker = document.createElement("br");
+
+                        paraBody.appendChild(node);
+                        paraBody.appendChild(linebreaker);
+
+                        const element = document.getElementById("header");
+                        element.appendChild(paraBody);
+                    }
+                    else {
+                        const node = document.createTextNode(team1 + ' vs ' + team2);
+                        const linebreaker = document.createElement("br");
+
+                        paraBody.appendChild(node);
+                        paraBody.appendChild(linebreaker);
+
+                        const element = document.getElementById("header");
+                        element.appendChild(paraBody);
+                    }
+                }
+                //Rotate Function
+                document.write("<br>");
+                var temp = teams[1];
+
+                for (i = 1; i < teams.length - 1; i++) {
+                    teams[i] = teams[i + 1];
+                }
+                teams[teams.length - 1] = temp;
+
+                document.createElement("br");
+            }
+            else
+            {
+
+                const para = document.createElement("h2");
+                para.classList.add("text-primary");
+                const node = document.createTextNode("Round " + (x + 1));
+                para.appendChild(node);
+
+                const element = document.getElementById("header");
+                element.appendChild(para);
+
+                if (x == shuffle) {
+                    console.log("we are at " + x);
+
+                    shuffleTeam = shuffleArray(teams);
+                    //console.log("shuffle " + shuffleTeam);
+                    teamsNew = shuffleTeam.slice();
+                    //console.log("teamsNew " + shuffleTeam);
+                }
+
+                console.log("LAST 5 " + x + " Iteration");
+                console.log(teamsNew)
+                console.log("------");
+
+                for (y = 0; y < n2; y++) {
+                    team1 = teamsNew[Math.ceil(n2 - y - 1)];
+                    team2 = teamsNew[Math.ceil(n2 + y)]
+
+                    const paraBody = document.createElement("p");
+                    paraBody.classList.add("text-big");
+
+                    if (team1.includes("WILL REST IN THIS ROUND")) {
+                        const node = document.createTextNode(team2 + ' ' + team1);
+                        const linebreaker = document.createElement("br");
+
+                        paraBody.appendChild(node);
+                        paraBody.appendChild(linebreaker);
+
+                        const element = document.getElementById("header");
+                        element.appendChild(paraBody);
+                    }
+                    else if (team2.includes("WILL REST IN THIS ROUND")) {
+                        const node = document.createTextNode(team1 + ' ' + team2);
+                        const linebreaker = document.createElement("br");
+
+                        paraBody.appendChild(node);
+                        paraBody.appendChild(linebreaker);
+
+                        const element = document.getElementById("header");
+                        element.appendChild(paraBody);
+                    }
+                    else {
+                        const node = document.createTextNode(team1 + ' vs ' + team2);
+                        const linebreaker = document.createElement("br");
+
+                        paraBody.appendChild(node);
+                        paraBody.appendChild(linebreaker);
+
+                        const element = document.getElementById("header");
+                        element.appendChild(paraBody);
+                    }
+                }
+                //Rotate Function
+                document.write("<br>");
+                var temp = teamsNew[1];
+
+                for (i = 1; i < teamsNew.length - 1; i++) {
+                    teamsNew[i] = teamsNew[i + 1];
+                }
+                teamsNew[teamsNew.length - 1] = temp;
+
+                document.createElement("br");
+            }
+        }
+    }
+
+</script>

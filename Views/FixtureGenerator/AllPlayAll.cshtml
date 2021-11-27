@@ -1,0 +1,168 @@
+﻿@{
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@{
+    ViewData["Title"] = "All Play All";
+}
+
+
+<h1 class="text-center mb-4">All Play All Tournament</h1>
+
+<div id="header" class="col-3 m-3">
+
+</div>
+
+
+<script>
+    var num_team = window.prompt("Enter the number of teams: ");
+    var num_week = num_team - 1;
+
+    //If number of teams is even
+    if (num_team % 2 == 0) {
+
+        //Calculate Number of Matches
+        var n2 = (num_team - 1) / 2;
+
+        var teams = new Array();
+        for (var x = 0; x < num_team; x++) {
+            teams[x] = window.prompt("Enter the name of team " + (x + 1) + ": ");
+        }
+
+
+        var team1 = "";
+        var team2 = "";
+
+
+        //Nested For Loops to Schedule
+        //Outer Loop
+        for (x = 0; x < num_week; x++) {
+
+            const para = document.createElement("h2");
+            para.classList.add("text-primary");
+            const node = document.createTextNode("Round " + (x + 1));
+            para.appendChild(node);
+
+            const element = document.getElementById("header");
+            element.appendChild(para);
+
+            for (y = 0; y < n2; y++) {
+                team1 = teams[Math.ceil(n2 - y - 1)];
+                team2 = teams[Math.ceil(n2 + y)]
+
+                const paraBody = document.createElement("p");
+                paraBody.classList.add("text-big");
+                const node = document.createTextNode(team1 + ' vs ' + team2);
+                const linebreaker = document.createElement("br");
+
+                paraBody.appendChild(node);
+                paraBody.appendChild(linebreaker);
+
+                const element = document.getElementById("header");
+                element.appendChild(paraBody);
+            }
+
+            //Rotate Function
+            document.write("<br>");
+            var temp = teams[1];
+
+            for (i = 1; i < teams.length - 1; i++) {
+                teams[i] = teams[i + 1];
+            }
+            teams[teams.length - 1] = temp;
+
+            document.createElement("br");
+        }
+    }//If Number of teams are odd
+    else {
+        //Incrementing to Even
+        num_team++;
+
+        //Calculate Number of Matches
+        var n2 = (num_team - 1) / 2;
+
+        var teams = new Array();
+        for (var x = 0; x < (num_team - 1); x++) {
+            teams[x] = window.prompt("Enter the name of team " + (x + 1) + ": ");
+        }
+
+        teams[teams.length] = "WILL REST IN THIS ROUND";
+
+        var team1 = "";
+        var team2 = "";
+
+
+        //Nested For Loops to Schedule
+        //Outer Loop
+        for (x = 0; x < (num_week + 1); x++) {
+
+            const para = document.createElement("h2");
+            para.classList.add("text-primary");
+            const node = document.createTextNode("Round " + (x + 1));
+            para.appendChild(node);
+
+            const element = document.getElementById("header");
+            element.appendChild(para);
+
+            for (y = 0; y < n2; y++) {
+                team1 = teams[Math.ceil(n2 - y - 1)];
+                team2 = teams[Math.ceil(n2 + y)]
+
+                const paraBody = document.createElement("p");
+                paraBody.classList.add("text-big");
+
+                if (team1.includes("WILL REST IN THIS ROUND")) {
+                    const node = document.createTextNode(team2 + ' ' + team1);
+                    const linebreaker = document.createElement("br");
+
+                    paraBody.appendChild(node);
+                    paraBody.appendChild(linebreaker);
+
+                    const element = document.getElementById("header");
+                    element.appendChild(paraBody);
+                }
+                else if (team2.includes("WILL REST IN THIS ROUND")) {
+                    const node = document.createTextNode(team1 + ' ' + team2);
+                    const linebreaker = document.createElement("br");
+
+                    paraBody.appendChild(node);
+                    paraBody.appendChild(linebreaker);
+
+                    const element = document.getElementById("header");
+                    element.appendChild(paraBody);
+                }
+                else {
+                    const node = document.createTextNode(team1 + ' vs ' + team2);
+                    const linebreaker = document.createElement("br");
+
+                    paraBody.appendChild(node);
+                    paraBody.appendChild(linebreaker);
+
+                    const element = document.getElementById("header");
+                    element.appendChild(paraBody);
+                }
+
+                //const node = document.createTextNode(team1 + ' vs ' + team2);
+                // const linebreaker = document.createElement("br");
+
+                // paraBody.appendChild(node);
+                // paraBody.appendChild(linebreaker);
+
+                // const element = document.getElementById("header");
+                // element.appendChild(paraBody);
+            }
+
+            //Rotate Function
+            document.write("<br>");
+            var temp = teams[1];
+
+            for (i = 1; i < teams.length - 1; i++) {
+                teams[i] = teams[i + 1];
+            }
+            teams[teams.length - 1] = temp;
+
+            document.createElement("br");
+        }
+    }
+
+</script>
