@@ -185,10 +185,10 @@ namespace GCUSMS.Controllers
             
         }
 
-        public IActionResult AboutMe()
-        {
-            return View();
-        }
+        //public IActionResult AboutMe()
+        //{
+        //    return View();
+        //}
 
         //Not Using It anymore
         //public IActionResult FAQs()
