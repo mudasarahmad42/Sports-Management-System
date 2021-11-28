@@ -907,8 +907,6 @@ textarea.parsley-error {
     margin: 5px;
 }
 
-
-/*Hiding Share icon from light gallery js*/
 #lg-share
 {
     display: none;
