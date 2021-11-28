@@ -29,14 +29,6 @@
                         <input asp-for="Input.Password" class="form-control" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-                    @*<div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="Input.RememberMe">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                        </div>
-                    </div>*@
                     <div class="form-group">
                         <button type="submit" class="btn" style="background-color: #722121; color:#fff">Log in</button>
                         <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">
@@ -44,9 +36,6 @@
                         </a>
                     </div>
                     <div class="form-group">
-                        @*<p>
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                        </p>*@
                         <p>
                             <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="color: #722121">Register as a new user</a>
                         </p>

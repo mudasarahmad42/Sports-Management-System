@@ -139,12 +139,6 @@
                     <hr />
 
                     <small class="font-weight-bold text-primary">This Information will be required to login to your account<br /> <span class="text-muted">Please keep record of your login details</span></small>
-                    @*<div class="form-group">
-                            <label asp-for="Input.UserName"></label>
-                            <input asp-for="Input.UserName" class="form-control" />
-                            <span asp-validation-for="Input.UserName" class="text-danger"></span>
-                        </div>*@
-
 
                     <div class="form-group">
                         <label asp-for="Input.Email"></label><br />
@@ -228,14 +222,6 @@
             blocks: [4],
         });
     </script>
-
-    @*<script>
-            // Semester
-            new Cleave('.input-semester', {
-                prefix: 'SEMESTER',
-                blocks: [8, 2]
-            });
-        </script>*@
 
     @*Parsley Date Validator*@
     <script type="text/javascript">
