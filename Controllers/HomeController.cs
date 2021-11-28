@@ -185,16 +185,17 @@ namespace GCUSMS.Controllers
             
         }
 
+
+        public IActionResult Readme()
+        {
+            return View();
+        }
+
         //public IActionResult AboutMe()
         //{
         //    return View();
         //}
 
-        //Not Using It anymore
-        //public IActionResult FAQs()
-        //{ 
-        //    return View(); 
-        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

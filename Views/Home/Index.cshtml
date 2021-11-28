@@ -7,6 +7,23 @@
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
+@*Pop up modal*@
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Want to know what this application is about?</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Click the button below to view readme file</p>
+                <a class="btn btn-success" asp-controller="Home" asp-action="Readme">README</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="section-hero d-flex justify-content-center align-items-center" style="background-image: url(../../main/images/img/hero-bg3.jpg); background-size: cover; background-repeat: no-repeat;">
     <div class="container">
         <div class="row">
@@ -58,7 +75,7 @@
         </div>
 
         <div class="row d-flex justify-content-center align-items-center">
-            <p class="mb-3">We huge collection of images to share with world.</p>
+            <p class="mb-3">We have huge collection of images to share with the world.</p>
         </div>
 
         <div class="container">
@@ -335,7 +352,7 @@
         </div>
 
         <div class="row d-flex justify-content-center align-items-center">
-            <p class="mb-3">We huge collection of images to share with world.</p>
+            <p class="mb-3">We are always publishing something new on our application. Read our blogs to know more</p>
         </div>
 
         <div class="container">
@@ -453,3 +470,12 @@
         </form>
     </div>
 </section>
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function(){
+        $("#myModal").modal('show');
+    });
+    </script>
+}
